@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import 'package:savemoney/widget/dialog_event.dart';
 import '../constant.dart';
 
 class FieldType extends StatefulWidget {
@@ -15,6 +15,7 @@ class FieldType extends StatefulWidget {
 class _FieldTypeState extends State<FieldType> {
   bool viewVisible = false ;
   Color colorType = Colors.transparent;
+  String type;
 
   void showWidget(){
     setState(() {
@@ -26,14 +27,17 @@ class _FieldTypeState extends State<FieldType> {
       switch(s) {
         case 'income' : {
           colorType = incomeColor;
+          type = 'income';
         }
         break;
         case 'expenditure' : {
           colorType = expenditureColor;
+          type = 'expenditure';
         }
         break;
         case 'goals' : {
           colorType = goalColor;
+          type = 'goals';
         }
         break;
       }
@@ -68,7 +72,7 @@ class _FieldTypeState extends State<FieldType> {
                           Text(
                             'Income',
                             style: TextStyle(
-                                color: kTextLightColor
+                              color: kTextLightColor
                             ),
                           )
                         ],
@@ -129,11 +133,20 @@ class _FieldTypeState extends State<FieldType> {
           ),
           Visibility(
               visible: viewVisible,
-              child: Container(
+              child: GestureDetector(
+                onTap: ()async {
+                  await showDialog(
+                    context: context,
+                    builder: (BuildContext context) {       
+                      return DialogEvent(type: type,);
+                    }
+                  );
+                },
+                child: Container(
                 height: 80,
                 decoration: BoxDecoration(
                     color: colorType,
-                    borderRadius: BorderRadius.circular(15),
+                    borderRadius: BorderRadius.circular(8),
                     boxShadow: [
                       BoxShadow(
                         color: Colors.grey.withOpacity(0.3),
@@ -143,25 +156,45 @@ class _FieldTypeState extends State<FieldType> {
                       )
                     ]
                 ),
-                margin: EdgeInsets.symmetric(horizontal: 45),
-                child: Center(
-                  child: Row(
-                    children: <Widget>[
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Text(
-                            ' Bath',
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 20),
-                          )
-                        ],
-                      ),
-                    ],
+                margin: EdgeInsets.symmetric(horizontal: 30),
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(vertical:8, horizontal:10),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: <Widget>[
+                            Card(
+                              color: Colors.white,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(6.0),
+                              ),
+                              elevation: 4,
+                              child: Container(
+                                padding: EdgeInsets.all(5),
+                                height:55,
+                                width:55,
+                                child: Center(
+                                  child: Image.asset('assests/icon/cup.png',fit: BoxFit.cover,)
+                                )
+                              ),
+                            ),
+                            SizedBox(width: 20,),
+                            Text(
+                              'Select icon'.toUpperCase(),
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 18,
+                              ),
+                            )
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-              )
+              ),
+            ),
           ),
         ],
       )

@@ -59,6 +59,32 @@ flutter:
     - assests/icon/star.svg
     - assests/images/goalIcon.png
 
+    - assests/icon/revenue.png
+    - assests/icon/salary.png
+    - assests/icon/store.png
+    - assests/icon/graph-1.png
+    - assests/icon/interest.png
+    - assests/icon/bonus.png
+    - assests/icon/gift.png
+    - assests/icon/wallet.png
+
+    - assests/icon/cup.png
+    - assests/icon/store-3.png
+    - assests/icon/home.png
+    - assests/icon/coin-10.png
+    - assests/icon/car.png
+    - assests/icon/shoes.png
+    - assests/icon/clothing.png
+    - assests/icon/bill.png
+    - assests/icon/technology.png
+    - assests/icon/tree.png
+    - assests/icon/repair-fee.png
+    - assests/icon/treatment.png
+    - assests/icon/pet.png
+    - assests/icon/education.png
+
+
+
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
 

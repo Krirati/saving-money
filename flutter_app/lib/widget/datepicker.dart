@@ -15,10 +15,6 @@ class DatePickerWidget extends StatefulWidget {
 class _DatePickerWidgetState extends State<DatePickerWidget> {
   DateTime _dateTime = DateTime.now();
 
-  void _sendDataBack(BuildContext context) {
-    DateTime textToSendBack = _dateTime;
-    Navigator.pop(context, textToSendBack);
-  }
   @override
   Widget build(BuildContext context) {
     return CupertinoDatePicker(

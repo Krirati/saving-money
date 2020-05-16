@@ -30,5 +30,77 @@ const kTitleTextstyle = TextStyle(
 );
 
 const kAppbar = TextStyle(
-  fontSize: 25,
+  fontSize: 22,
 );
+
+const List kColorsData = [
+  Colors.green,
+  Colors.red,
+  Colors.greenAccent,
+  Colors.cyan,
+  Colors.purple,
+  Colors.yellow,
+  Colors.blue,
+  Colors.black,
+  Colors.brown,
+  Colors.orange, 
+  Colors.teal, 
+  Colors.purpleAccent, 
+  Colors.blueGrey, 
+  Colors.tealAccent, 
+  Colors.deepOrangeAccent, 
+  Colors.lightBlueAccent
+];
+
+const kMapIconIncome = [
+  'assests/icon/revenue.png',
+  'assests/icon/salary.png',
+  'assests/icon/store.png',
+  'assests/icon/graph-1.png',
+  'assests/icon/interest.png',
+  'assests/icon/gift.png',
+  'assests/icon/bonus.png',
+  'assests/icon/wallet.png'
+];
+
+const kMapIconGoals = [
+  'assests/icon/revenue.png',
+  'assests/icon/salary.png',
+  'assests/icon/store.png',
+  'assests/icon/graph-1.png',
+  'assests/icon/interest.png',
+  'assests/icon/gift.png',
+  'assests/icon/bonus.png',
+  'assests/icon/wallet.png',
+  'assests/icon/cup.png',
+  'assests/icon/store-3.png',
+  'assests/icon/home.png',
+  'assests/icon/coin-10.png',
+  'assests/icon/car.png',
+  'assests/icon/shoes.png',
+  'assests/icon/clothing.png',
+  'assests/icon/bill.png',
+  'assests/icon/technology.png',
+  'assests/icon/tree.png',
+  'assests/icon/repair-fee.png',
+  'assests/icon/treatment.png',
+  'assests/icon/pet.png',
+  'assests/icon/education.png'
+];
+
+const kMapIconExpenditure = [
+  'assests/icon/cup.png',
+  'assests/icon/store-3.png',
+  'assests/icon/home.png',
+  'assests/icon/coin-10.png',
+  'assests/icon/car.png',
+  'assests/icon/shoes.png',
+  'assests/icon/clothing.png',
+  'assests/icon/bill.png',
+  'assests/icon/technology.png',
+  'assests/icon/tree.png',
+  'assests/icon/repair-fee.png',
+  'assests/icon/treatment.png',
+  'assests/icon/pet.png',
+  'assests/icon/education.png'
+];

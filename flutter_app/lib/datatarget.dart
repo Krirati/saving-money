@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:savemoney/constant.dart';
 
+import 'widget/dialog_notification.dart';
 import 'widget/goal_card.dart';
 
 class DataTarget extends StatefulWidget {
@@ -16,7 +17,16 @@ class _DataTargetState extends State<DataTarget>{
         appBar: AppBar(
           title: Text('Goals',style: kAppbar,),
           actions: <Widget>[
-            IconButton(icon: Icon(Icons.notifications),onPressed: (){},)
+            IconButton(icon: Icon(Icons.notifications),
+              onPressed: () async{
+                await showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return  DialogNotification();
+                  }
+                );
+              },
+            )
           ],
           elevation: 0,
         ),

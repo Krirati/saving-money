@@ -57,6 +57,7 @@ class _ExpenditureScreenState extends State<ExpenditureScreen> {
                             print(dropdownValue);
                           });
                         },
+                        hint: Text('select'.toUpperCase()),
                         items: <String>[
                           'Day',
                           'Week',

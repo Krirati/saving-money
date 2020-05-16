@@ -17,8 +17,6 @@ class _DialogNotificationState extends State<DialogNotification>{
 
   @override
   Widget build(BuildContext context) {
-    var height = MediaQuery.of(context).size.height;
-    var width = MediaQuery.of(context).size.width;
     return Dialog(
           backgroundColor: Colors.white,
           shape: RoundedRectangleBorder(
@@ -27,7 +25,7 @@ class _DialogNotificationState extends State<DialogNotification>{
           elevation: 2,
           child: Wrap(
             children: <Widget>[
-         Container(
+            Container(
             // height: height - 200,
             // width: width - 50,
             child: Stack(

@@ -4,6 +4,7 @@ import 'package:savemoney/tab_schedule/income.dart';
 import 'package:savemoney/widget/remindercard.dart';
 
 import 'tab_schedule/expenditure.dart';
+import 'widget/dialog_notification.dart';
 
 class History extends StatefulWidget {
   final Remin reminderItem;
@@ -23,7 +24,14 @@ class _HistoryState extends State<History>{
           title: Text('Schedule'),
           elevation: 0,
           actions: <Widget>[
-            IconButton(icon: Icon(Icons.notifications),onPressed: (){},)
+            IconButton(icon: Icon(Icons.notifications),
+            onPressed: () async{
+              await showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return  DialogNotification();
+                });
+            },)
           ],
         ),
         body: DefaultTabController(

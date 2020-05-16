@@ -66,7 +66,7 @@ class _IncomeScreenState extends State<IncomeScreen> {
                           print(dropdownValue);
                         });
                       },
-                      hint: Text('Day'),
+                      hint: Text('select'.toUpperCase()),
                       items: <String>[
                         'Day',
                         'Week',
