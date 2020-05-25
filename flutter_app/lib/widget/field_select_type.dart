@@ -3,10 +3,9 @@ import 'package:savemoney/widget/dialog_event.dart';
 import '../constant.dart';
 
 class FieldType extends StatefulWidget {
-//  final bool visible;
-//  final String type  ;
-//
-//  const FieldType({Key key, this.visible, this.type}) : super(key: key);
+
+  Function(String, String) callbackResultIcon;
+  FieldType(this.callbackResultIcon);
   @override
   _FieldTypeState createState() => _FieldTypeState();
 }
@@ -16,7 +15,7 @@ class _FieldTypeState extends State<FieldType> {
   bool viewVisible = false ;
   Color colorType = Colors.transparent;
   String type;
-
+  String icon;
   void showWidget(){
     setState(() {
       viewVisible = true ;
@@ -42,6 +41,28 @@ class _FieldTypeState extends State<FieldType> {
         break;
       }
     });
+  }
+  callbackTypeicon(newType, newIconName) {
+    setState(() {
+      type = newType;
+      icon = newIconName;
+      switch (type) {
+        case 'income':
+          icon = kMapIconIncome[int.parse(icon)];
+          break;
+        case 'expenditure' : {
+          icon = kMapIconExpenditure[int.parse(icon)];
+        }
+        break;
+        case 'goals' : {
+          icon = kMapIconGoals[int.parse(icon)];
+        }
+        break;
+      }
+      widget.callbackResultIcon(type,icon);
+    });
+    print(type);
+    print(icon);
   }
 
   @override
@@ -138,7 +159,7 @@ class _FieldTypeState extends State<FieldType> {
                   await showDialog(
                     context: context,
                     builder: (BuildContext context) {       
-                      return DialogEvent(type: type,);
+                      return DialogEvent(type, callbackTypeicon);
                     }
                   );
                 },
@@ -176,13 +197,15 @@ class _FieldTypeState extends State<FieldType> {
                                 height:55,
                                 width:55,
                                 child: Center(
-                                  child: Image.asset('assests/icon/cup.png',fit: BoxFit.cover,)
+                                  child: Image.asset(
+                                    (icon == null) ? 'assests/icon/pet.png' : icon
+                                  ,fit: BoxFit.cover,)
                                 )
                               ),
                             ),
                             SizedBox(width: 20,),
                             Text(
-                              'Select icon'.toUpperCase(),
+                              (icon == null) ? 'Select icon'.toUpperCase(): type,
                               style: TextStyle(
                                 color: Colors.black,
                                 fontSize: 18,

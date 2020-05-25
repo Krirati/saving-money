@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:savemoney/constant.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 
@@ -9,6 +10,98 @@ class DialogNotification extends StatefulWidget {
 }
 
 class _DialogNotificationState extends State<DialogNotification>{
+ FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+      FlutterLocalNotificationsPlugin();
+  AndroidInitializationSettings androidInitializationSettings;
+  IOSInitializationSettings iosInitializationSettings;
+  InitializationSettings initializationSettings;
+
+  @override
+  void initState() {
+    super.initState();
+    initializing();
+  }
+
+  void initializing() async {
+    androidInitializationSettings = AndroidInitializationSettings('app_icon');
+    iosInitializationSettings = IOSInitializationSettings(
+        onDidReceiveLocalNotification: onDidReceiveLocalNotification);
+    initializationSettings = InitializationSettings(
+        androidInitializationSettings, iosInitializationSettings);
+    await flutterLocalNotificationsPlugin.initialize(initializationSettings,
+        onSelectNotification: onSelectNotification);
+  }
+
+  void _showNotifications() async {
+    await notification();
+    
+  }
+
+  void showNotificationsDaily(int id, int hour, int minute) async {
+    await notificationDaily(id, hour, minute);
+  }
+
+  Future<void> notification() async {
+    AndroidNotificationDetails androidNotificationDetails =
+        AndroidNotificationDetails(
+            'Channel ID', 'Channel title', 'channel body',
+            priority: Priority.High,
+            importance: Importance.Max,
+            ticker: 'test');
+
+    IOSNotificationDetails iosNotificationDetails = IOSNotificationDetails();
+
+    NotificationDetails notificationDetails =
+        NotificationDetails(androidNotificationDetails, iosNotificationDetails);
+    await flutterLocalNotificationsPlugin.show(
+        0, 'Hello there', 'please subscribe my channel', notificationDetails);
+  }
+
+  Future<void> notificationDaily (id, hour, minute) async {
+    print('$hour : $minute: 0');
+    var time = Time(hour, minute, 0);
+    var androidPlatformChannelSpecifics =
+        AndroidNotificationDetails(
+          'your channel id', 'your channel name', 'your channel description',
+          importance: Importance.Max,
+          priority: Priority.High,
+          ticker: 'Medicine Reminder'
+        );
+    var iOSPlatformChannelSpecifics = IOSNotificationDetails();
+    var platformChannelSpecifics = NotificationDetails(
+        androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
+    await flutterLocalNotificationsPlugin.showDailyAtTime(
+        id,
+        'show daily title',
+        'Daily notification shown at  $hour : $minute: 0 ',
+        time,
+        platformChannelSpecifics);
+  }
+  Future onSelectNotification(String payLoad) {
+    print('Notification clicked');
+    if (payLoad != null) {
+      print(payLoad);
+    }
+    return Future.value(0);
+    // we can set navigator to navigate another screen
+  }
+
+  Future onDidReceiveLocalNotification(
+      int id, String title, String body, String payload) async {
+    return CupertinoAlertDialog(
+      title: Text(title),
+      content: Text(body),
+      actions: <Widget>[
+        CupertinoDialogAction(
+            isDefaultAction: true,
+            onPressed: () {
+              print("");
+            },
+            child: Text("Okay")),
+      ],
+    );
+  }
+
   bool _notification = false;
   bool _saving = false;
   bool _record = false;
@@ -109,12 +202,17 @@ class _DialogNotificationState extends State<DialogNotification>{
                                   onTap: () {
                                     DatePicker.showTime12hPicker(context,
                                         showTitleActions: true,
-                                        currentTime: DateTime.now(), onConfirm: (time) {
-                                      setState(() {
-                                        pickedtime_record =
-                                            "${time.hour} : ${time.minute} : ${time.second}";
-                                      });
-                                    });
+                                        currentTime: DateTime.now(), 
+                                        onConfirm: (time) {
+                                          setState(() {
+                                            pickedtime_record =
+                                              "${time.hour} : ${time.minute} : ${time.second}";
+                                            showNotificationsDaily(1,time.hour, time.minute);
+                                            print(pickedtime_record);
+                                          }
+                                        );
+                                      }
+                                    );
                                   },
                                 ) 
                               ),
@@ -156,7 +254,7 @@ class _DialogNotificationState extends State<DialogNotification>{
                                 dense: true,
                                 contentPadding: EdgeInsets.only(left: 20, right: 20),
                                 trailing: GestureDetector(
-                                  child: pickedtime_record == null ? 
+                                  child: pickedtime_saving == null ? 
                                     Text("Set Time") : 
                                     Text(pickedtime_record, 
                                       style: TextStyle(
@@ -169,8 +267,9 @@ class _DialogNotificationState extends State<DialogNotification>{
                                         showTitleActions: true,
                                         currentTime: DateTime.now(), onConfirm: (time) {
                                       setState(() {
-                                        pickedtime_record =
+                                        pickedtime_saving =
                                             "${time.hour} : ${time.minute} : ${time.second}";
+                                        showNotificationsDaily(2,time.hour, time.minute);
                                       });
                                     });
                                   },

@@ -3,27 +3,42 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:savemoney/constant.dart';
+import 'package:savemoney/history.dart';
 import 'package:savemoney/widget/dialog_notification.dart';
 import 'package:savemoney/widget/remindercard.dart';
 
+import 'database/dbHelper.dart';
 import 'home.dart';
 
 
 Color kPrimaryBlue = Color(0xff3c528b);
 Color kBackground = Color(0xfff9fbe7);
 class Dashboard extends StatefulWidget {
+
   @override
   _DashboardState createState() => _DashboardState();
 
 }
 
 class _DashboardState extends State<Dashboard>{
+  var dbHelper = DBHelper();
+  String timeNow = DateTime.now().toString();
+  Future<double> loadSum(name) async {
+    var result = dbHelper.sumAll(name);
+    return result;
+  }
+  Future<double> loadBalance() async {
+    var result = dbHelper.balance();
+    return result;
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
         appBar: PreferredSize(
-          preferredSize: Size(double.infinity, 200),
+          preferredSize: Size(double.infinity, 160),
           child: ClipPath(
             clipper: MyClipper(),
             child: Container(
@@ -82,12 +97,10 @@ class _DashboardState extends State<Dashboard>{
                             ),
                           ],
                         ),
-    
-
                         SvgPicture.asset(
                           'assests/icon/finance.svg',
                           width: 150,
-  //                        fit: BoxFit.fitWidth,
+                          fit: BoxFit.fitWidth,
                           alignment: Alignment.topCenter,
                         ),
                         Positioned(
@@ -109,7 +122,7 @@ class _DashboardState extends State<Dashboard>{
             ),
           ),
         ),
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.white10,
         body: ListView(
           children: <Widget>[
             Padding(
@@ -118,13 +131,47 @@ class _DashboardState extends State<Dashboard>{
               style: kTitleTextstyle,
               ),
             ),
-            CardListGroup(name: 'Balance', money: '500',img: AssetImage('assests/images/balance.png'),),
+            FutureBuilder(
+              future: loadBalance(),
+              builder: (BuildContext context, AsyncSnapshot<double> snapshot) {
+                return CardListGroup(
+                  name: 'Balance', 
+                  money: snapshot.data.toString(),
+                  img: AssetImage('assests/images/balance.png'),);
+              }
+            ),         
             SizedBox(height: 15,),
-            CardListGroup(name: 'Income', money: '300',img: AssetImage('assests/images/income.png'),),
+            FutureBuilder(
+              future: loadSum('income'),
+              builder: (BuildContext context, AsyncSnapshot<double> snapshot) {
+                return CardListGroup(
+                  name: 'Income', 
+                  money: snapshot.data.toString(),
+                  img: AssetImage('assests/images/income.png'),);
+              }
+            ),    
             SizedBox(height: 15,),
-            CardListGroup(name: 'Expenditure', money: '5000', img: AssetImage('assests/images/expenditure.png'),),
+            FutureBuilder(
+              future: loadSum('expenditure'),
+              builder: (BuildContext context, AsyncSnapshot<double> snapshot) {
+                return CardListGroup(
+                  name: 'Expenditure', 
+                  money: snapshot.data.toString(), 
+                  img: AssetImage('assests/images/expenditure.png'),
+                );
+              }
+            ),
             SizedBox(height: 15,),
-            CardListGroup(name: 'Saving', money: '500', img: AssetImage('assests/images/expenditure.png'),),
+            FutureBuilder(
+              future: loadSum('goals'),
+              builder: (BuildContext context, AsyncSnapshot<double> snapshot) {
+                return CardListGroup(
+                  name: 'Saving for goals', 
+                  money: snapshot.data.toString(), 
+                  img: AssetImage('assests/images/goalIcon.png'),
+                );
+              }
+            ),
             SizedBox(height: 15,),
             Padding(
               padding: EdgeInsets.fromLTRB(25, 1, 25, 15),
@@ -139,7 +186,7 @@ class _DashboardState extends State<Dashboard>{
                           style: kTitleTextstyle,
                         ),
                         TextSpan(
-                          text: 'Newest update March28',
+                          text: 'Newest update ${timeNow.split(' ')[0]}',
                           style: TextStyle(
                             color: kTextLightColor
                           ),
@@ -148,13 +195,23 @@ class _DashboardState extends State<Dashboard>{
                     ),
                   ),
                   Spacer(),
-                  Text(
-                    "See more",
-                    style: TextStyle(
-                      color: yellowLowColor,
-                      fontWeight: FontWeight.w600,
-                    ),
+                  FlatButton(
+                    onPressed: () {
+                      Navigator.push(context,
+                        MaterialPageRoute(
+                            builder: (_) => History()
+                        ),
+                      );
+                    }, 
+                    child: Text(
+                      "See more",
+                      style: TextStyle(
+                        color: yellowLowColor,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    )
                   )
+                  
                 ],
               ),
             ),
@@ -171,12 +228,18 @@ class CardListGroup extends StatefulWidget {
   final String money;
   final ImageProvider img;
   const CardListGroup({this.name, this.money, this.img});
+  
   @override
   _CardGroupState createState() => _CardGroupState();
 }
 
 class _CardGroupState extends State<CardListGroup> {
   bool vis = false;
+  @override
+  void initState() {
+    super.initState();
+
+  }
   @override
   Widget build(BuildContext context) {
     return Column(

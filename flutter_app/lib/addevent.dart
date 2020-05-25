@@ -4,6 +4,8 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:savemoney/database/dbHelper.dart';
+import 'package:savemoney/database/model.dart';
 import 'package:savemoney/widget/datepicker.dart';
 import 'package:savemoney/widget/field_select_type.dart';
 
@@ -19,39 +21,96 @@ class _AddEventState extends State<AddEvent>{
   var nameController = TextEditingController();
   var amountController = TextEditingController();
   var desciprionController = TextEditingController();
-
+  String name;
+  String amount;
+  String des;
+  String type;
+  String icon; 
   String time = DateTime.now().toString();
   DateTime newDateTime;
-  DateTime date = DateTime.now();
+  int curUserId;
 
   File _image;
+  int updateNo;
+
+  final formKeyName = new GlobalKey<FormState>();
+  final formKeyAmount = new GlobalKey<FormState>();
+  final formKeyDes = new GlobalKey<FormState>();
+  final formKeyType = new GlobalKey<FormState>();
+  final formKeyIcon = new GlobalKey<FormState>();
+  final formKeyTime= new GlobalKey<FormState>();
+  
+  var dbHelper;
+  bool isUpdating;
+  Future<List<EventModel>> events;
 
   callback(newTime) {
     setState(() {
       time = newTime;
       print('time:  ' + time);
-    
     });
   }
+  @override
   void initState() {
     super.initState();
+    dbHelper = DBHelper();
     newDateTime = DateTime.now();
+    isUpdating = false;
   } 
+
   clearField() {
     setState(() {
-      nameController = null;
-      amountController = null;
-      desciprionController = null;
+      nameController.clear();
+      amountController.clear();
+      desciprionController.clear();
     });
   }
 
+  validate() {
+    if (formKeyName.currentState.validate()) {
+      formKeyName.currentState.save();
+      if(isUpdating) {
+        EventModel e = EventModel(
+          id: curUserId, 
+          name: nameController.text, 
+          type: 'update', 
+          icon: 'bye', 
+          amount: double.parse(amountController.text), 
+          date: time,
+          description: desciprionController.text);
+        dbHelper.update(e);
+        setState(() {
+          isUpdating = false;
+        });
+      } else {
+        EventModel e = EventModel(
+          name: nameController.text, 
+          type: type, 
+          icon: icon,
+          amount: double.parse(amountController.text), 
+          date: time, 
+          description: desciprionController.text
+        );
+        dbHelper.insert(e);
+      }
+      clearField();
+    }
+  }
   Future _getImage() async {
     var image = await ImagePicker.pickImage(source: ImageSource.gallery);
-
     setState(() {
       _image = image;
       print('_image $_image');
     });
+  }
+
+  callbackResultIcon(newType, newIcon) {
+    setState(() {
+      type = newType;
+      icon = newIcon;
+    });
+    print('add type: $type');
+    print('add icon: $icon');
   }
   @override
   Widget build(BuildContext context) {
@@ -79,61 +138,76 @@ class _AddEventState extends State<AddEvent>{
           // elevation: 0,
         ),
         backgroundColor: Colors.white,
-          floatingActionButton: FloatingActionButton.extended(
-            icon: Icon(Icons.save),
-            backgroundColor: Colors.orangeAccent,
-            label: Text('Save'),
-            onPressed: (){
-              setState(() {
-                print('Save');
-              },);
-            },
-          ),
-          floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-          body:
+        floatingActionButton: FloatingActionButton.extended(
+          icon: Icon(Icons.save),
+          backgroundColor: Colors.orangeAccent,
+          label: Text(isUpdating ? 'Update': 'Save'),
+          onPressed: () async{
+            print('save ...');
+            validate();
+            print('save done');
+            clearField();
+          },
+        ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+        body:
           ListView(
-            padding: EdgeInsets.symmetric(vertical: 10,horizontal:15 ),
+            padding: EdgeInsets.symmetric(vertical: 10,horizontal:0 ),
             children: <Widget>[
               SizedBox(height: 10,),
               Container(
-                padding: EdgeInsets.all(0),
+                padding: EdgeInsets.all(15),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Column(
                       children: <Widget>[
-                        Container(
-                          margin: EdgeInsets.all(12),
-                          child: Column(
-                            mainAxisSize: MainAxisSize.max,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Text(
-                                'Name Event',
-                                style: TextStyle(
-                                    color: Colors.black
-                                ),
-                              ),
-                              Container(
-                                margin: EdgeInsets.fromLTRB(15, 5, 15, 5),
-                                child: TextField(
-                                  controller:  nameController,
-                                  decoration: InputDecoration(
-                                    hintText: 'Name',
-                                    contentPadding: EdgeInsets.all(10.0),
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(8),
-                                      borderSide: BorderSide()
-                                    ),
-                                    filled: true,
-                                    fillColor: Colors.grey[100],
+
+                        Form(
+                          key: formKeyName,
+                          child: Container(
+                            margin: EdgeInsets.all(12),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.max,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Text(
+                                  'Name Event',
+                                  style: TextStyle(
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.w600
                                   ),
                                 ),
-                              ),
-                            ],
+                                Container(
+                                  margin: EdgeInsets.fromLTRB(15, 5, 15, 5),
+                                  child: TextFormField(
+                                    controller: nameController,
+                                    keyboardType: TextInputType.text,
+                                    decoration: InputDecoration(
+                                      hintText: 'Name',
+                                      contentPadding: EdgeInsets.all(10.0),
+                                      border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(8),
+                                        borderSide: BorderSide(
+                                          color: Colors.red
+                                        )
+                                      ),
+                                      filled: true,
+                                      fillColor: Colors.white,
+                                    ),
+                                    validator: (val) => val.length == 0 ? 'Enter Name' : null,
+                                    onSaved: (val) => name = val,                                    
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
-                        Container(
+                      
+                        
+                        Form(
+                          key: formKeyType,
+                          child: Container(
                           margin: EdgeInsets.all(12),
                           child: Column(
                             mainAxisSize: MainAxisSize.max,
@@ -142,44 +216,50 @@ class _AddEventState extends State<AddEvent>{
                               Text(
                                 'Type',
                                 style: TextStyle(
-                                    color: Colors.black
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.w600
                                 ),
                               ),
-                              FieldType(),
+                              FieldType(callbackResultIcon),
                             ],
                           ),
+                          ),
                         ),
-                        Container(
-                          margin: EdgeInsets.fromLTRB(15, 5, 15, 15),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Text(
-                                'Amount',
-                                style: TextStyle(
-                                    color: Colors.black
-                                ),
-                              ),
-                              Container(
-                                margin: EdgeInsets.all(10),
-                                child: TextField(
-                                  keyboardType: TextInputType.number,
-                                  controller: amountController,
-                                  decoration: InputDecoration(
-                                    hintText: 'Amount',
-                                    contentPadding: EdgeInsets.all(10.0),
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(8),
-                                      borderSide: BorderSide(
-                                        color: Colors.white
-                                      )
-                                    ),
-                                    filled: true,
-                                    fillColor: Colors.grey[50],
+                        Form(
+                          key: formKeyAmount,
+                          child: Container(
+                            margin: EdgeInsets.fromLTRB(15, 5, 15, 15),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Text(
+                                  'Amount',
+                                  style: TextStyle(
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.w600
                                   ),
                                 ),
-                              ),
-                            ],
+                                Container(
+                                  margin: EdgeInsets.all(10),
+                                  child: TextField(
+                                    keyboardType: TextInputType.number,
+                                    controller: amountController,
+                                    decoration: InputDecoration(
+                                      hintText: 'Amount',
+                                      contentPadding: EdgeInsets.all(10.0),
+                                      border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(8),
+                                        borderSide: BorderSide(
+                                          color: Colors.white
+                                        )
+                                      ),
+                                      filled: true,
+                                      fillColor: Colors.white,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                         Container(
@@ -190,27 +270,32 @@ class _AddEventState extends State<AddEvent>{
                               Text(
                                 'Date & Time',
                                 style: TextStyle(
-                                    color: Colors.black
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.w600
                                 ),
                               ),
-                              RaisedButton(
-                                color: Colors.grey[100],
-                                padding: EdgeInsets.all(10.0),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(8),
-                                  side: BorderSide(color: Colors.grey)
+                              Padding(
+                                padding: EdgeInsets.symmetric(horizontal:10),
+                                child: RaisedButton(
+                                  color: Colors.grey[100],
+                                  padding: EdgeInsets.all(10.0),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(8),
+                                    side: BorderSide(color: Colors.grey)
+                                  ),
+                                  onPressed: ()
+                                  async{
+                                    await showModalBottomSheet(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return DatePickerWidget(callback);
+                                      }
+                                    );
+                                  },
+                                  child: new Text('TIME: ' + time),
                                 ),
-                                onPressed: ()
-                                async{
-                                  await showModalBottomSheet(
-                                    context: context,
-                                    builder: (BuildContext context) {
-                                      return DatePickerWidget(callback);
-                                    }
-                                  );
-                                },
-                                child: new Text(time),
                               ),
+         
                             ],
                           ),
                         ),
@@ -222,22 +307,26 @@ class _AddEventState extends State<AddEvent>{
                               Text(
                                 'Descirption',
                                 style: TextStyle(
-                                    color: Colors.black
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.w600
                                 ),
                               ),
                               Container(
                                 margin: EdgeInsets.all(10),
                                 child: TextField(
+                                  key: formKeyDes,
+                                  controller: desciprionController,
                                   keyboardType: TextInputType.multiline,
                                   maxLines: 3,
                                   decoration: InputDecoration(
                                     hintText: '',
                                     contentPadding: EdgeInsets.all(10.0),
                                     filled: true,
-                                    fillColor: Colors.grey[100],
+                                    fillColor: Colors.white,
                                     border: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(8),
-                                      borderSide: BorderSide()
+                                      borderSide: BorderSide(
+                                      )
                                     ),
                                   ),
                                   onChanged: null,
@@ -254,13 +343,11 @@ class _AddEventState extends State<AddEvent>{
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 children: <Widget>[
-                                  // Icon(
-                                  //   Icons.image,
-                                  //   color: kTextLightColor,),
                                   Text(
                                     'Pictures',
                                     style: TextStyle(
-                                        color: Colors.black
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.w600
                                     ),
                                   ),
                                 ],

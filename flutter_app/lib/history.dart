@@ -21,6 +21,7 @@ class _HistoryState extends State<History>{
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
+          
           title: Text('Schedule'),
           elevation: 0,
           actions: <Widget>[
@@ -34,10 +35,12 @@ class _HistoryState extends State<History>{
             },)
           ],
         ),
+        backgroundColor: Colors.white,
         body: DefaultTabController(
         length: 3,
         child: Scaffold(
           appBar: AppBar(
+            automaticallyImplyLeading: false,
             backgroundColor: Colors.orange[200],
             elevation: 0,
             flexibleSpace: TabBar(

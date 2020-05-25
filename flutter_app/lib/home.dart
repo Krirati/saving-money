@@ -9,9 +9,9 @@ import 'package:savemoney/setting.dart';
 
 class Home extends StatefulWidget {
   @override
-  _HomeState createState() => _HomeState();
+  HomeState createState() => HomeState();
 }
-class _HomeState extends State<Home> {
+class HomeState extends State<Home> {
 
   //Properties
 
@@ -151,8 +151,8 @@ class MyClipper extends CustomClipper<Path>{
   @override
   Path getClip(Size size) {
     var path = Path();
-    path.lineTo(0, size.height - 80);
-    path.quadraticBezierTo(size.width /2, size.height, size.width, size.height-80);
+    path.lineTo(0, size.height - 30);
+    path.quadraticBezierTo(size.width /2, size.height, size.width, size.height-30);
     path.lineTo(size.width, 0);
     path.close();
     return path;

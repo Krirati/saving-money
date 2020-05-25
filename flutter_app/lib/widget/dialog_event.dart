@@ -4,8 +4,8 @@ import '../constant.dart';
 
 class DialogEvent extends StatefulWidget {
   final type;
-  
-  const DialogEvent({this.type});
+  Function(String, String) callbackTypeicon;
+  DialogEvent(this.type, this.callbackTypeicon);
 
   @override
   _DialogEventState createState() => _DialogEventState();
@@ -38,6 +38,10 @@ class _DialogEventState extends State<DialogEvent>{
     Image image = Image.asset(iconData.elementAt(index));
     return  image;
   }
+
+  void sendState(type, selectedColor) {
+    widget.callbackTypeicon(type, selectedColor.toString());
+  }
   @override
   Widget build(BuildContext context) {
     return Dialog(
@@ -54,12 +58,13 @@ class _DialogEventState extends State<DialogEvent>{
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
-                  Text('Select Icon ',
+                  Text('Select Icon',
                     style: kHeadingTextStyle,),
                   Spacer(),
                   IconButton(
                       icon: Icon(Icons.save, color: Colors.black, size: 30,),
                       onPressed: () {
+                        sendState(widget.type, selectedColor);
                         Navigator.of(context).pop();
                       }
                   ),

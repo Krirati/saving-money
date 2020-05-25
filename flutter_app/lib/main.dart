@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:savemoney/home.dart';
 
-void main() {
+import 'database/dbHelper.dart';
+
+void main() async{
+  WidgetsFlutterBinding.ensureInitialized();
+  await DBHelper().initDb();
   runApp(MyApp());
 }
 
@@ -13,12 +17,8 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       theme: ThemeData(
         fontFamily: 'Poppins',
-        // primarySwatch: Colors.orangeAccent,
         primaryColor: Colors.orange[200],
         accentColor: Colors.orangeAccent,
-        // This makes the visual density adapt to the platform that you run
-        // the app on. For desktop platforms, the controls will be smaller and
-        // closer together (more dense) than on mobile platforms.
         visualDensity: VisualDensity.adaptivePlatformDensity,
         canvasColor: Colors.transparent
       ),
