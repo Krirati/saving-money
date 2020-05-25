@@ -177,7 +177,7 @@ class _FieldTypeState extends State<FieldType> {
                       )
                     ]
                 ),
-                margin: EdgeInsets.symmetric(horizontal: 30),
+                margin: EdgeInsets.symmetric(horizontal: 15),
                   child: Padding(
                     padding: EdgeInsets.symmetric(vertical:8, horizontal:10),
                     child: Column(

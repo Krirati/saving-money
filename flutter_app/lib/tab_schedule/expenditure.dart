@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:savemoney/database/dbHelper.dart';
+import 'package:savemoney/database/model.dart';
+import 'package:savemoney/widget/card_event.dart';
 
-import '../constant.dart';
 
 class ExpenditureScreen  extends StatefulWidget{
 
@@ -14,12 +16,49 @@ class ExpenditureScreen  extends StatefulWidget{
 class _ExpenditureScreenState extends State<ExpenditureScreen> {
   GlobalKey actionKey;
   String dropdownValue;
+  Future<List<EventModel>> events;
+  var dbHelper;
   @override
   void initState() {
     actionKey = LabeledGlobalKey('mode');
     super.initState();
+    dbHelper = DBHelper();
+    refreshList();
   }
 
+  refreshList() {
+    setState(() {
+      events = dbHelper.quertTypeEvent('expenditure','');
+    });
+  }
+  SingleChildScrollView dataTable(List<EventModel> events) {
+    var singleChildScrollView = SingleChildScrollView(
+      scrollDirection: Axis.vertical,
+      child: Column(
+        children:<Widget>[
+          for (var i = 0; i < events.length; i++) 
+            CardEvent(name: events[i].name, price: events[i].amount, time: events[i].date, icon: events[i].icon),
+        ]
+      ) 
+    );
+    return singleChildScrollView;
+  }
+  list() {
+    return Expanded(
+      child: FutureBuilder(
+        future: events,
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            return dataTable(snapshot.data);
+          }
+          if(null == snapshot.data || snapshot.data.length == 0){
+            return Text('No Data Found');
+          }
+          return CircularProgressIndicator();
+        },
+      )
+    );
+  }
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -74,56 +113,10 @@ class _ExpenditureScreenState extends State<ExpenditureScreen> {
                 )
               ),
               SizedBox(height:10),
-              Card(
-                color: Colors.white,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(2.0),
-                ),
-                elevation: 4,
-                child: Container(
-                  padding: EdgeInsets.all(10),
-                  child: DataTable(
-                    columnSpacing:70,
-                    columns: [
-                      DataColumn(label: Text('Name')),
-                      DataColumn(label: Text('Time')),
-                      DataColumn(label: Text('Price')),
-                    ], 
-                    rows: [
-                      DataRow(cells: [
-                        DataCell(Row( children: <Widget>[
-                          Icon(Icons.fastfood, color: kTextLightColor,),
-                          SizedBox(width: 3),
-                          Text('data')
-                        ], )),
-                        DataCell(Text('วันนี้')),
-                        DataCell(Text('1000'),showEditIcon: true),
-                      ]),
-                      DataRow(cells: [
-                        DataCell(Text('เมื่อวาน')),
-                        DataCell(Text('วันนี้')),
-                        DataCell(Text('1000'),showEditIcon: true),
-                      ]),
-                      DataRow(cells: [
-                        DataCell(Text('สัปดาห์ล่าสุด')),
-                        DataCell(Text('1000')),
-                        DataCell(Text('วันนี้'),showEditIcon: true),
-                      ]),
-                      DataRow(cells: [
-                        DataCell(Text('เดือนล่าสุด')),
-                        DataCell(Text('1000')),
-                        DataCell(Text('วันนี้'),showEditIcon: true),
-                      ]),
-                      
-                    ]
-                  ),
-                )
-              ),
-
+              list(),
             ],
           )
         )
-
       ),
     );
   } 

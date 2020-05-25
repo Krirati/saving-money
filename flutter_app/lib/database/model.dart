@@ -25,6 +25,6 @@ class EventModel {
 
   @override
   String toString() {
-    return 'EventModel{id: $id, name: $name, amount: }';
+    return 'EventModel{id: $id, name: $name, amount: $amount, icon : $icon, date: $date, desription: $description}';
   }
 }

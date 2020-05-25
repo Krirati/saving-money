@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:savemoney/constant.dart';
+import 'package:savemoney/database/dbHelper.dart';
+import 'package:savemoney/database/model.dart';
 import 'package:savemoney/history.dart';
 import 'package:savemoney/widget/tag_type.dart';
+
+import 'card_event.dart';
 
 
 class ReminderSlide extends StatefulWidget {
@@ -14,9 +18,24 @@ class ReminderSlide extends StatefulWidget {
 }
 
 class _ReminderSlideState extends State<ReminderSlide> {
+  Future<List<EventModel>> events;
   final int _numPages = reminderItems.length;
   final PageController _pageController = PageController(initialPage: 0, viewportFraction: 0.8);
   int _currentpage = 0;
+  var dbHelper = DBHelper();
+  int num = 0 ;
+  @override
+  void initState() {
+    super.initState();
+    refreshList();
+  } 
+
+  refreshList() {
+    setState(() {
+      events = dbHelper.getToDay();
+      print('reminder');
+    });
+  }
 
   List<Widget> _buildPageIndicator() {
     List<Widget> list = [];
@@ -46,7 +65,7 @@ class _ReminderSlideState extends State<ReminderSlide> {
         onTap: () {
           Navigator.push(context,
             MaterialPageRoute(
-                builder: (_) => History(reminderItem: reminderItems[index])
+                builder: (_) => History()
             ),
           );
         },
@@ -74,7 +93,6 @@ class _ReminderSlideState extends State<ReminderSlide> {
                 children: <Widget>[
                   Positioned(
                     top: 30.0,
-//                    right: 30.0,
                     child: Padding(
                       padding: EdgeInsets.all(10),
                       child: Column(
@@ -104,7 +122,6 @@ class _ReminderSlideState extends State<ReminderSlide> {
                                 Icons.access_time,
                                 color: kTextLightColor,
                                 size: 20,
-                                semanticLabel: 'Text to announce in accessibility modes',
                               ),
                               SizedBox(width: 10,),
                               Text(
@@ -194,6 +211,7 @@ class _ReminderSlideState extends State<ReminderSlide> {
                     return _reminderSelector(index);
                   },)
             ),
+            // CardEvent(),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: _buildPageIndicator(),

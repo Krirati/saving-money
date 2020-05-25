@@ -15,7 +15,11 @@ class DBHelper {
   static const String DATE = 'date';
   static const String DESCRIPTION = 'description';
 
+  static const String TOTAL = 'total';
+  static const String CURRENT = 'current';
+  static const String DATEFINISH = 'dateFinish';
   static const String TABLE = 'testDB';
+  static const String TABLEGOAL = 'testDBGoal';
   static const String DB_NAME = 'transaction_test.db';
 
   Future<Database> get db async {
@@ -35,11 +39,29 @@ class DBHelper {
 
   _onCreate(Database db, int version) async {
     await db.execute("CREATE TABLE $TABLE ($ID INTEGER PRIMARY KEY, $NAME TEXT, $TYPE TEXT, $AMOUNT DOUBLE, $ICON TEXT, $DESCRIPTION TEXT, $DATE TEXT)");
+    await db.execute("CREATE TABLE $TABLEGOAL ($ID INTEGER PRIMARY KEY, $NAME TEXT, $TYPE TEXT, $TOTAL DOUBLE, $CURRENT DOUBLE, $ICON TEXT, $DESCRIPTION TEXT, $DATEFINISH TEXT)");
   }
 
   Future<List<EventModel>> getEvents() async {
     var dbClient = await db;
     final List<Map<String, dynamic>> maps = await dbClient.query(TABLE);
+    return List.generate(maps.length, (index) {
+      return EventModel(
+        id: maps[index]['id'],
+        name: maps[index]['name'],
+        type: maps[index]['type'],
+        amount: maps[index]['amount'],
+        icon: maps[index]['icon'],
+        date: maps[index]['date'],
+        description: maps[index]['description'],
+      );
+    });
+  }
+
+    Future<List<EventModel>> getToDay() async {
+    var dbClient = await db;
+    var sql = "SELECT * FROM $TABLE WHERE $DATE LIKE '${DateTime.now().toString().split(' ')[0]}%' ";
+    final List<Map<String, dynamic>> maps = await dbClient.rawQuery(sql);
     return List.generate(maps.length, (index) {
       return EventModel(
         id: maps[index]['id'],

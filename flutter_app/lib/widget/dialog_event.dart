@@ -58,7 +58,7 @@ class _DialogEventState extends State<DialogEvent>{
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
-                  Text('Select Icon',
+                  Text('Select Group type',
                     style: kHeadingTextStyle,),
                   Spacer(),
                   IconButton(

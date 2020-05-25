@@ -8,6 +8,7 @@ class GoalCard extends StatefulWidget{
 }
 
 class _GoalCardState extends State<GoalCard> {
+  String dropdownValue;
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -19,7 +20,6 @@ class _GoalCardState extends State<GoalCard> {
       child: Container(
       padding: EdgeInsets.all(8),
       width: double.infinity,
-      height: 150,
         child: Stack(
           children: <Widget>[
             Column(
@@ -77,9 +77,28 @@ class _GoalCardState extends State<GoalCard> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: <Widget>[
-                  IconButton(
-                    icon: Icon(Icons.more_vert, color: kTextLightColor,),
-                    onPressed: (){},),
+                  DropdownButton<String>(
+                    dropdownColor: Colors.white,
+                    focusColor: Colors.red,
+                    icon: Icon(Icons.more_vert, color: Colors.black38,),
+
+                    underline: SizedBox(),
+                    onChanged: (String newValue) {
+                      setState(() {
+                        dropdownValue = newValue;
+                        print(dropdownValue);
+                      });
+                    },
+                    items: <String>[
+                      'Update',
+                      'Delete', 
+                    ].map<DropdownMenuItem<String>>((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(value),
+                      );
+                    }).toList()
+                  ),
                 ],
               )
             )

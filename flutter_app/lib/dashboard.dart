@@ -53,7 +53,7 @@ class _DashboardState extends State<Dashboard>{
                       Color(0xffffa726)
                     ],
                   ),
-  //                image: DecorationImage(image: AssetImage('assests/images/balance.png'))
+                //  image: DecorationImage(image: AssetImage('assests/images/balance.png'))
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
