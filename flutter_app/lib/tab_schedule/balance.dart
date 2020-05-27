@@ -29,9 +29,9 @@ class _BalanceScreenState extends State<BalanceScreen> {
   List<CircularStackEntry> data = <CircularStackEntry>[
     new CircularStackEntry(
       <CircularSegmentEntry>[
-        new CircularSegmentEntry(500.0, Colors.red[200], rankKey: 'Q1'),
-        new CircularSegmentEntry(1000.0, Colors.green[200], rankKey: 'Q2'),
-        new CircularSegmentEntry(2000.0, Colors.yellow[200], rankKey: 'Q3'),
+        new CircularSegmentEntry(500.0, incomeColor, rankKey: 'Q1'),
+        new CircularSegmentEntry(1000.0, expenditureColor, rankKey: 'Q2'),
+        new CircularSegmentEntry(2000.0, Colors.blue[100], rankKey: 'Q3'),
       ],
       rankKey: 'Quarterly Profits',
     ),
@@ -97,7 +97,7 @@ class _BalanceScreenState extends State<BalanceScreen> {
                                         Container(
                                           height: 10,
                                           width: 10,
-                                          color: Colors.red,
+                                          color: incomeColor,
                                           margin: EdgeInsets.all(3),
                                           child: Row(
                                             mainAxisAlignment: MainAxisAlignment.start,
@@ -113,7 +113,23 @@ class _BalanceScreenState extends State<BalanceScreen> {
                                         Container(
                                           height: 10,
                                           width: 10,
-                                          color: Colors.red,
+                                          color: expenditureColor,
+                                          margin: EdgeInsets.all(3),
+                                          child: Row(
+                                            mainAxisAlignment: MainAxisAlignment.start,
+                                            children: <Widget>[
+                                            ]
+                                          ),
+                                        ),
+                                        Text('Expenditure'),
+                                      ]
+                                    ),
+                                    Row(
+                                      children: <Widget>[
+                                        Container(
+                                          height: 10,
+                                          width: 10,
+                                          color: Colors.blue[100],
                                           margin: EdgeInsets.all(3),
                                           child: Row(
                                             mainAxisAlignment: MainAxisAlignment.start,
@@ -124,69 +140,51 @@ class _BalanceScreenState extends State<BalanceScreen> {
                                         Text('Saving'),
                                       ]
                                     ),
-                                    Row(
-                                      children: <Widget>[
-                                        Container(
-                                          height: 10,
-                                          width: 10,
-                                          color: Colors.red,
-                                          margin: EdgeInsets.all(3),
-                                          child: Row(
-                                            mainAxisAlignment: MainAxisAlignment.start,
-                                            children: <Widget>[
-                                            ]
-                                          ),
-                                        ),
-                                        Text('Arrears'),
-                                      ]
-                                    ),
                                   ],
                                 )
                               ),
                             ],
                           ),
-                          DataTable(
-                            columnSpacing:80,
-                            columns: [
-                              DataColumn(label: Text('Type')),
-                              DataColumn(label: Text('Price')),
-                              DataColumn(label: Text('Percent')),
-                            ], 
-                            rows: [
-                              DataRow(cells: [
-                                DataCell(Text('Income')),
-                                DataCell( FutureBuilder(
-                                  future: loadSum('income'),
-                                  builder: (BuildContext context, AsyncSnapshot<double>snapshot) {
-                                      return Text('${snapshot.data}');
-                                    }
-                                  )
-                                ),
-                                DataCell(Text('10%')),
-                              ]),
-                              DataRow(cells: [
-                                DataCell(Text('Expenditure')),
-                                DataCell( FutureBuilder(
-                                  future: loadSum('expenditure'),
-                                  builder: (BuildContext context, AsyncSnapshot<double>snapshot) {
-                                      return Text('${snapshot.data}');
-                                    }
-                                  )
-                                ),
-                                DataCell(Text('50%')),
-                              ]),
-                              DataRow(cells: [
-                                DataCell(Text('Saving for goals')),
-                                DataCell( FutureBuilder(
-                                  future: loadSum('goals'),
-                                  builder: (BuildContext context, AsyncSnapshot<double>snapshot) {
-                                      return Text('${snapshot.data}');
-                                    }
-                                  )
-                                ),
-                                DataCell(Text('70%')),
-                              ]),
-                            ]
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: <Widget>[
+                              Divider(thickness: 1,),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                children: <Widget>[
+                                  Padding(
+                                    padding: EdgeInsets.all(0),
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                      children: <Widget>[
+                                        Text('0', style: TextStyle(fontWeight: FontWeight.w500, fontSize: 25)),
+                                        Text('Income'.toUpperCase(), style: TextStyle(color: kTextLightColor, fontSize: 16),)
+                                      ]
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.all(0),
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                      children: <Widget>[
+                                        Text('0', style: TextStyle(fontWeight: FontWeight.w500, fontSize: 25)),
+                                        Text('Expenditure'.toUpperCase(), style: TextStyle(color: kTextLightColor, fontSize: 16),)
+                                      ]
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.all(0),
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                      children: <Widget>[
+                                        Text('0', style: TextStyle(fontWeight: FontWeight.w500, fontSize: 25)),
+                                        Text('Saving'.toUpperCase(), style: TextStyle(color: kTextLightColor, fontSize: 16),)
+                                      ]
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
                           ),
                         ]
                       ),

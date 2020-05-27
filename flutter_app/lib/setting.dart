@@ -33,7 +33,7 @@ class _SettingsState extends State<Settings> {
 
   refreshList() {
     setState(() {
-      events = dbHelper.quertTypeEvent('expenditure','');
+      events = dbHelper.getEvents();
     });
   }
   SingleChildScrollView dataTable(List<EventModel> events) {
@@ -46,18 +46,6 @@ class _SettingsState extends State<Settings> {
           ),
           DataColumn(
             label: Text('TYPE'),
-          ),
-          DataColumn(
-            label: Text('AMOUNT'),
-          ),
-          DataColumn(
-            label: Text('ICON'),
-          ),
-          DataColumn(
-            label: Text('DATE'),
-          ),
-          DataColumn(
-            label: Text('DESCRIPTION'),
           ),
           DataColumn(
             label: Text('Delete')
@@ -77,18 +65,6 @@ class _SettingsState extends State<Settings> {
             ),
             DataCell(
               Text('${event.type}'),
-            ),
-            DataCell(
-              Text('${event.amount}'),
-            ),
-            DataCell(
-              Text('${event.amount}'),
-            ),
-            DataCell(
-              Text('${event.date}'),
-            ),
-            DataCell(
-              Text('${event.description}'),
             ),
             DataCell(
               IconButton(
@@ -133,7 +109,7 @@ class _SettingsState extends State<Settings> {
       formKeyName.currentState.save();
       if(isUpdating) {
         print(curUserId.toString());
-        EventModel e = EventModel(id: curUserId, name: nameController.text, type: 'update', amount: 100.30, icon: 'bye', description: 'woww');
+        EventModel e = EventModel(id: curUserId, name: nameController.text,type: 'goals' ,amount: 100.30, icon: 'bye', description: 'woww');
         dbHelper.update(e);
         setState(() {
           isUpdating = false;

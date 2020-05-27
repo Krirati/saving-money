@@ -10,6 +10,7 @@ import 'package:savemoney/widget/datepicker.dart';
 import 'package:savemoney/widget/field_select_type.dart';
 
 import 'constant.dart';
+import 'database/goalmodel.dart';
 import 'widget/dialog_notification.dart';
 
 class AddEvent extends StatefulWidget {
@@ -91,7 +92,21 @@ class _AddEventState extends State<AddEvent>{
           date: time, 
           description: desciprionController.text
         );
-        dbHelper.insert(e);
+        if (type == 'goals') {
+          GoalModel g = GoalModel(
+            name: nameController.text,
+            type: type,
+            total: double.parse(amountController.text),
+            current: 0.0,
+            icon: icon,
+            dateFinish: time,
+            description: desciprionController.text
+          );
+          dbHelper.insertGoals(g);
+        } 
+        else {
+          dbHelper.insert(e);
+        }
       }
       clearField();
     }
@@ -233,7 +248,7 @@ class _AddEventState extends State<AddEvent>{
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
                                 Text(
-                                  'Amount',
+                                  (type == 'goals') ? 'Target amount':'Amount',
                                   style: TextStyle(
                                       color: Colors.black,
                                       fontWeight: FontWeight.w600
@@ -268,7 +283,7 @@ class _AddEventState extends State<AddEvent>{
                             crossAxisAlignment: CrossAxisAlignment.stretch,
                             children: <Widget>[
                               Text(
-                                'Date & Time',
+                                (type == 'goals') ? 'Target date':'Date & Time',
                                 style: TextStyle(
                                     color: Colors.black,
                                     fontWeight: FontWeight.w600

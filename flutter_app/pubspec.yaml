@@ -63,6 +63,7 @@ flutter:
     - assests/icon/finance.svg
     - assests/icon/star.svg
     - assests/images/goalIcon.png
+    - assests/icon/delete.png
 
     - assests/icon/revenue.png
     - assests/icon/salary.png
@@ -87,7 +88,7 @@ flutter:
     - assests/icon/treatment.png
     - assests/icon/pet.png
     - assests/icon/education.png
-
+    - assests/icon/bakery.png
 
 
   # An image asset can refer to one or more resolution-specific "variants", see

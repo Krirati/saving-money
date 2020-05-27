@@ -8,7 +8,9 @@ import 'package:savemoney/widget/dialog_notification.dart';
 import 'package:savemoney/widget/remindercard.dart';
 
 import 'database/dbHelper.dart';
+import 'database/model.dart';
 import 'home.dart';
+import 'widget/card_event.dart';
 
 
 Color kPrimaryBlue = Color(0xff3c528b);
@@ -31,7 +33,6 @@ class _DashboardState extends State<Dashboard>{
     var result = dbHelper.balance();
     return result;
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -104,16 +105,17 @@ class _DashboardState extends State<Dashboard>{
                           alignment: Alignment.topCenter,
                         ),
                         Positioned(
-                            top: 4,
-                          left: 200,
+                          top: 2,
+                          left: 150,
                           child: Text(
                             'Keb Tang',
                             style: kHeadingTextStyle.copyWith(
-                              color: Colors.white
+                              color: Colors.black,
+                              fontSize: 40,
+                              fontWeight: FontWeight.bold
                             ),
                           ),
                         ),
-                        Container(),
                       ],
                     ),
                   )
@@ -215,7 +217,7 @@ class _DashboardState extends State<Dashboard>{
                 ],
               ),
             ),
-            ReminderSlide()
+            ReminderSlide(),
           ],
         ),
       ),

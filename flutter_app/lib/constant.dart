@@ -85,7 +85,8 @@ const kMapIconGoals = [
   'assests/icon/repair-fee.png',
   'assests/icon/treatment.png',
   'assests/icon/pet.png',
-  'assests/icon/education.png'
+  'assests/icon/education.png',
+  'assests/icon/bakery.png'
 ];
 
 const kMapIconExpenditure = [
@@ -102,5 +103,6 @@ const kMapIconExpenditure = [
   'assests/icon/repair-fee.png',
   'assests/icon/treatment.png',
   'assests/icon/pet.png',
-  'assests/icon/education.png'
+  'assests/icon/education.png',
+  'assests/icon/bakery.png'
 ];

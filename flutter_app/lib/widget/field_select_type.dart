@@ -205,7 +205,7 @@ class _FieldTypeState extends State<FieldType> {
                             ),
                             SizedBox(width: 20,),
                             Text(
-                              (icon == null) ? 'Select icon'.toUpperCase(): type,
+                              (icon == null) ? 'Select group type'.toUpperCase(): type,
                               style: TextStyle(
                                 color: Colors.black,
                                 fontSize: 18,

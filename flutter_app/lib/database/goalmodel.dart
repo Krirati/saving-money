@@ -20,7 +20,7 @@ class GoalModel {
       'total': total,
       'current': current,
       'icon': icon,
-      'date': dateFinish,
+      'dateFinish': dateFinish,
       'description': description,
     };
 

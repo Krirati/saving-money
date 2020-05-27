@@ -5,6 +5,8 @@ import 'package:savemoney/database/model.dart';
 import 'package:sqflite/sqflite.dart';
 import 'dart:io' as io;
 
+import 'goalmodel.dart';
+
 class DBHelper {
   static Database _db;
   static const String ID = 'id';
@@ -57,10 +59,26 @@ class DBHelper {
       );
     });
   }
-
-    Future<List<EventModel>> getToDay() async {
+    Future<List<GoalModel>> getGoals() async {
     var dbClient = await db;
-    var sql = "SELECT * FROM $TABLE WHERE $DATE LIKE '${DateTime.now().toString().split(' ')[0]}%' ";
+    final List<Map<String, dynamic>> maps = await dbClient.query(TABLEGOAL);
+    return List.generate(maps.length, (index) {
+      return GoalModel(
+        id: maps[index]['id'],
+        name: maps[index]['name'],
+        type: maps[index]['type'],
+        total: maps[index]['total'],
+        icon: maps[index]['icon'],
+        current: maps[index]['current'],
+        dateFinish: maps[index]['dateFinish'],
+        description: maps[index]['description'],
+      );
+    });
+  }
+
+  Future<List<EventModel>> getToDay() async {
+    var dbClient = await db;
+    var sql = "SELECT * FROM $TABLE WHERE $DATE LIKE '2020%' ";
     final List<Map<String, dynamic>> maps = await dbClient.rawQuery(sql);
     return List.generate(maps.length, (index) {
       return EventModel(
@@ -86,15 +104,50 @@ class DBHelper {
     return eventModel;
   }
 
+  Future<GoalModel> insertGoals(GoalModel goalModel) async {
+    print('insert');
+    var dbClient = await db;
+    goalModel.id = await dbClient.insert(
+      TABLEGOAL, 
+      goalModel.toMap(), 
+      conflictAlgorithm: ConflictAlgorithm.replace
+    );
+    return goalModel;
+  }
+
   Future<int> delete(int id) async {
     var dbClient = await db;
     return await dbClient.delete(TABLE, where: '$ID = ?', whereArgs: [id]);
+  }
+
+  Future<int> deleteGoal(int id) async {
+    var dbClient = await db;
+    // await dbClient.delete(TABLE, where: '$ID = ?', whereArgs: [id]);
+    return await dbClient.delete(TABLEGOAL, where: '$ID = ?', whereArgs: [id]);
   }
 
   Future<int> update(EventModel eventModel) async {
     var dbClient = await db;
     return await dbClient.update(TABLE, eventModel.toMap(),
       where: '$ID = ?', whereArgs: [eventModel.id]
+    );
+  }
+
+  Future<int> updateGoal(GoalModel goalModel) async {
+    var dbClient = await db;
+    EventModel e = EventModel(
+      name: goalModel.name, 
+      type: goalModel.type, 
+      icon: goalModel.icon, 
+      amount: goalModel.current, 
+      date: DateTime.now().toString(),
+      description: goalModel.description
+    );
+    await dbClient.insert(TABLE, e.toMap(),conflictAlgorithm: ConflictAlgorithm.replace);
+    return await dbClient.update(TABLEGOAL, 
+      goalModel.toMap(),
+      where: "id = ?",
+      whereArgs: [goalModel.id]
     );
   }
 
@@ -144,6 +197,7 @@ class DBHelper {
     var dbClient = await db;
     double income = 0;
     double expenditure = 0;
+    double goals = 0;
     var sql = "SELECT * FROM $TABLE WHERE $TYPE = 'income'";
     final List<Map<String, dynamic>> mapsIn = await dbClient.rawQuery(sql);
     for (var item in mapsIn) {
@@ -154,8 +208,13 @@ class DBHelper {
     for (var item in mapsEx) {
       expenditure = expenditure + item['amount'];
     }
-    print(income-expenditure);
-    return income-expenditure;
+    var sqlGoals = "SELECT * FROM $TABLE WHERE $TYPE = 'goals'";
+    final List<Map<String, dynamic>> mapsGoal = await dbClient.rawQuery(sqlGoals);
+    for (var item in mapsGoal) {
+      goals = goals + item['amount'];
+    }
+    print(income-expenditure- goals);
+    return income-expenditure-goals;
   }
   Future close() async {
     var dbClient = await db;

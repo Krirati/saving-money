@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:savemoney/constant.dart';
 
+import 'database/dbHelper.dart';
+import 'database/goalmodel.dart';
 import 'widget/dialog_notification.dart';
 import 'widget/goal_card.dart';
 
@@ -11,6 +13,50 @@ class DataTarget extends StatefulWidget {
 }
 
 class _DataTargetState extends State<DataTarget>{
+
+  Future<List<GoalModel>> events;
+  var dbHelper;
+  @override
+  void initState() {
+    super.initState();
+    dbHelper = DBHelper();
+    refreshList();
+  }
+
+  void refreshList() {
+    setState(() {
+      events = dbHelper.getGoals();
+      
+    });
+  }
+  SingleChildScrollView dataTable(List<GoalModel> events) {
+    var singleChildScrollView = SingleChildScrollView(
+      scrollDirection: Axis.vertical,
+      child: Column(
+        children:<Widget>[
+          for (var i = 0; i < events.length; i++) 
+            GoalCard(id: events[i].id, name: events[i].name, totalMoney: events[i].total,current: events[i].current, dateEnd: events[i].dateFinish, icon: events[i].icon,)
+        ]
+      ) 
+    );
+    return singleChildScrollView;
+  }
+  list() {
+    return Expanded(
+      child: FutureBuilder(
+        future: events,
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            return dataTable(snapshot.data);
+          }
+          if(null == snapshot.data || snapshot.data.length == 0){
+            return Text('No Data Found');
+          }
+          return CircularProgressIndicator();
+        },
+      )
+    );
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -140,7 +186,7 @@ class _DataTargetState extends State<DataTarget>{
                           )
                         ]
                       ),
-                      GoalCard(),
+                      list()
                   ]
                 )
               ),

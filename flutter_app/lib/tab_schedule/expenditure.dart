@@ -44,7 +44,7 @@ class _ExpenditureScreenState extends State<ExpenditureScreen> {
     return singleChildScrollView;
   }
   list() {
-    return Expanded(
+    return Container(
       child: FutureBuilder(
         future: events,
         builder: (context, snapshot) {
@@ -74,9 +74,19 @@ class _ExpenditureScreenState extends State<ExpenditureScreen> {
                 padding:
                     EdgeInsets.symmetric(horizontal: 16, vertical: 5),
                 alignment: Alignment.centerRight,
+                
                 decoration: BoxDecoration(
-                    color: Colors.orangeAccent,
-                    borderRadius: BorderRadius.circular(10)),
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(10),
+                  boxShadow:  [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.5),
+                      spreadRadius: 1,
+                      blurRadius:4,
+                      offset: Offset(0,3),
+                    )
+                  ]  
+                ),
 
                 // dropdown below..
                 child: Row(
@@ -87,7 +97,7 @@ class _ExpenditureScreenState extends State<ExpenditureScreen> {
                       dropdownColor: Colors.white,
                         value: dropdownValue,
                         // iconDisabledColor: Colors.white,
-                        icon: Icon(Icons.arrow_drop_down, color: Colors.white,),
+                        icon: Icon(Icons.arrow_drop_down, color: Colors.black,),
                         iconSize: 42,
                         underline: SizedBox(),
                         onChanged: (String newValue) {

@@ -31,6 +31,7 @@ class _IncomeScreenState extends State<IncomeScreen> {
   refreshList() {
     setState(() {
       events = dbHelper.quertTypeEvent('income','');
+      
     });
   }
   SingleChildScrollView dataTable(List<EventModel> events) {
@@ -46,7 +47,8 @@ class _IncomeScreenState extends State<IncomeScreen> {
     return singleChildScrollView;
   }
   list() {
-    return Expanded(
+    return Container(
+      margin: EdgeInsets.symmetric(vertical:10),
       child: FutureBuilder(
         future: events,
         builder: (context, snapshot) {
