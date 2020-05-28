@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:savemoney/constant.dart';
 import 'package:savemoney/database/dbHelper.dart';
 import 'package:savemoney/database/model.dart';
 import 'package:savemoney/widget/card_event.dart';
@@ -94,7 +95,7 @@ class _IncomeScreenState extends State<IncomeScreen> {
                 // dropdown below..
                 child: Row(
                   children: <Widget>[
-                    Text('Select Rang'.toUpperCase(), style: TextStyle(color: Colors.black, fontSize: 22, fontWeight: FontWeight.w300)),
+                    Text('Select Rang'.toUpperCase(), style: TextStyle(color: Colors.black, fontSize: 24, fontWeight: FontWeight.w400)),
                     Spacer(),
                     DropdownButton<String>(
                       dropdownColor: Colors.white,
@@ -109,7 +110,7 @@ class _IncomeScreenState extends State<IncomeScreen> {
                           print(dropdownValue);
                         });
                       },
-                      hint: Text('select'.toUpperCase()),
+                      hint: Text('select'.toUpperCase(), style: TextStyle(color: kTextLightColor, fontSize: 24, fontWeight: FontWeight.w400)),
                       items: <String>[
                         'Day',
                         'Week',

@@ -13,8 +13,10 @@ class DataTarget extends StatefulWidget {
 }
 
 class _DataTargetState extends State<DataTarget>{
-
   Future<List<GoalModel>> events;
+  Future<int> countGoal;
+  Future<int> countGoalNew;
+  Future<int> countGoalCom;
   var dbHelper;
   @override
   void initState() {
@@ -26,8 +28,16 @@ class _DataTargetState extends State<DataTarget>{
   void refreshList() {
     setState(() {
       events = dbHelper.getGoals();
-      
+      countGoal = dbHelper.countGoal();
+      countGoalNew = dbHelper.countGoalNew();
+      countGoalCom = dbHelper.countGoalCompleted();
+      print(countGoal);
     });
+  }
+  callback(update) {
+    if (update == true) {
+      refreshList();
+    }
   }
   SingleChildScrollView dataTable(List<GoalModel> events) {
     var singleChildScrollView = SingleChildScrollView(
@@ -35,7 +45,14 @@ class _DataTargetState extends State<DataTarget>{
       child: Column(
         children:<Widget>[
           for (var i = 0; i < events.length; i++) 
-            GoalCard(id: events[i].id, name: events[i].name, totalMoney: events[i].total,current: events[i].current, dateEnd: events[i].dateFinish, icon: events[i].icon,)
+            GoalCard(
+              id: events[i].id, 
+              name: events[i].name, 
+              totalMoney: events[i].total,
+              current: events[i].current, 
+              dateEnd: events[i].dateFinish, 
+              icon: events[i].icon,
+              callBack: callback,)
         ]
       ) 
     );
@@ -110,12 +127,28 @@ class _DataTargetState extends State<DataTarget>{
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: <Widget>[
-                                      Text(
-                                        '0 Goals',
-                                        style: TextStyle(
-                                          fontSize: 30,
-                                        )
-                                      ),
+                                      FutureBuilder(
+                                        future: countGoal,
+                                        builder: (context, snapshot) {
+                                          if (snapshot.hasData) {
+                                            return Text(
+                                              '${snapshot.data} Goals',
+                                              style: TextStyle(
+                                                fontSize: 48,
+                                              )
+                                            );
+                                          }
+                                          if(null == snapshot.data || snapshot.data.length == 0){
+                                            return Text('0 Goals',
+                                              style: TextStyle(
+                                                fontSize: 48,
+                                              )
+                                            );
+                                          }
+                                          return CircularProgressIndicator();
+      
+                                        }
+                                      ),                          
                                     ],
                                   ),
                                   SizedBox(height: 25,), 
@@ -127,8 +160,32 @@ class _DataTargetState extends State<DataTarget>{
                                         child: Column(
                                           crossAxisAlignment: CrossAxisAlignment.center,
                                           children: <Widget>[
-                                            Text('0', style: TextStyle(fontWeight: FontWeight.w500, fontSize: 25)),
-                                            Text('New Item'.toUpperCase(), style: TextStyle(color: kTextLightColor, fontSize: 16),)
+                                            FutureBuilder(
+                                              future: countGoalNew,
+                                              builder: (context, snapshot) {
+                                                if (snapshot.hasData) {
+                                                  return Text(
+                                                    '${snapshot.data}',
+                                                    style: TextStyle(
+                                                      fontSize: 48,
+                                                      fontWeight: FontWeight.w500
+                                                    )
+                                                  );
+                                                }
+                                                if(null == snapshot.data || snapshot.data.length == 0){
+                                                  return Text('0',
+                                                    style: TextStyle(
+                                                      fontSize: 48,
+                                                      fontWeight: FontWeight.w500
+                                                    )
+                                                  );
+                                                }
+                                                return CircularProgressIndicator();
+            
+                                              }
+                                            ),
+                                            // Text('0', style: TextStyle(fontWeight: FontWeight.w500, fontSize: 25)),
+                                            Text('New Item'.toUpperCase(), style: TextStyle(color: kTextLightColor, fontSize: 26),)
                                           ]
                                         ),
                                       ),
@@ -137,8 +194,8 @@ class _DataTargetState extends State<DataTarget>{
                                         child: Column(
                                           crossAxisAlignment: CrossAxisAlignment.center,
                                           children: <Widget>[
-                                            Text('0', style: TextStyle(fontWeight: FontWeight.w500, fontSize: 25)),
-                                            Text('nearly'.toUpperCase(), style: TextStyle(color: kTextLightColor, fontSize: 16),)
+                                            Text('0', style: TextStyle(fontWeight: FontWeight.w500, fontSize: 48)),
+                                            Text('nearly'.toUpperCase(), style: TextStyle(color: kTextLightColor, fontSize: 26),)
                                           ]
                                         ),
                                       ),
@@ -147,8 +204,32 @@ class _DataTargetState extends State<DataTarget>{
                                         child: Column(
                                           crossAxisAlignment: CrossAxisAlignment.center,
                                           children: <Widget>[
-                                            Text('0', style: TextStyle(fontWeight: FontWeight.w500, fontSize: 25)),
-                                            Text('Completed'.toUpperCase(), style: TextStyle(color: kTextLightColor, fontSize: 16),)
+                                            FutureBuilder(
+                                              future: countGoalCom,
+                                              builder: (context, snapshot) {
+                                                if (snapshot.hasData) {
+                                                  return Text(
+                                                    '${snapshot.data}',
+                                                    style: TextStyle(
+                                                      fontSize: 48,
+                                                      fontWeight: FontWeight.w500
+                                                    )
+                                                  );
+                                                }
+                                                if(null == snapshot.data || snapshot.data.length == 0){
+                                                  return Text('0',
+                                                    style: TextStyle(
+                                                      fontSize: 48,
+                                                      fontWeight: FontWeight.w500
+                                                    )
+                                                  );
+                                                }
+                                                return CircularProgressIndicator();
+            
+                                              }
+                                            ),
+                                            // Text('0', style: TextStyle(fontWeight: FontWeight.w500, fontSize: 25)),
+                                            Text('Completed'.toUpperCase(), style: TextStyle(color: kTextLightColor, fontSize: 26),)
                                           ]
                                         ),
                                       ),
@@ -164,7 +245,7 @@ class _DataTargetState extends State<DataTarget>{
                         children: <Widget>[
                           Text('Goals lists',
                             style: TextStyle(
-                              fontSize: 17
+                              fontSize: 27
                             ),
                           ),
                           Spacer(),
@@ -173,6 +254,7 @@ class _DataTargetState extends State<DataTarget>{
                             style: TextStyle(
                               color: yellowLowColor,
                               fontWeight: FontWeight.w400,
+                              fontSize: 25,
                               decoration: TextDecoration.underline
                             ),
                           ),
@@ -182,6 +264,7 @@ class _DataTargetState extends State<DataTarget>{
                             style: TextStyle(
                               color: kTextLightColor,
                               fontWeight: FontWeight.w400,
+                              fontSize: 25,
                             ),
                           )
                         ]

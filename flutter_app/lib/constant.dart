@@ -17,22 +17,26 @@ const goalColor = Color(0xff4fc3f7);
 const expenditureColor = Color(0xffff8a80);
 // Text Style
 const kHeadingTextStyle = TextStyle(
-  fontSize: 22,
+  fontSize: 32,
   fontWeight: FontWeight.w600,
 );
 
 const kSubTextStyle = TextStyle(fontSize: 16, color: kTextLightColor);
 
 const kTitleTextstyle = TextStyle(
-  fontSize: 18,
+  fontSize: 28,
   color: kTitleTextColor,
+  fontFamily: 'Lamoon',
   fontWeight: FontWeight.bold,
 );
 
 const kAppbar = TextStyle(
-  fontSize: 22,
+  fontSize: 42,
 );
 
+const kSizeDefault = TextStyle(
+  fontSize: 22,
+);
 const List kColorsData = [
   Colors.green,
   Colors.red,

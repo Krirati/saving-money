@@ -4,6 +4,8 @@ import 'package:savemoney/database/dbHelper.dart';
 import 'package:savemoney/database/model.dart';
 import 'package:savemoney/widget/card_event.dart';
 
+import '../constant.dart';
+
 
 class ExpenditureScreen  extends StatefulWidget{
 
@@ -91,7 +93,7 @@ class _ExpenditureScreenState extends State<ExpenditureScreen> {
                 // dropdown below..
                 child: Row(
                   children: <Widget>[
-                    Text('Select Rang'.toUpperCase(), style: TextStyle(color: Colors.black, fontSize: 22, fontWeight: FontWeight.w300)),
+                    Text('Select Rang'.toUpperCase(), style: TextStyle(color: Colors.black, fontSize: 24, fontWeight: FontWeight.w400)),
                     Spacer(),
                     DropdownButton<String>(
                       dropdownColor: Colors.white,
@@ -106,7 +108,7 @@ class _ExpenditureScreenState extends State<ExpenditureScreen> {
                             print(dropdownValue);
                           });
                         },
-                        hint: Text('select'.toUpperCase()),
+                        hint: Text('select'.toUpperCase(),style: TextStyle(color: kTextLightColor, fontSize: 24, fontWeight: FontWeight.w400)),
                         items: <String>[
                           'Day',
                           'Week',

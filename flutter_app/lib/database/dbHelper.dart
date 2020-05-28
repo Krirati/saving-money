@@ -20,6 +20,7 @@ class DBHelper {
   static const String TOTAL = 'total';
   static const String CURRENT = 'current';
   static const String DATEFINISH = 'dateFinish';
+  static const String STATE = 'state';
   static const String TABLE = 'testDB';
   static const String TABLEGOAL = 'testDBGoal';
   static const String DB_NAME = 'transaction_test.db';
@@ -216,6 +217,31 @@ class DBHelper {
     print(income-expenditure- goals);
     return income-expenditure-goals;
   }
+
+  Future<int> countGoal() async {
+    var dbClient = await db;
+    var sql = "SELECT COUNT(id) FROM $TABLEGOAL";
+    int count = Sqflite.firstIntValue(await dbClient.rawQuery(sql));
+
+    return count;
+  }
+
+  Future<int> countGoalNew() async {
+    var dbClient = await db;
+    var sqlNew = "SELECT COUNT(id) FROM $TABLEGOAL WHERE $CURRENT = 0 ";
+    int countNew = Sqflite.firstIntValue(await dbClient.rawQuery(sqlNew));
+
+    return countNew;
+  }
+
+  Future<int> countGoalCompleted() async {
+    var dbClient = await db;
+    var sqlNew = "SELECT COUNT(id) FROM $TABLEGOAL WHERE $CURRENT = $TOTAL ";
+    int countNew = Sqflite.firstIntValue(await dbClient.rawQuery(sqlNew));
+
+    return countNew;
+  }
+
   Future close() async {
     var dbClient = await db;
     dbClient.close();

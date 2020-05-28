@@ -43,7 +43,7 @@ class _DashboardState extends State<Dashboard>{
           child: ClipPath(
             clipper: MyClipper(),
             child: Container(
-              height: 400,
+              height: 300,
               width: double.infinity,
               decoration: BoxDecoration(
                   gradient: LinearGradient(
@@ -61,7 +61,7 @@ class _DashboardState extends State<Dashboard>{
                 children: <Widget>[
                   Padding(
                     padding: const EdgeInsets.only(
-                      left: 12,right: 12,top: 30,bottom: 8
+                      left: 12,right: 12,top: 10,bottom: 8
                     ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.end,
@@ -78,7 +78,7 @@ class _DashboardState extends State<Dashboard>{
                                   return  DialogNotification();
                                 });
                             },
-                            child: Icon(Icons.notifications, color: Colors.white,size: 35,),
+                            child: Icon(Icons.notifications, color: Colors.black,size: 35,),
                           ),
                         )
                       ],
@@ -87,6 +87,12 @@ class _DashboardState extends State<Dashboard>{
                   Expanded(
                     child: Stack(
                       children: <Widget>[
+                        SvgPicture.asset(
+                          'assests/icon/finance.svg',
+                          width: 150,
+                          fit: BoxFit.fitWidth,
+                          alignment: Alignment.topCenter,
+                        ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: <Widget>[                    
@@ -98,21 +104,14 @@ class _DashboardState extends State<Dashboard>{
                             ),
                           ],
                         ),
-                        SvgPicture.asset(
-                          'assests/icon/finance.svg',
-                          width: 150,
-                          fit: BoxFit.fitWidth,
-                          alignment: Alignment.topCenter,
-                        ),
                         Positioned(
-                          top: 2,
                           left: 150,
                           child: Text(
                             'Keb Tang',
                             style: kHeadingTextStyle.copyWith(
                               color: Colors.black,
-                              fontSize: 40,
-                              fontWeight: FontWeight.bold
+                              fontSize: 60,
+                              fontWeight: FontWeight.w500,
                             ),
                           ),
                         ),
@@ -190,7 +189,9 @@ class _DashboardState extends State<Dashboard>{
                         TextSpan(
                           text: 'Newest update ${timeNow.split(' ')[0]}',
                           style: TextStyle(
-                            color: kTextLightColor
+                            color: kTextLightColor,
+                            fontFamily: 'Lamoon',
+                            fontSize: 20
                           ),
                         ),
                       ]
@@ -209,6 +210,7 @@ class _DashboardState extends State<Dashboard>{
                       "See more",
                       style: TextStyle(
                         color: yellowLowColor,
+                        fontSize: 26,
                         fontWeight: FontWeight.w600,
                       ),
                     )
@@ -280,7 +282,7 @@ class _CardGroupState extends State<CardListGroup> {
                       widget.name,
                       style: TextStyle(
                         color: Colors.grey,
-                        fontSize: 22,
+                        fontSize: 32,
                         fontWeight: FontWeight.w500,
                       ),
                     ),
@@ -289,7 +291,7 @@ class _CardGroupState extends State<CardListGroup> {
                       '${widget.money} Bath',
                       style: TextStyle(
                           color: Colors.grey,
-                          fontSize: 20),
+                          fontSize: 30),
                     )
                   ],
                 ),

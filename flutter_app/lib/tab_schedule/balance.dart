@@ -105,7 +105,7 @@ class _BalanceScreenState extends State<BalanceScreen> {
                                             ]
                                           ),
                                         ),
-                                        Text('Income'),
+                                        Text('Income', style: kSizeDefault),
                                       ]
                                     ),
                                     Row(
@@ -121,7 +121,7 @@ class _BalanceScreenState extends State<BalanceScreen> {
                                             ]
                                           ),
                                         ),
-                                        Text('Expenditure'),
+                                        Text('Expenditure', style: kSizeDefault),
                                       ]
                                     ),
                                     Row(
@@ -137,7 +137,7 @@ class _BalanceScreenState extends State<BalanceScreen> {
                                             ]
                                           ),
                                         ),
-                                        Text('Saving'),
+                                        Text('Saving', style: kSizeDefault,),
                                       ]
                                     ),
                                   ],
@@ -148,7 +148,7 @@ class _BalanceScreenState extends State<BalanceScreen> {
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: <Widget>[
-                              Divider(thickness: 1,),
+                              Divider(thickness: 1,color: Colors.orange[100],),
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                 children: <Widget>[
@@ -157,8 +157,8 @@ class _BalanceScreenState extends State<BalanceScreen> {
                                     child: Column(
                                       crossAxisAlignment: CrossAxisAlignment.center,
                                       children: <Widget>[
-                                        Text('0', style: TextStyle(fontWeight: FontWeight.w500, fontSize: 25)),
-                                        Text('Income'.toUpperCase(), style: TextStyle(color: kTextLightColor, fontSize: 16),)
+                                        Text('0', style: TextStyle(fontWeight: FontWeight.w500, fontSize: 45)),
+                                        Text('Income'.toUpperCase(), style: TextStyle(color: kTextLightColor, fontSize: 24),)
                                       ]
                                     ),
                                   ),
@@ -167,8 +167,8 @@ class _BalanceScreenState extends State<BalanceScreen> {
                                     child: Column(
                                       crossAxisAlignment: CrossAxisAlignment.center,
                                       children: <Widget>[
-                                        Text('0', style: TextStyle(fontWeight: FontWeight.w500, fontSize: 25)),
-                                        Text('Expenditure'.toUpperCase(), style: TextStyle(color: kTextLightColor, fontSize: 16),)
+                                        Text('0', style: TextStyle(fontWeight: FontWeight.w500, fontSize: 45)),
+                                        Text('Expenditure'.toUpperCase(), style: TextStyle(color: kTextLightColor, fontSize: 24),)
                                       ]
                                     ),
                                   ),
@@ -177,8 +177,8 @@ class _BalanceScreenState extends State<BalanceScreen> {
                                     child: Column(
                                       crossAxisAlignment: CrossAxisAlignment.center,
                                       children: <Widget>[
-                                        Text('0', style: TextStyle(fontWeight: FontWeight.w500, fontSize: 25)),
-                                        Text('Saving'.toUpperCase(), style: TextStyle(color: kTextLightColor, fontSize: 16),)
+                                        Text('0', style: TextStyle(fontWeight: FontWeight.w500, fontSize: 45)),
+                                        Text('Saving'.toUpperCase(), style: TextStyle(color: kTextLightColor, fontSize: 24),)
                                       ]
                                     ),
                                   ),

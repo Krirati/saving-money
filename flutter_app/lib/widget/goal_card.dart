@@ -11,7 +11,9 @@ class GoalCard extends StatefulWidget{
   final double totalMoney;
   final double current;
   final String icon;
-  GoalCard({this.id, this.name, this.current,this.dateEnd,this.totalMoney, this.icon});
+  Function(bool) callBack;
+
+  GoalCard({this.id, this.name, this.current,this.dateEnd,this.totalMoney, this.icon, this.callBack});
   @override
   _GoalCardState createState() => _GoalCardState();
 }
@@ -19,7 +21,18 @@ class GoalCard extends StatefulWidget{
 class _GoalCardState extends State<GoalCard> {
   String dropdownValue;
   var dbHelper = DBHelper();
-  
+  int _money = 0;
+  void add(){
+    setState(() {
+      _money++;
+    });
+  }
+  void minus() {
+    setState(() {
+      if (_money != 0) 
+        _money--;
+    });
+  }
   Future _dialogUpdate() async {
     return showDialog(
       context: context,
@@ -38,13 +51,33 @@ class _GoalCardState extends State<GoalCard> {
                   Image.asset(widget.icon, width: 80,height:80,)
                 ]
               ),
-              Text('data'),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: <Widget>[
+                  FloatingActionButton(
+                    onPressed: add,
+                    child: new Icon(Icons.add, color: Colors.black,),
+                    backgroundColor: Colors.greenAccent,
+                  ),
+                  Text('$_money',
+                      style: new TextStyle(fontSize: 60.0)),
+
+                  FloatingActionButton(
+                    onPressed: minus,
+                    child: new Icon(
+                    const IconData(0xe15b, fontFamily: 'MaterialIcons'),
+                      color: Colors.black),
+                    backgroundColor: Colors.redAccent[100],
+                  ),
+                ],
+              ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   GestureDetector(
                     onTap: ()=>{
-                      Navigator.pop(context)
+                      Navigator.pop(context),
+                      _money = 0
                     },
                     child: Container(
                       margin: EdgeInsets.symmetric(horizontal:10),
@@ -58,7 +91,10 @@ class _GoalCardState extends State<GoalCard> {
                   ),
                   
                   GestureDetector(
-                    onTap: ()=>{},
+                    onTap: ()=>{
+                      widget.callBack(true),
+                      Navigator.pop(context)
+                    },
                     child: Container(
                       margin: EdgeInsets.symmetric(horizontal:10),
                       padding: EdgeInsets.symmetric(vertical:10, horizontal:20),
@@ -126,6 +162,7 @@ class _GoalCardState extends State<GoalCard> {
                   GestureDetector(
                     onTap: ()=>{
                       dbHelper.deleteGoal(widget.id),
+                      widget.callBack(true),
                       Navigator.pop(context)
                     },
                     child: Container(
@@ -207,8 +244,8 @@ class _GoalCardState extends State<GoalCard> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
-                      Text('${widget.current} Bath'),
-                      Text('${widget.totalMoney} Bath')
+                      Text('${widget.current} Bath', style: kSizeDefault,),
+                      Text('${widget.totalMoney} Bath', style: kSizeDefault,)
                     ]
                   ),
                 )

@@ -34,7 +34,7 @@ class _CardEventState extends State<CardEvent> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget> [
                 Text('${widget.name}', style: kHeadingTextStyle,),
-                Text('${widget.price} Bath', style: TextStyle(color: kBodyTextColor),),
+                Text('${widget.price} Bath', style: TextStyle(color: kBodyTextColor, fontSize: 25),),
                 Row(
                   children: <Widget>[
                     Icon(
@@ -46,7 +46,7 @@ class _CardEventState extends State<CardEvent> {
                     Text(
                       ' ${widget.time.split('.')[0]}',
                       style: TextStyle(
-                        color: Colors.orange[200]
+                        color: Colors.orange[200],fontSize: 22
                       ),
                     ),
                   ],

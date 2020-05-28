@@ -3,6 +3,7 @@ import 'package:savemoney/tab_schedule/balance.dart';
 import 'package:savemoney/tab_schedule/income.dart';
 import 'package:savemoney/widget/remindercard.dart';
 
+import 'constant.dart';
 import 'tab_schedule/expenditure.dart';
 import 'widget/dialog_notification.dart';
 
@@ -57,7 +58,8 @@ class _HistoryState extends State<History>{
                           border: Border.all(color: Colors.white, width: 2)),
                       child: Align(
                         alignment: Alignment.center,
-                        child: Text("Balance"),
+                        child: Text("Balance"
+                        ),
                       ),
                     ),
                   ),
@@ -68,7 +70,11 @@ class _HistoryState extends State<History>{
                           border: Border.all(color: Colors.white, width: 2)),
                       child: Align(
                         alignment: Alignment.center,
-                        child: Text("Income"),
+                        child: Text("Income",
+                         style: TextStyle(
+                            fontSize: 24
+                          ),
+                        ),
                       ),
                     ),
                   ),
@@ -79,7 +85,11 @@ class _HistoryState extends State<History>{
                           border: Border.all(color: Colors.white, width: 2)),
                       child: Align(
                         alignment: Alignment.center,
-                        child: Text("Expenditure"),
+                        child: Text("Expenditure",
+                         style: TextStyle(
+                            fontSize: 24
+                          ),
+                        ),
                       ),
                     ),
                   ),

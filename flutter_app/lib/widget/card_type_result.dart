@@ -46,7 +46,7 @@ class _CardTypeResultState extends State<CardTypeResult> {
                       Text(
                         '0 Bath',
                         style: TextStyle(
-                          fontSize: 30,
+                          fontSize: 40,
                         )
                       ),
                     ],
@@ -61,8 +61,8 @@ class _CardTypeResultState extends State<CardTypeResult> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: <Widget>[
-                            Text('0', style: TextStyle(fontWeight: FontWeight.w500, fontSize: 25)),
-                            Text('today'.toUpperCase(), style: TextStyle(color: kTextLightColor, fontSize: 16),)
+                            Text('0', style: TextStyle(fontWeight: FontWeight.w500, fontSize: 35)),
+                            Text('today'.toUpperCase(), style: TextStyle(color: kTextLightColor, fontSize: 20),)
                           ]
                         ),
                       ),
@@ -71,8 +71,8 @@ class _CardTypeResultState extends State<CardTypeResult> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: <Widget>[
-                            Text('0', style: TextStyle(fontWeight: FontWeight.w500, fontSize: 25)),
-                            Text('week'.toUpperCase(), style: TextStyle(color: kTextLightColor, fontSize: 16),)
+                            Text('0', style: TextStyle(fontWeight: FontWeight.w500, fontSize: 35)),
+                            Text('week'.toUpperCase(), style: TextStyle(color: kTextLightColor, fontSize: 20),)
                           ]
                         ),
                       ),
@@ -81,8 +81,8 @@ class _CardTypeResultState extends State<CardTypeResult> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: <Widget>[
-                            Text('0', style: TextStyle(fontWeight: FontWeight.w500, fontSize: 25)),
-                            Text('month'.toUpperCase(), style: TextStyle(color: kTextLightColor, fontSize: 16),)
+                            Text('0', style: TextStyle(fontWeight: FontWeight.w500, fontSize: 35)),
+                            Text('month'.toUpperCase(), style: TextStyle(color: kTextLightColor, fontSize: 20),)
                           ]
                         ),
                       ),
@@ -91,8 +91,8 @@ class _CardTypeResultState extends State<CardTypeResult> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: <Widget>[
-                            Text('0', style: TextStyle(fontWeight: FontWeight.w500, fontSize: 25)),
-                            Text('year'.toUpperCase(), style: TextStyle(color: kTextLightColor, fontSize: 16),)
+                            Text('0', style: TextStyle(fontWeight: FontWeight.w500, fontSize: 35)),
+                            Text('year'.toUpperCase(), style: TextStyle(color: kTextLightColor, fontSize: 20),)
                           ]
                         ),
                       ),
