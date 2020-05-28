@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:savemoney/database/dbHelper.dart';
 import 'package:savemoney/database/model.dart';
 
+import '../addevent.dart';
 import '../constant.dart';
 
 class CardEvent extends StatefulWidget {
@@ -13,74 +14,19 @@ class CardEvent extends StatefulWidget {
   final double price;
   final String time;
   final String icon;
+  final String description;
+  final String type;
   final Function callback;
-  CardEvent({this.id, this.name, this.price, this.time, this.icon,this.callback});
+  CardEvent({this.id, this.name, this.price, this.time,this.type, this.icon,this.description,this.callback});
   @override
   _CardEventState createState() => _CardEventState();
 }
 
 class _CardEventState extends State<CardEvent> {
-    String dropdownValue;
-    var dbHelper = DBHelper();
-    Future _dialogUpdate() async {
-    return showDialog(
-      context: context,
-      barrierDismissible: false,
-      child: Stack(
-        children: <Widget>[
-          SimpleDialog(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8)
-            ),
-            contentPadding: EdgeInsets.all(8),
-            children: <Widget>[
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Image.asset(widget.icon, width: 80,height:80,)
-                ]
-              ),
-              Text('data'),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  GestureDetector(
-                    onTap: ()=>{
-                      Navigator.pop(context)
-                    },
-                    child: Container(
-                      margin: EdgeInsets.symmetric(horizontal:10),
-                      padding: EdgeInsets.symmetric(vertical:10, horizontal:20),
-                      decoration: BoxDecoration(
-                        border: Border.all(width: 1.0,color: Colors.grey),
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                      child: Text('Cancel', style: TextStyle(color: Colors.grey,fontWeight: FontWeight.w600),),
-                    ),
-                  ),
-                  
-                  GestureDetector(
-                    onTap: ()=>{},
-                    child: Container(
-                      margin: EdgeInsets.symmetric(horizontal:10),
-                      padding: EdgeInsets.symmetric(vertical:10, horizontal:20),
-                      decoration: BoxDecoration(
-                        border: Border.all(width: 1.0,color: Colors.blue),
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                      child: Text('Update', style: TextStyle(color: Colors.blue,fontWeight: FontWeight.w600),),
-                    ),
-                  )
-                ]
-              ),
-            ],
-          ),
-
-        ],
-      )
-    );
-  }
-    Future _dialogDelete() async {
+  String dropdownValue;
+  var dbHelper = DBHelper();
+  
+  Future _dialogDelete() async {
     return showDialog(
       context: context,
       barrierDismissible: false,
@@ -206,7 +152,20 @@ class _CardEventState extends State<CardEvent> {
                 underline: SizedBox(),
                 onChanged: (String newValue) {
                   if (newValue == 'Update') {
-                    _dialogUpdate();
+                    Navigator.push(context,
+                      MaterialPageRoute(
+                          builder: (_) => AddEvent(
+                            id: widget.id,
+                            name: widget.name,
+                            price: widget.price,
+                            time: widget.time,
+                            type: widget.type,
+                            icon: widget.icon,
+                            description: widget.description,
+                            update: true,
+                          )
+                      ),
+                    );
                   } else {
                     _dialogDelete();
                   }

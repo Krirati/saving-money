@@ -18,12 +18,16 @@ class _DataTargetState extends State<DataTarget>{
   Future<int> countGoal;
   Future<int> countGoalNew;
   Future<int> countGoalCom;
+  Future<int> countGoalNear;
   var dbHelper;
+  bool progress = true;
+
   @override
   void initState() {
     super.initState();
     dbHelper = DBHelper();
     refreshList();
+    
   }
 
   void refreshList() {
@@ -32,12 +36,22 @@ class _DataTargetState extends State<DataTarget>{
       countGoal = dbHelper.countGoal();
       countGoalCom = dbHelper.countGoalCompleted();
       countGoalNew = dbHelper.countGoalNew();
+      countGoalNear = dbHelper.countGoalNear();
     });
   }
   callback(update) {
     if (update == true) {
       refreshList();
     }
+  }
+  void refreshListGoal() {
+    setState(() {
+      if (progress) {
+        events = dbHelper.getGoals();
+      } else {
+        events = dbHelper.getGoalsCom();  
+      }
+    });
   }
   SingleChildScrollView dataTable(List<GoalModel> events) {
     var singleChildScrollView = SingleChildScrollView(
@@ -193,7 +207,7 @@ class _DataTargetState extends State<DataTarget>{
                                           crossAxisAlignment: CrossAxisAlignment.center,
                                           children: <Widget>[
                                             FutureBuilder(
-                                              future: countGoalNew,
+                                              future: countGoalNear,
                                               builder: (context, snapshot) {
                                                 if(snapshot.hasData) {
                                                   return Text(
@@ -269,22 +283,41 @@ class _DataTargetState extends State<DataTarget>{
                             ),
                           ),
                           Spacer(),
-                          Text(
-                            "Progress",
-                            style: TextStyle(
-                              color: yellowLowColor,
-                              fontWeight: FontWeight.w400,
-                              decoration: TextDecoration.underline
+                          GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                progress = true;
+                                refreshListGoal();
+                              });
+                            },
+                            child: Text(
+                              "Progress",
+                              style: TextStyle(
+                                color: (progress) ? yellowLowColor: kTextLightColor,
+                                fontWeight: FontWeight.w400,
+                                decoration: (progress) ?TextDecoration.underline :TextDecoration.none
+                              ),
                             ),
                           ),
+
                           SizedBox(width:5),
-                          Text(
-                            "Completed",
-                            style: TextStyle(
-                              color: kTextLightColor,
-                              fontWeight: FontWeight.w400,
+                          GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                progress = false;
+                                refreshListGoal();
+                              });
+                            },
+                            child: Text(
+                              "Completed",
+                              style: TextStyle(
+                                color: (progress) ? kTextLightColor : yellowLowColor,
+                                fontWeight: FontWeight.w400,
+                                decoration: (progress) ?TextDecoration.none :TextDecoration.underline
+                              ),
                             ),
-                          )
+                          ),
+
                         ]
                       ),
                       list()

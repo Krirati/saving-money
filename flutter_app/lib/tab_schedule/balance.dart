@@ -16,7 +16,17 @@ class _BalanceScreenState extends State<BalanceScreen> {
   
   final GlobalKey<AnimatedCircularChartState> _chartKey = new GlobalKey<AnimatedCircularChartState>();
   var dbHelper = DBHelper();
+  double income = 0.0;
+  double expenditure;
+  double saving;
 
+  void initState() {
+    super.initState();
+    dbHelper = DBHelper();
+    income = 0.0;
+    expenditure = 0.0;
+    saving = 0.0;
+  }
   Future<double> loadSum(name) async {
     var result = dbHelper.sumAll(name);
     return result;
@@ -26,12 +36,13 @@ class _BalanceScreenState extends State<BalanceScreen> {
     return result;
   }
 
+  var intr= 0;
   List<CircularStackEntry> data = <CircularStackEntry>[
     new CircularStackEntry(
       <CircularSegmentEntry>[
-        new CircularSegmentEntry(500.0, incomeColor, rankKey: 'Q1'),
-        new CircularSegmentEntry(1000.0, expenditureColor, rankKey: 'Q2'),
-        new CircularSegmentEntry(2000.0, Colors.blue[100], rankKey: 'Q3'),
+        new CircularSegmentEntry(10, incomeColor, rankKey: 'Q1'),
+        new CircularSegmentEntry(20, expenditureColor, rankKey: 'Q2'),
+        new CircularSegmentEntry(30, Colors.blue[100], rankKey: 'Q3'),
       ],
       rankKey: 'Quarterly Profits',
     ),
@@ -157,7 +168,15 @@ class _BalanceScreenState extends State<BalanceScreen> {
                                     child: Column(
                                       crossAxisAlignment: CrossAxisAlignment.center,
                                       children: <Widget>[
-                                        Text('0', style: TextStyle(fontWeight: FontWeight.w500, fontSize: 25)),
+                                        FutureBuilder(
+                                          future: loadSum('income'),
+                                          builder: (BuildContext context, AsyncSnapshot<double> snapshot) {
+                                            // setState(() {
+                                            //   income = snapshot.data;
+                                            // });
+                                            return Text(snapshot.data.toString(), style: TextStyle(fontWeight: FontWeight.w500, fontSize: 25));
+                                          }
+                                        ), 
                                         Text('Income'.toUpperCase(), style: TextStyle(color: kTextLightColor, fontSize: 16),)
                                       ]
                                     ),
@@ -167,7 +186,15 @@ class _BalanceScreenState extends State<BalanceScreen> {
                                     child: Column(
                                       crossAxisAlignment: CrossAxisAlignment.center,
                                       children: <Widget>[
-                                        Text('0', style: TextStyle(fontWeight: FontWeight.w500, fontSize: 25)),
+                                        FutureBuilder(
+                                          future: loadSum('expenditure'),
+                                          builder: (BuildContext context, AsyncSnapshot<double> snapshot) {
+                                            // setState(() {
+                                            //   expenditure = snapshot.data;
+                                            // });
+                                            return Text(snapshot.data.toString(), style: TextStyle(fontWeight: FontWeight.w500, fontSize: 25));
+                                          }
+                                        ), 
                                         Text('Expenditure'.toUpperCase(), style: TextStyle(color: kTextLightColor, fontSize: 16),)
                                       ]
                                     ),
@@ -177,7 +204,16 @@ class _BalanceScreenState extends State<BalanceScreen> {
                                     child: Column(
                                       crossAxisAlignment: CrossAxisAlignment.center,
                                       children: <Widget>[
-                                        Text('0', style: TextStyle(fontWeight: FontWeight.w500, fontSize: 25)),
+                                        FutureBuilder(
+                                          future: loadSum('goals'),
+                                          builder: (BuildContext context, AsyncSnapshot<double> snapshot) {
+                                            // setState(() {
+                                            //   saving = snapshot.data;
+                                            // });
+                                            return Text(snapshot.data.toString(), style: TextStyle(fontWeight: FontWeight.w500, fontSize: 25));
+                                          }
+                                        ), 
+                                        // Text('0', style: TextStyle(fontWeight: FontWeight.w500, fontSize: 25)),
                                         Text('Saving'.toUpperCase(), style: TextStyle(color: kTextLightColor, fontSize: 16),)
                                       ]
                                     ),

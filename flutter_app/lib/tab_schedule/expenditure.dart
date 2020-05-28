@@ -46,7 +46,9 @@ class _ExpenditureScreenState extends State<ExpenditureScreen> {
               name: events[i].name, 
               price: events[i].amount, 
               time: events[i].date, 
+              type: events[i].type, 
               icon: events[i].icon,
+              description: events[i].description,
               callback: callback,),
         ]
       ) 

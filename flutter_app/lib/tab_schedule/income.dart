@@ -49,8 +49,10 @@ class _IncomeScreenState extends State<IncomeScreen> {
               id: events[i].id,
               name: events[i].name, 
               price: events[i].amount, 
-              time: events[i].date, 
+              time: events[i].date,
+              type: events[i].type, 
               icon: events[i].icon,
+              description: events[i].description,
               callback: callback,
             ),
         ]

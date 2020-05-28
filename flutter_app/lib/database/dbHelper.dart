@@ -59,9 +59,26 @@ class DBHelper {
       );
     });
   }
-    Future<List<GoalModel>> getGoals() async {
+  Future<List<GoalModel>> getGoals() async {
     var dbClient = await db;
     final List<Map<String, dynamic>> maps = await dbClient.query(TABLEGOAL);
+    return List.generate(maps.length, (index) {
+      return GoalModel(
+        id: maps[index]['id'],
+        name: maps[index]['name'],
+        type: maps[index]['type'],
+        total: maps[index]['total'],
+        icon: maps[index]['icon'],
+        current: maps[index]['current'],
+        dateFinish: maps[index]['dateFinish'],
+        description: maps[index]['description'],
+      );
+    });
+  }
+  Future<List<GoalModel>> getGoalsCom() async {
+    var dbClient = await db;
+    var sql = "SELECT * FROM $TABLEGOAL WHERE $TOTAL = $CURRENT ORDER BY $DATEFINISH DESC";
+    final List<Map<String, dynamic>> maps = await dbClient.rawQuery(sql);
     return List.generate(maps.length, (index) {
       return GoalModel(
         id: maps[index]['id'],
@@ -237,7 +254,15 @@ class DBHelper {
     var dbClient = await db;
     var sqlNew = "SELECT COUNT(id) FROM $TABLEGOAL WHERE $CURRENT = $TOTAL ";
     int countNew = Sqflite.firstIntValue(await dbClient.rawQuery(sqlNew));
+    print('countGoalCompleted $countNew ');
+    return countNew;
+  }
 
+  Future<int> countGoalNear() async {
+    var dbClient = await db;
+    var sql = "SELECT COUNT(id) FROM $TABLEGOAL WHERE ($CURRENT/$TOTAL) >= 0.9 ORDER BY $DATEFINISH DESC";
+    int countNew = Sqflite.firstIntValue(await dbClient.rawQuery(sql));
+    print('countGoalNear $countNew ');
     return countNew;
   }
 

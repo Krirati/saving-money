@@ -14,6 +14,16 @@ import 'database/goalmodel.dart';
 import 'widget/dialog_notification.dart';
 
 class AddEvent extends StatefulWidget {
+  final int  id;
+  final String name; 
+  final double price; 
+  final String time; 
+  final String icon;
+  final String description;
+  final String type;
+  final bool update;
+
+  const AddEvent({this.id, this.name, this.price, this.time,this.type, this.icon, this.description, this.update});
   @override
   _AddEventState createState() => _AddEventState();
   }
@@ -57,7 +67,19 @@ class _AddEventState extends State<AddEvent>{
     dbHelper = DBHelper();
     newDateTime = DateTime.now();
     isUpdating = false;
+
+    if (widget.update != null) {
+      isUpdating = widget.update;
+      nameController.text = widget.name;
+      amountController.text = widget.price.toString();
+      desciprionController.text = widget.description;
+      time = widget.time;
+      icon = widget.icon;
+      curUserId = widget.id;
+      type = widget.type;
+    }
   } 
+
 
   clearField() {
     setState(() {
@@ -74,8 +96,8 @@ class _AddEventState extends State<AddEvent>{
         EventModel e = EventModel(
           id: curUserId, 
           name: nameController.text, 
-          type: 'update', 
-          icon: 'bye', 
+          type: type, 
+          icon: icon, 
           amount: double.parse(amountController.text), 
           date: time,
           description: desciprionController.text);
