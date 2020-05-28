@@ -9,7 +9,6 @@ class GoalModel {
     String icon;
     String dateFinish;
     String description;
-    //เพิ่ม state ไว้เช็ค progress
 
   GoalModel({this.id, this.name, this.type, this.total, this.current,this.icon, this.dateFinish, this.description});
 

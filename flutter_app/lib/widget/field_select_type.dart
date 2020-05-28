@@ -93,8 +93,7 @@ class _FieldTypeState extends State<FieldType> {
                           Text(
                             'Income',
                             style: TextStyle(
-                              color: kTextLightColor,
-                              fontSize: 22
+                              color: kTextLightColor
                             ),
                           )
                         ],
@@ -118,8 +117,7 @@ class _FieldTypeState extends State<FieldType> {
                           Text(
                             'Expenditure',
                             style: TextStyle(
-                              color: kTextLightColor,
-                              fontSize: 22
+                                color: kTextLightColor
                             ),
                           )
                         ],
@@ -143,8 +141,7 @@ class _FieldTypeState extends State<FieldType> {
                           Text(
                             'Goals',
                             style: TextStyle(
-                              color: kTextLightColor,
-                              fontSize: 22
+                                color: kTextLightColor
                             ),
                           )
                         ],

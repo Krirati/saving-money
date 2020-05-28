@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:savemoney/constant.dart';
 import 'package:savemoney/database/dbHelper.dart';
 import 'package:savemoney/database/model.dart';
 import 'package:savemoney/widget/card_event.dart';
@@ -35,13 +34,25 @@ class _IncomeScreenState extends State<IncomeScreen> {
       
     });
   }
+  callback(update) {
+    if(update == true) {
+      refreshList();
+    }
+  }
   SingleChildScrollView dataTable(List<EventModel> events) {
     var singleChildScrollView = SingleChildScrollView(
       scrollDirection: Axis.vertical,
       child: Column(
         children:<Widget>[
           for (var i = 0; i < events.length; i++) 
-            CardEvent(name: events[i].name, price: events[i].amount, time: events[i].date, icon: events[i].icon,),
+            CardEvent(
+              id: events[i].id,
+              name: events[i].name, 
+              price: events[i].amount, 
+              time: events[i].date, 
+              icon: events[i].icon,
+              callback: callback,
+            ),
         ]
       ) 
     );
@@ -77,7 +88,7 @@ class _IncomeScreenState extends State<IncomeScreen> {
             children: <Widget>[
               Container(
                 padding:
-                    EdgeInsets.symmetric(horizontal: 16, vertical: 5),
+                  EdgeInsets.symmetric(horizontal: 16, vertical: 5),
                 alignment: Alignment.centerRight,
                 decoration: BoxDecoration(
                   color: Colors.white,
@@ -95,7 +106,7 @@ class _IncomeScreenState extends State<IncomeScreen> {
                 // dropdown below..
                 child: Row(
                   children: <Widget>[
-                    Text('Select Rang'.toUpperCase(), style: TextStyle(color: Colors.black, fontSize: 24, fontWeight: FontWeight.w400)),
+                    Text('Select Rang'.toUpperCase(), style: TextStyle(color: Colors.black, fontSize: 22, fontWeight: FontWeight.w300)),
                     Spacer(),
                     DropdownButton<String>(
                       dropdownColor: Colors.white,
@@ -110,7 +121,7 @@ class _IncomeScreenState extends State<IncomeScreen> {
                           print(dropdownValue);
                         });
                       },
-                      hint: Text('select'.toUpperCase(), style: TextStyle(color: kTextLightColor, fontSize: 24, fontWeight: FontWeight.w400)),
+                      hint: Text('select'.toUpperCase()),
                       items: <String>[
                         'Day',
                         'Week',

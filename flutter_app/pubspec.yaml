@@ -122,11 +122,5 @@ flutter:
           weight: 600
         - asset: assests/fonts/Poppins/Poppins-Bold.ttf
           weight: 700
-    - family: Lamoon
-      fonts:
-        - asset: assests/fonts/Poppins//FCLamoon-Bold.ttf
-          weight: 700
-        - asset: assests/fonts/Poppins//FCLamoon-Regular.ttf
-        - asset: assests/fonts/Poppins//FCLamoon-Light.ttf
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages

@@ -132,7 +132,7 @@ class _AddEventState extends State<AddEvent>{
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
-          title: Text('Add New Activity',style: kAppbar,),
+          title: Text('Add New Activity'),
           leading: IconButton(
             icon: Icon(Icons.arrow_back_ios) ,
             onPressed: () {
@@ -190,14 +190,12 @@ class _AddEventState extends State<AddEvent>{
                                   'Name Event',
                                   style: TextStyle(
                                       color: Colors.black,
-                                      fontWeight: FontWeight.w600,
-                                      fontSize: 28
+                                      fontWeight: FontWeight.w600
                                   ),
                                 ),
                                 Container(
                                   margin: EdgeInsets.fromLTRB(15, 5, 15, 5),
                                   child: TextFormField(
-                                    style: kSizeDefault,
                                     controller: nameController,
                                     keyboardType: TextInputType.text,
                                     decoration: InputDecoration(
@@ -234,8 +232,7 @@ class _AddEventState extends State<AddEvent>{
                                 'Type',
                                 style: TextStyle(
                                     color: Colors.black,
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: 28
+                                    fontWeight: FontWeight.w600
                                 ),
                               ),
                               FieldType(callbackResultIcon),
@@ -254,14 +251,12 @@ class _AddEventState extends State<AddEvent>{
                                   (type == 'goals') ? 'Target amount':'Amount',
                                   style: TextStyle(
                                       color: Colors.black,
-                                      fontWeight: FontWeight.w600,
-                                      fontSize: 28
+                                      fontWeight: FontWeight.w600
                                   ),
                                 ),
                                 Container(
                                   margin: EdgeInsets.all(10),
                                   child: TextField(
-                                    style: kSizeDefault,
                                     keyboardType: TextInputType.number,
                                     controller: amountController,
                                     decoration: InputDecoration(
@@ -291,8 +286,7 @@ class _AddEventState extends State<AddEvent>{
                                 (type == 'goals') ? 'Target date':'Date & Time',
                                 style: TextStyle(
                                     color: Colors.black,
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: 28
+                                    fontWeight: FontWeight.w600
                                 ),
                               ),
                               Padding(
@@ -313,7 +307,7 @@ class _AddEventState extends State<AddEvent>{
                                       }
                                     );
                                   },
-                                  child: new Text('TIME: ' + time,style: kSizeDefault,),
+                                  child: new Text('TIME: ' + time),
                                 ),
                               ),
          
@@ -329,15 +323,13 @@ class _AddEventState extends State<AddEvent>{
                                 'Descirption',
                                 style: TextStyle(
                                     color: Colors.black,
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: 28
+                                    fontWeight: FontWeight.w600
                                 ),
                               ),
                               Container(
                                 margin: EdgeInsets.all(10),
                                 child: TextField(
                                   key: formKeyDes,
-                                  style: kSizeDefault,
                                   controller: desciprionController,
                                   keyboardType: TextInputType.multiline,
                                   maxLines: 3,
@@ -370,8 +362,7 @@ class _AddEventState extends State<AddEvent>{
                                     'Pictures',
                                     style: TextStyle(
                                         color: Colors.black,
-                                        fontWeight: FontWeight.w600,
-                                        fontSize: 28
+                                        fontWeight: FontWeight.w600
                                     ),
                                   ),
                                 ],
