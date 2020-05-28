@@ -61,7 +61,9 @@ class DBHelper {
   }
   Future<List<GoalModel>> getGoals() async {
     var dbClient = await db;
-    final List<Map<String, dynamic>> maps = await dbClient.query(TABLEGOAL);
+    var sql = "SELECT * FROM $TABLEGOAL WHERE $TOTAL <> $CURRENT ORDER BY $DATEFINISH DESC";
+    final List<Map<String, dynamic>> maps = await dbClient.rawQuery(sql);
+    print('getGoals ');
     return List.generate(maps.length, (index) {
       return GoalModel(
         id: maps[index]['id'],
@@ -96,6 +98,23 @@ class DBHelper {
   Future<List<EventModel>> getToDay() async {
     var dbClient = await db;
     var sql = "SELECT * FROM $TABLE WHERE $DATE LIKE '2020%' ";
+    final List<Map<String, dynamic>> maps = await dbClient.rawQuery(sql);
+    return List.generate(maps.length, (index) {
+      return EventModel(
+        id: maps[index]['id'],
+        name: maps[index]['name'],
+        type: maps[index]['type'],
+        amount: maps[index]['amount'],
+        icon: maps[index]['icon'],
+        date: maps[index]['date'],
+        description: maps[index]['description'],
+      );
+    });
+  }
+
+  Future<List<EventModel>> getGroupType() async {
+    var dbClient = await db;
+    var sql = "SELECT * FROM $TABLE GROUP BY $ICON";
     final List<Map<String, dynamic>> maps = await dbClient.rawQuery(sql);
     return List.generate(maps.length, (index) {
       return EventModel(
@@ -154,12 +173,13 @@ class DBHelper {
     var dbClient = await db;
     EventModel e = EventModel(
       name: goalModel.name, 
-      type: goalModel.type, 
+      type: 'goals', 
       icon: goalModel.icon, 
       amount: goalModel.current, 
       date: DateTime.now().toString(),
       description: goalModel.description
     );
+    print(goalModel);
     await dbClient.insert(TABLE, e.toMap(),conflictAlgorithm: ConflictAlgorithm.replace);
     return await dbClient.update(TABLEGOAL, 
       goalModel.toMap(),
@@ -246,7 +266,7 @@ class DBHelper {
     var dbClient = await db;
     var sqlNew = "SELECT COUNT(id) FROM $TABLEGOAL WHERE $CURRENT = 0 ";
     int countNew = Sqflite.firstIntValue(await dbClient.rawQuery(sqlNew));
-
+    print('countGoalNew $countNew ');
     return countNew;
   }
 

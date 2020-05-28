@@ -105,6 +105,7 @@ class _AddEventState extends State<AddEvent>{
         setState(() {
           isUpdating = false;
         });
+        Navigator.pop(context);
       } else {
         EventModel e = EventModel(
           name: nameController.text, 
@@ -220,6 +221,7 @@ class _AddEventState extends State<AddEvent>{
                                   child: TextFormField(
                                     controller: nameController,
                                     keyboardType: TextInputType.text,
+                                    
                                     decoration: InputDecoration(
                                       hintText: 'Name',
                                       contentPadding: EdgeInsets.all(10.0),

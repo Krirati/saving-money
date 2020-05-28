@@ -28,6 +28,6 @@ class GoalModel {
 
   @override
   String toString() {
-    return 'GoalModel{id: $id, name: $name, amount: }';
+    return 'GoalModel{id: $id, name: $name, total: $total, current: $current, icon: $icon, dateEnd: $dateFinish, desc: $description}';
   }
 }

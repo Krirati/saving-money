@@ -27,7 +27,7 @@ class _DataTargetState extends State<DataTarget>{
     super.initState();
     dbHelper = DBHelper();
     refreshList();
-    
+    callback(true);
   }
 
   void refreshList() {
@@ -66,6 +66,8 @@ class _DataTargetState extends State<DataTarget>{
               current: events[i].current, 
               dateEnd: events[i].dateFinish, 
               icon: events[i].icon,
+              type: events[i].type,
+              description: events[i].description,
               callback: callback,)
         ]
       ) 

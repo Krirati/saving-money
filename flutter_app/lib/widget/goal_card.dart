@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:savemoney/database/dbHelper.dart';
-import 'package:savemoney/datatarget.dart';
+import 'package:savemoney/database/goalmodel.dart';
 
 import '../constant.dart';
 
@@ -11,8 +11,10 @@ class GoalCard extends StatefulWidget{
   final double totalMoney;
   final double current;
   final String icon;
+  final String type;
+  final String description;
   final Function(bool) callback;
-  GoalCard({this.id, this.name, this.current,this.dateEnd,this.totalMoney, this.icon, this.callback});
+  GoalCard({this.id, this.name, this.type,this.current,this.dateEnd,this.totalMoney, this.icon, this.description,this.callback});
   @override
   _GoalCardState createState() => _GoalCardState();
 }
@@ -20,66 +22,41 @@ class GoalCard extends StatefulWidget{
 class _GoalCardState extends State<GoalCard> {
   String dropdownValue;
   var dbHelper = DBHelper();
-  
+  double newCurrent;
   Future _dialogUpdate() async {
     return showDialog(
       context: context,
       barrierDismissible: false,
-      child: Stack(
-        children: <Widget>[
-          SimpleDialog(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8)
-            ),
-            contentPadding: EdgeInsets.all(8),
-            children: <Widget>[
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Image.asset(widget.icon, width: 80,height:80,)
-                ]
-              ),
-              Text('data'),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  GestureDetector(
-                    onTap: ()=>{
-                      Navigator.pop(context)
-                    },
-                    child: Container(
-                      margin: EdgeInsets.symmetric(horizontal:10),
-                      padding: EdgeInsets.symmetric(vertical:10, horizontal:20),
-                      decoration: BoxDecoration(
-                        border: Border.all(width: 1.0,color: Colors.grey),
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                      child: Text('Cancel', style: TextStyle(color: Colors.grey,fontWeight: FontWeight.w600),),
-                    ),
-                  ),
-                  
-                  GestureDetector(
-                    onTap: ()=>{},
-                    child: Container(
-                      margin: EdgeInsets.symmetric(horizontal:10),
-                      padding: EdgeInsets.symmetric(vertical:10, horizontal:20),
-                      decoration: BoxDecoration(
-                        border: Border.all(width: 1.0,color: Colors.blue),
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                      child: Text('Update', style: TextStyle(color: Colors.blue,fontWeight: FontWeight.w600),),
-                    ),
-                  )
-                ]
-              ),
-            ],
-          ),
-
-        ],
-      )
+      builder: (_) {
+        return DialogUpdate(
+          id: widget.id,
+          name: widget.name,
+          type: widget.type,
+          current: widget.current,
+          dateEnd: widget.dateEnd,
+          totalMoney: widget.totalMoney,
+          icon: widget.icon,
+          description: widget.description,
+          callbackCard: callbackCard
+        );
+      },
     );
   }
 
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    newCurrent = widget.current;
+  }
+  void callbackCard(update, newAddCurrent) {
+    print('callbackCard: $update');
+    if (update == true) {
+      widget.callback(true);
+      // update = false;
+      newCurrent = widget.current + newAddCurrent;
+    }
+  }
   Future _dialogDelete() async {
     return showDialog(
       context: context,
@@ -209,7 +186,7 @@ class _GoalCardState extends State<GoalCard> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
-                      Text('${widget.current} Bath'),
+                      Text('${newCurrent} Bath'),
                       Text('${widget.totalMoney} Bath')
                     ]
                   ),
@@ -257,4 +234,174 @@ class _GoalCardState extends State<GoalCard> {
     );
   }
   
+}
+class DialogUpdate extends StatefulWidget {
+  final int id;
+  final String name;
+  final String type;
+  final String dateEnd;
+  final double totalMoney;
+  final double current;
+  final String icon;
+  final String description;
+  final Function(bool,double) callbackCard;
+  const DialogUpdate({ this.id, this.name, this.type,this.dateEnd, this.totalMoney, this.current, this.icon, this.description, this.callbackCard});
+  @override
+  _DialogUpdateState createState() => new _DialogUpdateState();
+}
+
+class _DialogUpdateState extends State<DialogUpdate> {
+  int _counter = 0;
+  var currentController = TextEditingController();
+  String current;
+  var dbHelper = DBHelper();
+  void _incrementCounter() {
+    setState(() {
+      _counter++;
+      currentController.text = _counter.toString();
+      _counter = int.parse(currentController.text);
+      
+    });
+  }
+  void updateGoal() {
+    GoalModel g = GoalModel(
+      id: widget.id,
+      name: widget.name,
+      type: widget.type,
+      total: widget.totalMoney,
+      current: widget.current + double.parse(currentController.text),
+      icon: widget.icon,
+      dateFinish: widget.dateEnd,
+      description: widget.description
+    );
+    print(double.parse(currentController.text));
+    dbHelper.updateGoal(g);
+    widget.callbackCard(true,double.parse(currentController.text));
+  }
+  GoalModel g;
+  @override
+  Widget build(BuildContext context) {
+    return Dialog(
+      backgroundColor: Colors.white,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(16)
+      ), 
+      elevation: 2,
+      child: Wrap(
+        children: <Widget>[
+          Container(
+            child: Stack(
+              children: <Widget> [
+                SafeArea(
+                  minimum: EdgeInsets.symmetric(vertical: 15, horizontal:10 ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Text('Update current money',
+                            style: kHeadingTextStyle,),
+                          Spacer(),
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Image.asset(widget.icon, width: 80,height:80,)
+                        ]
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          FloatingActionButton(
+                            backgroundColor: Colors.redAccent[100],
+                            onPressed: _incrementCounter,
+                            tooltip: 'Decrement',
+                            child: Icon(Icons.remove, ),
+                          ),
+                          SizedBox(width:10),
+                          Container(
+                            width: 100,
+                            child: TextField(
+                              keyboardType: TextInputType.number,
+                              controller: currentController,
+                              decoration: InputDecoration(
+                                hintText: 'Amount',
+                                contentPadding: EdgeInsets.all(10.0),
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(8),
+                                  borderSide: BorderSide(
+                                    color: Colors.white
+                                  )
+                                ),
+                                filled: true,
+                                fillColor: Colors.white,
+                              ),
+                            ),
+                          ),
+                          SizedBox(width:10),
+                          FloatingActionButton(
+                            onPressed: _incrementCounter,
+                            backgroundColor: Colors.green[200],
+                            tooltip: 'Increment',
+                            child: Icon(Icons.add),
+                          ),
+                        ]
+                      ),
+                      SizedBox(height:10),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          GestureDetector(
+                            onTap: ()=>{Navigator.pop(context)},
+                            child: Container(
+                              margin: EdgeInsets.symmetric(horizontal:10),
+                              padding: EdgeInsets.symmetric(vertical:10, horizontal:20),
+                              decoration: BoxDecoration(
+                                border: Border.all(width: 1.0,color: Colors.grey),
+                                borderRadius: BorderRadius.circular(10.0),
+                              ),
+                              child: Text('Cancel', style: TextStyle(color: Colors.grey,fontWeight: FontWeight.w600),),
+                            ),
+                          ),
+                          
+                          GestureDetector(
+                            onTap: ()=>{
+                              g = GoalModel(
+                                id: widget.id,
+                                name: widget.name,
+                                type: widget.type,
+                                total: widget.totalMoney,
+                                current: widget.current + double.parse(currentController.text),
+                                icon: widget.icon,
+                                dateFinish: widget.dateEnd,
+                                description: widget.description
+                              ),
+                              dbHelper.updateGoal(g),
+                              widget.callbackCard(true,double.parse(currentController.text)),
+                              Navigator.pop(context)
+                            },
+                            child: Container(
+                              margin: EdgeInsets.symmetric(horizontal:10),
+                              padding: EdgeInsets.symmetric(vertical:10, horizontal:20),
+                              decoration: BoxDecoration(
+                                border: Border.all(width: 1.0,color: Colors.blue),
+                                borderRadius: BorderRadius.circular(10.0),
+                              ),
+                              child: Text('Update', style: TextStyle(color: Colors.blue,fontWeight: FontWeight.w600),),
+                            ),
+                          )
+                        ]
+                      ),
+                    ]
+                  ),
+                )
+              ]
+            ),
+          )
+        ]
+        )
+      );
+  }
 }
