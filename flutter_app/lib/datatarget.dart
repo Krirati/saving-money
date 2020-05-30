@@ -42,6 +42,7 @@ class _DataTargetState extends State<DataTarget>{
   callback(update) {
     if (update == true) {
       refreshList();
+      progress = true;
     }
   }
   void refreshListGoal() {

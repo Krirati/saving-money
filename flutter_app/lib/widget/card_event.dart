@@ -175,7 +175,7 @@ class _CardEventState extends State<CardEvent> {
                   });
                 },
                 items: <String>[
-                  'Update',
+                  'Edit',
                   'Delete', 
                 ].map<DropdownMenuItem<String>>((String value) {
                   return DropdownMenuItem<String>(

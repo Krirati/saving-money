@@ -2,8 +2,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:path/path.dart';
 import 'package:savemoney/constant.dart';
 import 'package:savemoney/history.dart';
+import 'package:savemoney/widget/card_today.dart';
 import 'package:savemoney/widget/dialog_notification.dart';
 import 'package:savemoney/widget/remindercard.dart';
 
@@ -11,6 +13,7 @@ import 'database/dbHelper.dart';
 import 'database/model.dart';
 import 'home.dart';
 import 'widget/card_event.dart';
+import 'widget/card_type_result.dart';
 
 
 Color kPrimaryBlue = Color(0xff3c528b);
@@ -25,6 +28,7 @@ class Dashboard extends StatefulWidget {
 class _DashboardState extends State<Dashboard>{
   var dbHelper = DBHelper();
   String timeNow = DateTime.now().toString();
+  Future<List<EventModel>> events;
   Future<double> loadSum(name) async {
     var result = dbHelper.sumAll(name);
     return result;
@@ -34,6 +38,62 @@ class _DashboardState extends State<Dashboard>{
     return result;
   }
 
+  void initState() {
+    super.initState();
+    refreshList();
+  } 
+
+  refreshList() {
+    setState(() {
+      events = dbHelper.getToDay();
+    });
+  }
+
+  ListView dataTable(List<EventModel> events) {
+    var singleChildScrollView = ListView.builder(
+      scrollDirection: Axis.horizontal,
+      itemCount: events.length,
+      itemBuilder: (context, index) {
+        print(index);
+        return Container(
+          padding: EdgeInsets.symmetric(horizontal:1),
+          width: MediaQuery.of(context).size.width *0.9,
+          child: CardToday(
+            name: events[index].name,
+            type: events[index].type,
+            icon: events[index].icon,
+            price: events[index].amount,
+            time: events[index].date,
+          )
+        );
+
+        
+      }
+    );
+    return singleChildScrollView;
+  }
+  list() {
+    return 
+       FutureBuilder(
+        future: events,
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            return Container(
+              // width: double.infinity,
+              padding: EdgeInsets.symmetric( vertical: 24.0),
+              height: MediaQuery.of(context).size.height *0.25 ,
+              child: dataTable(snapshot.data),
+
+            );
+          }
+          if(null == snapshot.data || snapshot.data.length == 0){
+            return Text('No Data Found');
+          }
+          return CircularProgressIndicator();
+        },
+      );
+    
+  }
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -176,7 +236,7 @@ class _DashboardState extends State<Dashboard>{
             ),
             SizedBox(height: 15,),
             Padding(
-              padding: EdgeInsets.fromLTRB(25, 1, 25, 15),
+              padding: EdgeInsets.fromLTRB(25, 1, 25, 0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
@@ -216,8 +276,10 @@ class _DashboardState extends State<Dashboard>{
                   
                 ],
               ),
+              
             ),
-            ReminderSlide(),
+            // ReminderSlide(),
+            list()
           ],
         ),
       ),
@@ -279,7 +341,7 @@ class _CardGroupState extends State<CardListGroup> {
                     Text(
                       widget.name,
                       style: TextStyle(
-                        color: Colors.grey,
+                        color: Colors.black,
                         fontSize: 22,
                         fontWeight: FontWeight.w500,
                       ),

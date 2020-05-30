@@ -128,6 +128,81 @@ class _GoalCardState extends State<GoalCard> {
 
     );
   }
+  Future dialogCheck() async {
+    return showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) {
+        return Stack(
+        children: <Widget>[
+          SimpleDialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8)
+            ),
+            contentPadding: EdgeInsets.all(10),
+            children: <Widget>[
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Image.asset('assests/icon/tick.png', width: 80,height:80,)
+                ]
+              ),
+              Padding(
+                padding: EdgeInsets.symmetric(vertical:5),
+                child:  Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Center(
+                   
+                      child:  Text('You have successfully saved \nyour money for the goal.'
+                      ,textAlign: TextAlign.center,),
+                    ),
+                  ]
+                ),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  GestureDetector(
+                    onTap: ()=>{Navigator.pop(context)},
+                    child: Container(
+                      margin: EdgeInsets.symmetric(horizontal:10),
+                      padding: EdgeInsets.symmetric(vertical:10, horizontal:20),
+                      decoration: BoxDecoration(
+                        border: Border.all(width: 1.0,color: Colors.grey),
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
+                      child: Text('Cancel', style: TextStyle(color: Colors.grey,fontWeight: FontWeight.w600),),
+                    ),
+                  ),
+                  
+                  GestureDetector(
+                    onTap: ()=>{
+                      // dbHelper.deleteGoal(widget.id),
+                      widget.callback(true),
+                      Navigator.pop(context)
+                    },
+                    child: Container(
+                      margin: EdgeInsets.symmetric(horizontal:10),
+                      padding: EdgeInsets.symmetric(vertical:10, horizontal:20),
+                      decoration: BoxDecoration(
+                        border: Border.all(width: 1.0,color: Colors.green),
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
+                      child: Text('Check', style: TextStyle(color: Colors.green,fontWeight: FontWeight.w600),),
+                    ),
+                  )
+                ]
+              ),
+            ],
+          ),
+
+        ],
+      );
+      },
+
+    );
+  }
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -206,7 +281,12 @@ class _GoalCardState extends State<GoalCard> {
                     onChanged: (String newValue) {
                       if (newValue == 'Update') {
                         _dialogUpdate();
-                      } else {
+                      } else if (newValue == 'Check') {
+                        dialogCheck();
+                      } else if (newValue == 'History') {
+
+                      }
+                      else {
                         _dialogDelete();
                       }
                       setState(() {
@@ -215,7 +295,9 @@ class _GoalCardState extends State<GoalCard> {
                       });
                     },
                     items: <String>[
+                      'Check',
                       'Update',
+                      'History',
                       'Delete', 
                     ].map<DropdownMenuItem<String>>((String value) {
                       return DropdownMenuItem<String>(
@@ -263,20 +345,76 @@ class _DialogUpdateState extends State<DialogUpdate> {
       
     });
   }
-  void updateGoal() {
-    GoalModel g = GoalModel(
-      id: widget.id,
-      name: widget.name,
-      type: widget.type,
-      total: widget.totalMoney,
-      current: widget.current + double.parse(currentController.text),
-      icon: widget.icon,
-      dateFinish: widget.dateEnd,
-      description: widget.description
+  void _decrementCounter() {
+    setState(() {
+      _counter--;
+      currentController.text = _counter.toString();
+      _counter = int.parse(currentController.text);
+      
+    });
+  }
+  Future dialogError() async {
+    return showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) {
+        Future.delayed(Duration(seconds: 3), () {
+          Navigator.pop(context);
+        });
+        return Stack(
+        children: <Widget>[
+          SimpleDialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8)
+            ),
+            contentPadding: EdgeInsets.all(10),
+            children: <Widget>[
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Image.asset('assests/icon/delete.png', width: 80,height:80,)
+                ]
+              ),
+              Padding(
+                padding: EdgeInsets.symmetric(vertical:5),
+                child:  Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Text('You have exceeded the target amount.'),
+                  ]
+                ),
+              ),
+            ],
+          ),
+
+        ],
+      );
+      },
+
     );
-    print(double.parse(currentController.text));
-    dbHelper.updateGoal(g);
-    widget.callbackCard(true,double.parse(currentController.text));
+  }
+  void updateGoal()async {
+    if (widget.current + double.parse(currentController.text)>  widget.totalMoney) {
+      print('more');
+      dialogError();
+    }
+    else {
+      GoalModel g = GoalModel(
+        id: widget.id,
+        name: widget.name,
+        type: widget.type,
+        total: widget.totalMoney,
+        current: widget.current + double.parse(currentController.text),
+        icon: widget.icon,
+        dateFinish: widget.dateEnd,
+        description: widget.description
+      );
+      print(double.parse(currentController.text));
+      await dbHelper.updateGoal(g);
+      widget.callbackCard(true,double.parse(currentController.text));
+      Navigator.pop(context);
+    }
+
   }
   GoalModel g;
   @override
@@ -316,7 +454,7 @@ class _DialogUpdateState extends State<DialogUpdate> {
                         children: <Widget>[
                           FloatingActionButton(
                             backgroundColor: Colors.redAccent[100],
-                            onPressed: _incrementCounter,
+                            onPressed: _decrementCounter,
                             tooltip: 'Decrement',
                             child: Icon(Icons.remove, ),
                           ),
@@ -368,19 +506,7 @@ class _DialogUpdateState extends State<DialogUpdate> {
                           
                           GestureDetector(
                             onTap: ()=>{
-                              g = GoalModel(
-                                id: widget.id,
-                                name: widget.name,
-                                type: widget.type,
-                                total: widget.totalMoney,
-                                current: widget.current + double.parse(currentController.text),
-                                icon: widget.icon,
-                                dateFinish: widget.dateEnd,
-                                description: widget.description
-                              ),
-                              dbHelper.updateGoal(g),
-                              widget.callbackCard(true,double.parse(currentController.text)),
-                              Navigator.pop(context)
+                              updateGoal()
                             },
                             child: Container(
                               margin: EdgeInsets.symmetric(horizontal:10),

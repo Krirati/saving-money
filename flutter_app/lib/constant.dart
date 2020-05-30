@@ -13,7 +13,7 @@ const kPrimaryColor = Color(0xFF3382CC);
 final kShadowColor = Color(0xFFB7B7B7).withOpacity(.16);
 final kActiveShadowColor = Color(0xFF4056C6).withOpacity(.15);
 const incomeColor = Color(0xffc8e6c9);
-const goalColor = Color(0xff4fc3f7);
+const goalColor = Color(0xffb3e5fc);
 const expenditureColor = Color(0xffff8a80);
 // Text Style
 const kHeadingTextStyle = TextStyle(

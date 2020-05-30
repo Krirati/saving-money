@@ -97,8 +97,9 @@ class DBHelper {
 
   Future<List<EventModel>> getToDay() async {
     var dbClient = await db;
-    var sql = "SELECT * FROM $TABLE WHERE $DATE LIKE '2020%' ";
+    var sql = "SELECT * FROM $TABLE WHERE $DATE LIKE '${DateTime.now().toString().split(' ')[0]}%' ";
     final List<Map<String, dynamic>> maps = await dbClient.rawQuery(sql);
+    // print(maps);
     return List.generate(maps.length, (index) {
       return EventModel(
         id: maps[index]['id'],
@@ -114,7 +115,7 @@ class DBHelper {
 
   Future<List<EventModel>> getGroupType() async {
     var dbClient = await db;
-    var sql = "SELECT * FROM $TABLE GROUP BY $ICON";
+    var sql = "SELECT * FROM $TABLE WHERE $TYPE <> 'goals' GROUP BY $ICON";
     final List<Map<String, dynamic>> maps = await dbClient.rawQuery(sql);
     return List.generate(maps.length, (index) {
       return EventModel(
@@ -250,7 +251,7 @@ class DBHelper {
     for (var item in mapsGoal) {
       goals = goals + item['amount'];
     }
-    print(income-expenditure- goals);
+    // print(income-expenditure- goals);
     return income-expenditure-goals;
   }
 
@@ -284,6 +285,38 @@ class DBHelper {
     int countNew = Sqflite.firstIntValue(await dbClient.rawQuery(sql));
     print('countGoalNear $countNew ');
     return countNew;
+  }
+
+  Future<List> sumType(typeNew) async {
+    var dbClient = await db;
+    var sql  = "SELECT SUM($AMOUNT) as Total FROM $TABLE WHERE $ICON = '$typeNew'";
+    var result = await dbClient.rawQuery(sql);
+    return result.toList();
+  }
+
+  Future<List> sumTypeToday(typeNew) async {
+    var dbClient = await db;
+    var sql  = "SELECT COALESCE(SUM($AMOUNT),0) as Total FROM $TABLE WHERE $ICON = '$typeNew' AND $DATE LIKE '${DateTime.now().toString().split(' ')[0]}%'";
+    var result = await dbClient.rawQuery(sql);
+    return result.toList();
+  }
+
+  Future<List> sumTypeMonth(typeNew) async {
+    var dbClient = await db;
+    final dateYear = DateTime.now().toString().split(' ')[0].split('-')[0];
+    final dateMonth = DateTime.now().toString().split(' ')[0].split('-')[1];
+    final newDate = '$dateYear-$dateMonth';
+    var sql  = "SELECT COALESCE(SUM($AMOUNT),0) as Total FROM $TABLE WHERE $ICON = '$typeNew' AND $DATE LIKE '$newDate%'";
+    var result = await dbClient.rawQuery(sql);
+    return result.toList();
+  }
+
+  Future<List> sumTypeYear(typeNew) async {
+    var dbClient = await db;
+    final dateYear = DateTime.now().toString().split(' ')[0].split('-')[0];
+    var sql  = "SELECT COALESCE(SUM($AMOUNT),0) as Total FROM $TABLE WHERE $ICON = '$typeNew' AND $DATE LIKE '$dateYear%'";
+    var result = await dbClient.rawQuery(sql);
+    return result.toList();
   }
 
   Future close() async {

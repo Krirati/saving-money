@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_circular_chart/flutter_circular_chart.dart';
 import 'package:savemoney/database/dbHelper.dart';
+import 'package:savemoney/database/model.dart';
 import 'package:savemoney/widget/card_type_result.dart';
 
 import '../constant.dart';
@@ -34,6 +35,41 @@ class _BalanceScreenState extends State<BalanceScreen> {
   Future<double> loadBalance() async {
     var result = dbHelper.balance();
     return result;
+  }
+  Future<List<EventModel>> loadGroupType() async {
+    var result = dbHelper.getGroupType();
+    return result;
+  }
+
+  SingleChildScrollView cardType(List<EventModel> events) {
+    var singleChildScrollView = SingleChildScrollView(
+      scrollDirection: Axis.vertical,
+      child: Column(
+        children:<Widget>[
+          for (var i = 0; i < events.length; i++) 
+            CardTypeResult(
+              icon: events[i].icon
+            )
+        ]
+      ) 
+    );
+    return singleChildScrollView;
+  }
+  list() {
+    return Container(
+      child: FutureBuilder(
+        future: loadGroupType(),
+        builder: (context, snapshot) {
+           if (snapshot.hasData) {
+            return cardType(snapshot.data);
+          }
+          if(null == snapshot.data || snapshot.data.length == 0){
+            return Text('No Data Found');
+          }
+          return CircularProgressIndicator();
+        },
+      )
+    );
   }
 
   var intr= 0;
@@ -93,12 +129,13 @@ class _BalanceScreenState extends State<BalanceScreen> {
                               Center(
                                 child: new AnimatedCircularChart(
                                   key: _chartKey,
-                                  size: const Size(250.0, 250.0),
+                                  size: Size(160.0, 160.0),
                                   initialChartData: data,
                                   chartType: CircularChartType.Pie,
                                   // percentageValues: true,
                                 ),
                               ),     
+                              SizedBox(width: 10),
                               Center(
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -228,7 +265,8 @@ class _BalanceScreenState extends State<BalanceScreen> {
                   ),
                 ),
               ),
-              CardTypeResult()
+              list()
+              // CardTypeResult()
             ],
           ),
         ]

@@ -22,48 +22,13 @@ class _ReminderSlideState extends State<ReminderSlide> {
   final int _numPages = reminderItems.length;
   final PageController _pageController = PageController(initialPage: 0, viewportFraction: 0.8);
   int _currentpage = 0;
-  var dbHelper = DBHelper();
+
   int num = 0 ;
   @override
   void initState() {
     super.initState();
-    refreshList();
+
   } 
-
-  refreshList() {
-    setState(() {
-      events = dbHelper.getToDay();
-    });
-  }
-
-  SingleChildScrollView dataTable(List<EventModel> events) {
-    var singleChildScrollView = SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      child: Column(
-        children:<Widget>[
-          for (var i = 0; i < events.length; i++) 
-            CardEvent(name: events[i].name, price: events[i].amount, time: events[i].date, icon: events[i].icon,),
-        ]
-      ) 
-    );
-    return singleChildScrollView;
-  }
-  list() {
-    return Expanded(
-      child: FutureBuilder(
-        future: events,
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            return dataTable(snapshot.data);
-          }
-          if(null == snapshot.data || snapshot.data.length == 0){
-            return Text('No Data Found');
-          }
-          return CircularProgressIndicator();
-        },
-      )
-    );
-  }
   List<Widget> _buildPageIndicator() {
     List<Widget> list = [];
     for (int i = 0; i < _numPages; i++ ) {
@@ -178,7 +143,9 @@ class _ReminderSlideState extends State<ReminderSlide> {
                         width: 200,
                         margin: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
                         decoration: BoxDecoration(
-                            image: DecorationImage(image: AssetImage('assests/images/balance.png'))
+                            image: DecorationImage(
+                              image: AssetImage('assests/images/balance.png',),
+                              )
                         ),
                       )
                     ],
