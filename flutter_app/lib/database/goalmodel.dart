@@ -9,8 +9,9 @@ class GoalModel {
     String icon;
     String dateFinish;
     String description;
+    String status;
 
-  GoalModel({this.id, this.name, this.type, this.total, this.current,this.icon, this.dateFinish, this.description});
+  GoalModel({this.id, this.name, this.type, this.total, this.current,this.icon, this.dateFinish, this.description, this.status});
 
   Map<String, dynamic> toMap() {
     return {
@@ -22,6 +23,7 @@ class GoalModel {
       'icon': icon,
       'dateFinish': dateFinish,
       'description': description,
+      'status': status
     };
 
   }

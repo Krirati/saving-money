@@ -17,27 +17,21 @@ class CardTypeResult extends StatefulWidget{
 
 class _CardTypeResultState extends State<CardTypeResult> {
   var dbHelper = DBHelper();
-  int _total;
+  // int _total;
+  Future<List> day;
+  Future<List> month;
+  Future<List> year;
   @override
   initState(){
     super.initState();
     loadSum(widget.icon);
+    day = dbHelper.sumType(widget.icon);
+    month = dbHelper.sumType(widget.icon);
+    year = dbHelper.sumType(widget.icon);
   }
 
   Future loadSum(type) async {
     var result = await dbHelper.sumType(type);
-    return result;
-  }
-  Future loadSumToday(type) async {
-    var result = await dbHelper.sumTypeToday(type);
-    return result;
-  }
-  Future loadSumMonth(type) async {
-    var result = await dbHelper.sumTypeMonth(type);
-    return result;
-  }
-  Future loadSumYear(type) async{
-    var result = await dbHelper.sumTypeYear(type);
     return result;
   }
   @override
@@ -50,6 +44,7 @@ class _CardTypeResultState extends State<CardTypeResult> {
         ),
         elevation: 4,
         child: Container(
+          width: double.infinity,
           padding: EdgeInsets.all(10),
           child: Column(
             children: <Widget>[
@@ -104,7 +99,7 @@ class _CardTypeResultState extends State<CardTypeResult> {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: <Widget>[
                             FutureBuilder(
-                              future: loadSumToday(widget.icon),
+                              future: day,
                               builder: (context, snapshot) {
                                 if (snapshot.hasData) {
                                   return Text(
@@ -130,23 +125,13 @@ class _CardTypeResultState extends State<CardTypeResult> {
                           ]
                         ),
                       ),
-                      // Padding(
-                      //   padding: EdgeInsets.all(0),
-                      //   child: Column(
-                      //     crossAxisAlignment: CrossAxisAlignment.center,
-                      //     children: <Widget>[
-                      //       Text('0', style: TextStyle(fontWeight: FontWeight.w400, fontSize: 20)),
-                      //       Text('week'.toUpperCase(), style: TextStyle(color: kTextLightColor, fontSize: 16),)
-                      //     ]
-                      //   ),
-                      // ),
                       Padding(
                         padding: EdgeInsets.all(0),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: <Widget>[
                             FutureBuilder(
-                              future: loadSumMonth(widget.icon),
+                              future: month,
                               builder: (context, snapshot) {
                                 if (snapshot.hasData) {
                                   return Text(
@@ -176,7 +161,7 @@ class _CardTypeResultState extends State<CardTypeResult> {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: <Widget>[
                             FutureBuilder(
-                              future: loadSumYear(widget.icon),
+                              future: year,
                               builder: (context, snapshot) {
                                 if (snapshot.hasData) {
                                   return Text(

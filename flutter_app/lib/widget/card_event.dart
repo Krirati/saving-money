@@ -3,7 +3,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:savemoney/database/dbHelper.dart';
-import 'package:savemoney/database/model.dart';
 
 import '../addevent.dart';
 import '../constant.dart';
@@ -151,7 +150,7 @@ class _CardEventState extends State<CardEvent> {
 
                 underline: SizedBox(),
                 onChanged: (String newValue) {
-                  if (newValue == 'Update') {
+                  if (newValue == 'Edit') {
                     Navigator.push(context,
                       MaterialPageRoute(
                           builder: (_) => AddEvent(

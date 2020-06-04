@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:savemoney/constant.dart';
 import 'package:savemoney/home.dart';
 
 import 'database/dbHelper.dart';
@@ -20,7 +21,8 @@ class MyApp extends StatelessWidget {
         primaryColor: Colors.orange[200],
         accentColor: Colors.orangeAccent,
         visualDensity: VisualDensity.adaptivePlatformDensity,
-        canvasColor: Colors.transparent
+        canvasColor: Colors.transparent,
+        scaffoldBackgroundColor: kBackgroundColor2
       ),
 
       home: Home(),

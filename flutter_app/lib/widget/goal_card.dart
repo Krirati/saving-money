@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:savemoney/database/dbHelper.dart';
 import 'package:savemoney/database/goalmodel.dart';
+import 'package:savemoney/widget/dialog_history_goal.dart';
 
 import '../constant.dart';
 
@@ -42,10 +43,18 @@ class _GoalCardState extends State<GoalCard> {
       },
     );
   }
+  Future dialogHistory(String name) async {
+    return showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (_) {
+        return DialogHistoryGoal(name: name);
+      },
+    );
+  }
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     newCurrent = widget.current;
   }
@@ -56,6 +65,23 @@ class _GoalCardState extends State<GoalCard> {
       // update = false;
       newCurrent = widget.current + newAddCurrent;
     }
+  }
+
+  checkGoalDone() async {
+    GoalModel g = GoalModel(
+      id:  widget.id,
+      name: widget.name,
+      type: widget.type,
+      total: widget.totalMoney,
+      current: widget.totalMoney,
+      icon: widget.icon,
+      dateFinish: widget.dateEnd,
+      description: widget.description,
+      status: 'done'
+    );
+    dbHelper.updateGoal(g);
+    widget.callback(true);
+    // Navigator.pop(context);
   }
   Future _dialogDelete() async {
     return showDialog(
@@ -178,7 +204,7 @@ class _GoalCardState extends State<GoalCard> {
                   
                   GestureDetector(
                     onTap: ()=>{
-                      // dbHelper.deleteGoal(widget.id),
+                      checkGoalDone(),
                       widget.callback(true),
                       Navigator.pop(context)
                     },
@@ -261,7 +287,7 @@ class _GoalCardState extends State<GoalCard> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
-                      Text('${newCurrent} Bath'),
+                      Text('$newCurrent Bath'),
                       Text('${widget.totalMoney} Bath')
                     ]
                   ),
@@ -284,7 +310,7 @@ class _GoalCardState extends State<GoalCard> {
                       } else if (newValue == 'Check') {
                         dialogCheck();
                       } else if (newValue == 'History') {
-
+                        dialogHistory(widget.name);
                       }
                       else {
                         _dialogDelete();
@@ -334,9 +360,15 @@ class DialogUpdate extends StatefulWidget {
 
 class _DialogUpdateState extends State<DialogUpdate> {
   int _counter = 0;
+  double income;
   var currentController = TextEditingController();
   String current;
   var dbHelper = DBHelper();
+  @override
+  void initState() {
+    super.initState();
+    loadSumIncome();
+  }
   void _incrementCounter() {
     setState(() {
       _counter++;
@@ -344,6 +376,10 @@ class _DialogUpdateState extends State<DialogUpdate> {
       _counter = int.parse(currentController.text);
       
     });
+  }
+  Future<double> loadSum(name) async {
+    var result = dbHelper.sumAll('income');
+    return result;
   }
   void _decrementCounter() {
     setState(() {
@@ -353,7 +389,30 @@ class _DialogUpdateState extends State<DialogUpdate> {
       
     });
   }
-  Future dialogError() async {
+  void updateCurrentInput(val) {
+    _counter = int.parse(val);
+    print(val);
+  }
+  void loadSumIncome() async {
+    FutureBuilder(
+        future: dbHelper.sumAll('income'),
+        builder: (BuildContext context, AsyncSnapshot<double> snapshot) {
+          setState(() {
+            income = snapshot.data;
+          });
+        }
+      );
+  }
+    
+  Future dialogError(error) async {
+    String errorMsg;
+    switch (error) {
+      case 'more':
+        errorMsg = 'You have exceeded the target amount.';
+        break;
+      case 'moreincome':
+        errorMsg = 'You have less than your balance.';
+    }
     return showDialog(
       context: context,
       barrierDismissible: false,
@@ -380,7 +439,7 @@ class _DialogUpdateState extends State<DialogUpdate> {
                 child:  Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    Text('You have exceeded the target amount.'),
+                    Text(errorMsg),
                   ]
                 ),
               ),
@@ -396,7 +455,9 @@ class _DialogUpdateState extends State<DialogUpdate> {
   void updateGoal()async {
     if (widget.current + double.parse(currentController.text)>  widget.totalMoney) {
       print('more');
-      dialogError();
+      dialogError('more');
+    } else if (income - double.parse(currentController.text) < 0) {
+      dialogError('moreincome');
     }
     else {
       GoalModel g = GoalModel(
@@ -407,7 +468,8 @@ class _DialogUpdateState extends State<DialogUpdate> {
         current: widget.current + double.parse(currentController.text),
         icon: widget.icon,
         dateFinish: widget.dateEnd,
-        description: widget.description
+        description: widget.description,
+        status: 'wait'
       );
       print(double.parse(currentController.text));
       await dbHelper.updateGoal(g);
@@ -476,17 +538,23 @@ class _DialogUpdateState extends State<DialogUpdate> {
                                 filled: true,
                                 fillColor: Colors.white,
                               ),
+                              onChanged: (val) => updateCurrentInput(val),
                             ),
                           ),
+
                           SizedBox(width:10),
                           FloatingActionButton(
-                            onPressed: _incrementCounter,
+                            onPressed: () {
+                              _incrementCounter();
+                              updateCurrentInput(_counter.toString());
+                            },
                             backgroundColor: Colors.green[200],
                             tooltip: 'Increment',
                             child: Icon(Icons.add),
                           ),
                         ]
                       ),
+                      
                       SizedBox(height:10),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,

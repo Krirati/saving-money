@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../constant.dart';
 
 class DialogEvent extends StatefulWidget {
-  final type;
+  final  type;
   Function(String, String) callbackTypeicon;
   DialogEvent(this.type, this.callbackTypeicon);
 

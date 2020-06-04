@@ -36,6 +36,7 @@ dependencies:
   path:
   decimal: ^0.3.5
   shared_preferences: ^0.5.7+3
+  url_launcher: ^5.4.10
 
 dev_dependencies:
   flutter_test:
@@ -66,6 +67,12 @@ flutter:
     - assests/images/goalIcon.png
     - assests/icon/delete.png
     - assests/icon/tick.png
+    - assests/icon/about.svg
+    - assests/icon/bad.svg
+    - assests/icon/notification.svg
+    - assests/icon/database.svg
+    - assests/icon/info.svg
+    - assests/images/Group1.png
 
     - assests/icon/revenue.png
     - assests/icon/salary.png

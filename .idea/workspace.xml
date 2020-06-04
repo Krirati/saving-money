@@ -2,10 +2,28 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c9d80273-a2de-4a6f-ac76-2783eec8ebaa" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/saving-money.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/saving-money.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/flutter_app/android/app/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/flutter_app/android/app/src/main/AndroidManifest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/flutter_app/lib/addevent.dart" beforeDir="false" afterPath="$PROJECT_DIR$/flutter_app/lib/addevent.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/flutter_app/lib/constant.dart" beforeDir="false" afterPath="$PROJECT_DIR$/flutter_app/lib/constant.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/flutter_app/lib/dashboard.dart" beforeDir="false" afterPath="$PROJECT_DIR$/flutter_app/lib/dashboard.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/flutter_app/lib/database/dbHelper.dart" beforeDir="false" afterPath="$PROJECT_DIR$/flutter_app/lib/database/dbHelper.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/flutter_app/lib/database/goalmodel.dart" beforeDir="false" afterPath="$PROJECT_DIR$/flutter_app/lib/database/goalmodel.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/flutter_app/lib/datatarget.dart" beforeDir="false" afterPath="$PROJECT_DIR$/flutter_app/lib/datatarget.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/flutter_app/lib/history.dart" beforeDir="false" afterPath="$PROJECT_DIR$/flutter_app/lib/history.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/flutter_app/lib/home.dart" beforeDir="false" afterPath="$PROJECT_DIR$/flutter_app/lib/home.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/flutter_app/lib/main.dart" beforeDir="false" afterPath="$PROJECT_DIR$/flutter_app/lib/main.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/flutter_app/lib/setting.dart" beforeDir="false" afterPath="$PROJECT_DIR$/flutter_app/lib/setting.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/flutter_app/lib/tab_schedule/balance.dart" beforeDir="false" afterPath="$PROJECT_DIR$/flutter_app/lib/tab_schedule/balance.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/flutter_app/lib/tab_schedule/expenditure.dart" beforeDir="false" afterPath="$PROJECT_DIR$/flutter_app/lib/tab_schedule/expenditure.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/flutter_app/lib/tab_schedule/income.dart" beforeDir="false" afterPath="$PROJECT_DIR$/flutter_app/lib/tab_schedule/income.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/flutter_app/lib/widget/card_event.dart" beforeDir="false" afterPath="$PROJECT_DIR$/flutter_app/lib/widget/card_event.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/flutter_app/lib/widget/card_type_result.dart" beforeDir="false" afterPath="$PROJECT_DIR$/flutter_app/lib/widget/card_type_result.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/flutter_app/lib/widget/dialog_event.dart" beforeDir="false" afterPath="$PROJECT_DIR$/flutter_app/lib/widget/dialog_event.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/flutter_app/lib/widget/dialog_notification.dart" beforeDir="false" afterPath="$PROJECT_DIR$/flutter_app/lib/widget/dialog_notification.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/flutter_app/lib/widget/goal_card.dart" beforeDir="false" afterPath="$PROJECT_DIR$/flutter_app/lib/widget/goal_card.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/flutter_app/lib/widget/remindercard.dart" beforeDir="false" afterPath="$PROJECT_DIR$/flutter_app/lib/widget/remindercard.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/flutter_app/lib/widget/tag_type.dart" beforeDir="false" afterPath="$PROJECT_DIR$/flutter_app/lib/widget/tag_type.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/flutter_app/pubspec.lock" beforeDir="false" afterPath="$PROJECT_DIR$/flutter_app/pubspec.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/flutter_app/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/flutter_app/pubspec.yaml" afterDir="false" />
     </list>
@@ -28,7 +46,8 @@
   <component name="ProjectId" id="1bJSk0W4VCzmluXTevypkeF1PeF" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="PropertiesComponent">
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../save-money" />
+    <property name="last_opened_file_path" value="$USER_HOME$/flutter_sdk/flutter/bin" />
+    <property name="settings.editor.selected.configurable" value="preferences.externalResources" />
     <property name="show.migrate.to.gradle.popup" value="false" />
   </component>
   <component name="RunDashboard">

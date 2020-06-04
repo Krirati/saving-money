@@ -123,7 +123,8 @@ class _AddEventState extends State<AddEvent>{
             current: 0.0,
             icon: icon,
             dateFinish: time,
-            description: desciprionController.text
+            description: desciprionController.text,
+            status: 'wait',
           );
           dbHelper.insertGoals(g);
         } 

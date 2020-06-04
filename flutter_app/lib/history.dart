@@ -88,21 +88,24 @@ class _HistoryState extends State<History>{
           ),
           body:  Stack(
             children: <Widget>[
-              new Container(
-                decoration: new BoxDecoration(
-                  gradient: new LinearGradient(
-                    begin: Alignment.topRight,
-                    end: Alignment.bottomLeft,
-                    colors: [Colors.orange[200], Colors.orange[200]]
-                  ),
+            Container(
+              decoration: new BoxDecoration(
+                gradient: new LinearGradient(
+                  begin: Alignment.topRight,
+                  end: Alignment.bottomLeft,
+                  colors: [Colors.orange[200], Colors.orange[200]]
                 ),
-                height: 30,
               ),
-              TabBarView(children: [
+              height: 85,
+            ),
+              Positioned(
+                child: TabBarView(children: [
                 BalanceScreen(),
                 IncomeScreen(),
                 ExpenditureScreen(),
-              ])
+              ]),
+              ),
+              
             ],
             ),
           )

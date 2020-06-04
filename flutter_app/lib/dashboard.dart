@@ -2,18 +2,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:path/path.dart';
 import 'package:savemoney/constant.dart';
 import 'package:savemoney/history.dart';
 import 'package:savemoney/widget/card_today.dart';
 import 'package:savemoney/widget/dialog_notification.dart';
-import 'package:savemoney/widget/remindercard.dart';
 
 import 'database/dbHelper.dart';
 import 'database/model.dart';
 import 'home.dart';
-import 'widget/card_event.dart';
-import 'widget/card_type_result.dart';
 
 
 Color kPrimaryBlue = Color(0xff3c528b);
@@ -37,10 +33,14 @@ class _DashboardState extends State<Dashboard>{
     var result = dbHelper.balance();
     return result;
   }
-
+  Future<double> loadGoal() async {
+    var result = dbHelper.sumGoal();
+    return result;
+  }
   void initState() {
     super.initState();
     refreshList();
+    
   } 
 
   refreshList() {
@@ -77,7 +77,7 @@ class _DashboardState extends State<Dashboard>{
        FutureBuilder(
         future: events,
         builder: (context, snapshot) {
-          if (snapshot.hasData) {
+          if (snapshot.hasData && snapshot.data.length != 0) {
             return Container(
               // width: double.infinity,
               padding: EdgeInsets.symmetric( vertical: 24.0),
@@ -87,7 +87,12 @@ class _DashboardState extends State<Dashboard>{
             );
           }
           if(null == snapshot.data || snapshot.data.length == 0){
-            return Text('No Data Found');
+            return Padding(
+              padding: EdgeInsets.symmetric(horizontal: 25, vertical:5),
+              child: Text("Today don't have  event")
+            );
+            
+          // return CircularProgressIndicator();  
           }
           return CircularProgressIndicator();
         },
@@ -111,10 +116,14 @@ class _DashboardState extends State<Dashboard>{
                     end: Alignment.bottomLeft,
                     colors: [
                       Color(0xffffe0b2),
-                      Color(0xffffa726)
+                      Colors.orange[300].withOpacity(0.9)
                     ],
                   ),
-                //  image: DecorationImage(image: AssetImage('assests/images/balance.png'))
+                 image: DecorationImage(
+                  //  alignment: Alignment.topLeft,
+                   image: AssetImage('assests/images/Group1.png'),
+                   fit: BoxFit.fitWidth
+                  )
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -138,7 +147,7 @@ class _DashboardState extends State<Dashboard>{
                                   return  DialogNotification();
                                 });
                             },
-                            child: Icon(Icons.notifications, color: Colors.white,size: 35,),
+                            child: Icon(Icons.notifications, color: Colors.black,size: 35,),
                           ),
                         )
                       ],
@@ -153,7 +162,7 @@ class _DashboardState extends State<Dashboard>{
                             Opacity(
                               opacity: 0.1,
                               child: CustomPaint(
-                                painter: ShapesPainter(),
+                                // painter: ShapessPainter(),
                               ),  
                             ),
                           ],
@@ -161,7 +170,7 @@ class _DashboardState extends State<Dashboard>{
                         SvgPicture.asset(
                           'assests/icon/finance.svg',
                           width: 150,
-                          fit: BoxFit.fitWidth,
+                          fit: BoxFit.fitHeight,
                           alignment: Alignment.topCenter,
                         ),
                         Positioned(
@@ -225,13 +234,24 @@ class _DashboardState extends State<Dashboard>{
             ),
             SizedBox(height: 15,),
             FutureBuilder(
-              future: loadSum('goals'),
-              builder: (BuildContext context, AsyncSnapshot<double> snapshot) {
-                return CardListGroup(
-                  name: 'Saving for goals', 
-                  money: snapshot.data.toString(), 
-                  img: AssetImage('assests/images/goalIcon.png'),
-                );
+              future: loadGoal(),
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  return CardListGroup(
+                    name: 'Saving for goals', 
+                    money: snapshot.data.toString(), 
+                    img: AssetImage('assests/images/goalIcon.png'),
+                  );
+                }
+                if(null == snapshot.data || snapshot.data.length == 0){
+                  return CardListGroup(
+                    name: 'No data', 
+                    money: '0', 
+                    img: AssetImage('assests/images/goalIcon.png'),
+                  );
+                }
+                return CircularProgressIndicator();
+               
               }
             ),
             SizedBox(height: 15,),
@@ -311,13 +331,13 @@ class _CardGroupState extends State<CardListGroup> {
         Container(
           decoration: BoxDecoration(
             color: Colors.white,
-            borderRadius: BorderRadius.circular(15),
+            borderRadius: BorderRadius.circular(13),
             boxShadow: [
               BoxShadow(
                 color: Colors.grey.withOpacity(0.5),
-                spreadRadius: 1,
-                blurRadius:4,
-                offset: Offset(0,3),
+                spreadRadius: 0.5,
+                blurRadius:5,
+                offset: Offset(0,2),
               )
             ]
           ),

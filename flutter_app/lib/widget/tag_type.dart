@@ -13,7 +13,6 @@ class _TagTypeState extends State<TagType> {
   Color color;
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     if (widget.type == 'income') {
       color = incomeColor;

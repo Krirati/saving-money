@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:path/path.dart';
 import 'package:savemoney/constant.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -39,29 +38,8 @@ class _DialogNotificationState extends State<DialogNotification>{
         onSelectNotification: onSelectNotification);
   }
 
-  void _showNotifications() async {
-    await notification();
-    
-  }
-
   void showNotificationsDaily(int id, int hour, int minute) async {
     await notificationDaily(id, hour, minute);
-  }
-
-  Future<void> notification() async {
-    AndroidNotificationDetails androidNotificationDetails =
-        AndroidNotificationDetails(
-            'Channel ID', 'Channel title', 'channel body',
-            priority: Priority.High,
-            importance: Importance.Max,
-            ticker: 'test');
-
-    IOSNotificationDetails iosNotificationDetails = IOSNotificationDetails();
-
-    NotificationDetails notificationDetails =
-        NotificationDetails(androidNotificationDetails, iosNotificationDetails);
-    await flutterLocalNotificationsPlugin.show(
-        0, 'Hello there', 'please subscribe my channel', notificationDetails);
   }
 
   Future<void> notificationDaily (id, hour, minute) async {
@@ -69,7 +47,9 @@ class _DialogNotificationState extends State<DialogNotification>{
     var time = Time(hour, minute, 0);
     var androidPlatformChannelSpecifics =
         AndroidNotificationDetails(
-          'your channel id', 'your channel name', 'your channel description',
+          'repeatDailyAtTime channel id', 
+          'repeatDailyAtTime channel name', 
+          'repeatDailyAtTime description',
           importance: Importance.Max,
           priority: Priority.High,
           ticker: 'Medicine Reminder'
@@ -113,8 +93,23 @@ class _DialogNotificationState extends State<DialogNotification>{
   getSF() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     _notification = prefs.getBool('notification');
+    if (_notification == null) {
+      setState(() {
+        _notification = false;
+      });
+    }
     _saving = prefs.getBool('saving_status');
+    if (_saving == null) {
+     setState(() {
+       _saving = false;
+     }); 
+    }
     _record = prefs.getBool('record_status');
+    if (_record == null) {
+      setState(() {
+        _record = false;
+      });
+    }
     pickedtime_saving = prefs.getString('saving_time');
     pickedtime_record = prefs.getString('record_time');
     print('$_notification $_saving $_record');

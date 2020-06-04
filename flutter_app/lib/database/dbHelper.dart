@@ -20,6 +20,7 @@ class DBHelper {
   static const String TOTAL = 'total';
   static const String CURRENT = 'current';
   static const String DATEFINISH = 'dateFinish';
+  static const String STATUS = 'status';
   static const String TABLE = 'testDB';
   static const String TABLEGOAL = 'testDBGoal';
   static const String DB_NAME = 'transaction_test.db';
@@ -41,7 +42,7 @@ class DBHelper {
 
   _onCreate(Database db, int version) async {
     await db.execute("CREATE TABLE $TABLE ($ID INTEGER PRIMARY KEY, $NAME TEXT, $TYPE TEXT, $AMOUNT DOUBLE, $ICON TEXT, $DESCRIPTION TEXT, $DATE TEXT)");
-    await db.execute("CREATE TABLE $TABLEGOAL ($ID INTEGER PRIMARY KEY, $NAME TEXT, $TYPE TEXT, $TOTAL DOUBLE, $CURRENT DOUBLE, $ICON TEXT, $DESCRIPTION TEXT, $DATEFINISH TEXT)");
+    await db.execute("CREATE TABLE $TABLEGOAL ($ID INTEGER PRIMARY KEY, $NAME TEXT, $TYPE TEXT, $TOTAL DOUBLE, $CURRENT DOUBLE, $ICON TEXT, $DESCRIPTION TEXT, $DATEFINISH TEXT, $STATUS TEXT)");
   }
 
   Future<List<EventModel>> getEvents() async {
@@ -61,7 +62,7 @@ class DBHelper {
   }
   Future<List<GoalModel>> getGoals() async {
     var dbClient = await db;
-    var sql = "SELECT * FROM $TABLEGOAL WHERE $TOTAL <> $CURRENT ORDER BY $DATEFINISH DESC";
+    var sql = "SELECT * FROM $TABLEGOAL WHERE $STATUS <> 'done' ORDER BY $DATEFINISH DESC";
     final List<Map<String, dynamic>> maps = await dbClient.rawQuery(sql);
     print('getGoals ');
     return List.generate(maps.length, (index) {
@@ -74,12 +75,13 @@ class DBHelper {
         current: maps[index]['current'],
         dateFinish: maps[index]['dateFinish'],
         description: maps[index]['description'],
+        status: maps[index]['status']
       );
     });
   }
   Future<List<GoalModel>> getGoalsCom() async {
     var dbClient = await db;
-    var sql = "SELECT * FROM $TABLEGOAL WHERE $TOTAL = $CURRENT ORDER BY $DATEFINISH DESC";
+    var sql = "SELECT * FROM $TABLEGOAL WHERE $STATUS = 'done' ORDER BY $DATEFINISH DESC";
     final List<Map<String, dynamic>> maps = await dbClient.rawQuery(sql);
     return List.generate(maps.length, (index) {
       return GoalModel(
@@ -91,6 +93,24 @@ class DBHelper {
         current: maps[index]['current'],
         dateFinish: maps[index]['dateFinish'],
         description: maps[index]['description'],
+        status: maps[index]['status']
+      );
+    });
+  }
+
+  Future<List<EventModel>> getGoalsHis(name) async {
+    var dbClient = await db;
+    var sql = "SELECT * FROM $TABLE WHERE $NAME = '$name' ORDER BY $DATE DESC";
+    final List<Map<String, dynamic>> maps = await dbClient.rawQuery(sql);
+    return List.generate(maps.length, (index) {
+      return EventModel(
+        id: maps[index]['id'],
+        name: maps[index]['name'],
+        type: maps[index]['type'],
+        amount: maps[index]['amount'],
+        icon: maps[index]['icon'],
+        date: maps[index]['date'],
+        description: maps[index]['description'],
       );
     });
   }
@@ -99,7 +119,7 @@ class DBHelper {
     var dbClient = await db;
     var sql = "SELECT * FROM $TABLE WHERE $DATE LIKE '${DateTime.now().toString().split(' ')[0]}%' ";
     final List<Map<String, dynamic>> maps = await dbClient.rawQuery(sql);
-    // print(maps);
+    print(maps.length);
     return List.generate(maps.length, (index) {
       return EventModel(
         id: maps[index]['id'],
@@ -152,6 +172,7 @@ class DBHelper {
     return goalModel;
   }
 
+
   Future<int> delete(int id) async {
     var dbClient = await db;
     return await dbClient.delete(TABLE, where: '$ID = ?', whereArgs: [id]);
@@ -163,6 +184,11 @@ class DBHelper {
     return await dbClient.delete(TABLEGOAL, where: '$ID = ?', whereArgs: [id]);
   }
 
+  Future<int> deleteData() async {
+    var dbClient = await db;
+    await dbClient.rawDelete('DELETE FROM $TABLEGOAL');
+    return await dbClient.rawDelete('DELETE FROM $TABLE');
+  }
   Future<int> update(EventModel eventModel) async {
     var dbClient = await db;
     return await dbClient.update(TABLE, eventModel.toMap(),
@@ -188,6 +214,7 @@ class DBHelper {
       whereArgs: [goalModel.id]
     );
   }
+
 
   Future<List<EventModel>> quertTypeEvent(String typeNew, String range) async{
     var dbClient = await db;
@@ -273,7 +300,7 @@ class DBHelper {
 
   Future<int> countGoalCompleted() async {
     var dbClient = await db;
-    var sqlNew = "SELECT COUNT(id) FROM $TABLEGOAL WHERE $CURRENT = $TOTAL ";
+    var sqlNew = "SELECT COUNT(id) FROM $TABLEGOAL WHERE $STATUS = 'done' ";
     int countNew = Sqflite.firstIntValue(await dbClient.rawQuery(sqlNew));
     print('countGoalCompleted $countNew ');
     return countNew;
@@ -317,6 +344,20 @@ class DBHelper {
     var sql  = "SELECT COALESCE(SUM($AMOUNT),0) as Total FROM $TABLE WHERE $ICON = '$typeNew' AND $DATE LIKE '$dateYear%'";
     var result = await dbClient.rawQuery(sql);
     return result.toList();
+  }
+
+  Future<double> sumGoal() async {
+    var dbClient = await db;
+
+    // var sql  = "SELECT COALESCE(SUM($CURRENT),0) as Total FROM $TABLEGOAL";
+
+    var sql = "SELECT * FROM $TABLEGOAL ";
+    final List<Map<String, dynamic>> maps = await dbClient.rawQuery(sql);
+    double amount = 0;
+    for (var item in maps) {
+      amount = amount + item['current'];
+    }
+    return amount;
   }
 
   Future close() async {

@@ -80,11 +80,11 @@ class _DataTargetState extends State<DataTarget>{
       child: FutureBuilder(
         future: events,
         builder: (context, snapshot) {
-          if (snapshot.hasData) {
+          if (snapshot.hasData && snapshot.data.length != 0) {
             return dataTable(snapshot.data);
           }
           if(null == snapshot.data || snapshot.data.length == 0){
-            return Text('No Data Found');
+            return Text('No Goal Found');
           }
           return CircularProgressIndicator();
         },

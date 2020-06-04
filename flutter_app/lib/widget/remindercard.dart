@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:savemoney/constant.dart';
-import 'package:savemoney/database/dbHelper.dart';
 import 'package:savemoney/database/model.dart';
 import 'package:savemoney/history.dart';
 import 'package:savemoney/widget/tag_type.dart';
-
-import 'card_event.dart';
 
 
 class ReminderSlide extends StatefulWidget {
