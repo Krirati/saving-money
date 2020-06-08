@@ -42,7 +42,7 @@ class _CardTypeResultState extends State<CardTypeResult> {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12.0),
         ),
-        elevation: 4,
+        elevation: 1,
         child: Container(
           width: double.infinity,
           padding: EdgeInsets.all(10),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:savemoney/constant.dart';
 import 'package:savemoney/home.dart';
+import 'package:splashscreen/splashscreen.dart';
 
 import 'database/dbHelper.dart';
 
@@ -15,7 +16,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Kep tang',
       theme: ThemeData(
         fontFamily: 'Poppins',
         primaryColor: Colors.orange[200],
@@ -25,7 +26,19 @@ class MyApp extends StatelessWidget {
         scaffoldBackgroundColor: kBackgroundColor2
       ),
 
-      home: Home(),
+      // home: Home(),
+      home: SplashScreen(
+        seconds: 5,
+        navigateAfterSeconds: Home(),
+        imageBackground: AssetImage('assests/images/splashscreen.png'),
+        image: Image.asset('assests/icon/coin-10.png', width: 160,),
+        title: Text(
+          'Kep tang'.toUpperCase(),
+          style: TextStyle(
+            fontSize: 30
+          ),
+        ),
+      ),
     );
   }
 }

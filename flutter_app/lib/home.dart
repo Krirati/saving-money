@@ -16,15 +16,22 @@ class HomeState extends State<Home> {
   //Properties
 
   int currentTab = 0;
-  final List<Widget> screens = [
+  List<Widget> screens = [
     Dashboard(),
     History(),
     DataTarget(),
     Settings()
   ];// to store tab views
 
+  @override
+  void initState() {
+    super.initState();
+
+  }
+
   // Active page (Tab)
   Widget currentScreen = Dashboard(); //initial screen in viewport
+
   final PageStorageBucket bucket = PageStorageBucket();
 
   bool clickedCentreFAB = false; //boolean used to handle container animation which expands from the FAB
@@ -38,6 +45,7 @@ class HomeState extends State<Home> {
       text = buttonText;
     });
   }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -52,17 +60,10 @@ class HomeState extends State<Home> {
           child: Icon(Icons.add),
           backgroundColor: Colors.orangeAccent,
           onPressed: (){
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) {
-                    return AddEvent();
-                  }),
-            );
-            // setState(() {
-            //   currentScreen = AddEvent();
-
-            // },);
+            setState(() {
+              currentScreen = AddEvent();
+              selectedIndex = 5;
+            },);
           },
         ),
 

@@ -62,101 +62,107 @@ class _IncomeScreenState extends State<IncomeScreen> {
   }
   list() {
     return Container(
-      margin: EdgeInsets.symmetric(vertical:10),
-      child: FutureBuilder(
+      // margin: EdgeInsets.symmetric(vertical:10),
+            child: FutureBuilder(
         future: events,
         builder: (context, snapshot) {
-          if (snapshot.hasData) {
+          if (snapshot.hasData && snapshot.data.length != 0) {
             return dataTable(snapshot.data);
           }
           if(null == snapshot.data || snapshot.data.length == 0){
-            return Text('No Data Found');
+            return Container(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  SizedBox(height:30),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Container(
+                        height: 170,
+                        width: 170,
+                        margin: EdgeInsets.symmetric(horizontal: 5, vertical: 1),
+                        decoration: BoxDecoration(
+                            image: DecorationImage(image: AssetImage('assests/icon/box.png'))
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 10),
+                  Text('Not have income.')
+     
+                ],)
+            );
           }
           return CircularProgressIndicator();
         },
+      
       )
     );
   }
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        body: Stack(
-          children: <Widget>[
-             Container(
-              decoration: new BoxDecoration(
-                gradient: new LinearGradient(
-                  begin: Alignment.topRight,
-                  end: Alignment.bottomLeft,
-                  colors: [Colors.orange[200], Colors.orange[200]]
-                ),
-              ),
-              height: 30,
-              ),  
-              ListView(
-              padding: EdgeInsets.symmetric(vertical:5, horizontal: 15),
-              addAutomaticKeepAlives: true,
-              children: <Widget>[
-                Container(
-                  padding:
-                    EdgeInsets.symmetric(horizontal: 16, vertical: 5),
-                  alignment: Alignment.centerRight,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(10),
-                    boxShadow:  [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.5),
-                        spreadRadius: 1,
-                        blurRadius:4,
-                        offset: Offset(0,3),
-                      )
-                    ]
-                  ),
-                  
-                  // dropdown below..
-                  child: Row(
-                    children: <Widget>[
-                      Text('Select Rang'.toUpperCase(), style: TextStyle(color: Colors.black, fontSize: 22, fontWeight: FontWeight.w300)),
-                      Spacer(),
-                      DropdownButton<String>(
-                        dropdownColor: Colors.white,
-                        value: dropdownValue,
-                        focusColor: Colors.red,
-                        icon: Icon(Icons.arrow_drop_down, color: Colors.black,),
-                        iconSize: 42,
-                        underline: SizedBox(),
-                        onChanged: (String newValue) {
-                          setState(() {
-                            dropdownValue = newValue;
-                            print(dropdownValue);
-                          });
-                        },
-                        hint: Text('select'.toUpperCase()),
-                        items: <String>[
-                          'Day',
-                          'Week',
-                          'Month',
-                          'Year'
-                        ].map<DropdownMenuItem<String>>((String value) {
-                          return DropdownMenuItem<String>(
-                            value: value,
-                            child: Text(value , style: TextStyle(color: Colors.black, fontSize: 22, fontWeight: FontWeight.w600)),
-                          );
-                        }).toList()
-                      ),
-                    ],
-                  )
-                ),
-                SizedBox(height:10),
+    return 
+      ListView(
+      padding: EdgeInsets.symmetric(vertical:5, horizontal: 15),
+      addAutomaticKeepAlives: true,
+      children: <Widget>[
+//                Container(
+//                  padding:
+//                    EdgeInsets.symmetric(horizontal: 16, vertical: 5),
+//                  alignment: Alignment.centerRight,
+//                  decoration: BoxDecoration(
+//                    color: Colors.white,
+//                    borderRadius: BorderRadius.circular(10),
+//                    boxShadow:  [
+//                      BoxShadow(
+//                        color: Colors.grey.withOpacity(0.5),
+//                        spreadRadius: 1,
+//                        blurRadius:4,
+//                        offset: Offset(0,3),
+//                      )
+//                    ]
+//                  ),
+//
+//                  // dropdown below..
+//                  child: Row(
+//                    children: <Widget>[
+//                      Text('Select Rang'.toUpperCase(), style: TextStyle(color: Colors.black, fontSize: 22, fontWeight: FontWeight.w300)),
+//                      Spacer(),
+//                      DropdownButton<String>(
+//                        dropdownColor: Colors.white,
+//                        value: dropdownValue,
+//                        focusColor: Colors.red,
+//                        icon: Icon(Icons.arrow_drop_down, color: Colors.black,),
+//                        iconSize: 42,
+//                        underline: SizedBox(),
+//                        onChanged: (String newValue) {
+//                          setState(() {
+//                            dropdownValue = newValue;
+//                            print(dropdownValue);
+//                          });
+//                        },
+//                        hint: Text('select'.toUpperCase()),
+//                        items: <String>[
+//                          'Day',
+//                          'Week',
+//                          'Month',
+//                          'Year'
+//                        ].map<DropdownMenuItem<String>>((String value) {
+//                          return DropdownMenuItem<String>(
+//                            value: value,
+//                            child: Text(value , style: TextStyle(color: Colors.black, fontSize: 22, fontWeight: FontWeight.w600)),
+//                          );
+//                        }).toList()
+//                      ),
+//                    ],
+//                  )
+//                ),
+                // SizedBox(height: 5),
                 list()
                 
               ],
-            )
-          ],
             
-        )
-      ),
     );
   } 
 }

@@ -23,7 +23,7 @@ class _CardTodayState extends State<CardToday> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 10),
+      padding: EdgeInsets.symmetric(horizontal: 1),
       child: Stack(
       children: <Widget>[
         Card(
@@ -31,7 +31,7 @@ class _CardTodayState extends State<CardToday> {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12.0),
           ),
-          elevation: 4,
+          elevation: 1,
           child: Container(
             width: double.infinity,
             padding: EdgeInsets.symmetric(horizontal:20, vertical:16),
@@ -49,7 +49,7 @@ class _CardTodayState extends State<CardToday> {
                       semanticLabel: 'Text to announce in accessibility modes',
                     ),
                     Text(
-                      ' ${widget.time.split('.')[0]}',
+                      ' ${widget.time.split(' ')[1].split('.')[0]}',
                         style: TextStyle(
                         color: Colors.orange[200]
                       ),

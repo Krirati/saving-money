@@ -25,6 +25,10 @@ class _CardEventState extends State<CardEvent> {
   String dropdownValue;
   var dbHelper = DBHelper();
   
+  callback(update) {
+    widget.callback(true);
+  }
+
   Future _dialogDelete() async {
     return showDialog(
       context: context,
@@ -105,7 +109,7 @@ class _CardEventState extends State<CardEvent> {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12.0),
           ),
-          elevation: 4,
+          elevation: 1,
           child: Container(
             width: double.infinity,
             padding: EdgeInsets.symmetric(horizontal:20, vertical:10),
@@ -162,6 +166,7 @@ class _CardEventState extends State<CardEvent> {
                             icon: widget.icon,
                             description: widget.description,
                             update: true,
+                            callback: callback,
                           )
                       ),
                     );

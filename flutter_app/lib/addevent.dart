@@ -1,17 +1,16 @@
 
-import 'dart:io';
+// import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:image_picker/image_picker.dart';
+
 import 'package:savemoney/database/dbHelper.dart';
 import 'package:savemoney/database/model.dart';
 import 'package:savemoney/widget/datepicker.dart';
 import 'package:savemoney/widget/field_select_type.dart';
 
-import 'constant.dart';
 import 'database/goalmodel.dart';
-import 'widget/dialog_notification.dart';
+
 
 class AddEvent extends StatefulWidget {
   final int  id;
@@ -22,8 +21,8 @@ class AddEvent extends StatefulWidget {
   final String description;
   final String type;
   final bool update;
-
-  const AddEvent({this.id, this.name, this.price, this.time,this.type, this.icon, this.description, this.update});
+  final Function(bool) callback;
+  const AddEvent({this.id, this.name, this.price, this.time,this.type, this.icon, this.description, this.update, this.callback});
   @override
   _AddEventState createState() => _AddEventState();
   }
@@ -41,7 +40,7 @@ class _AddEventState extends State<AddEvent>{
   DateTime newDateTime;
   int curUserId;
 
-  File _image;
+  // File _image;
   int updateNo;
 
   final formKeyName = new GlobalKey<FormState>();
@@ -102,10 +101,11 @@ class _AddEventState extends State<AddEvent>{
           date: time,
           description: desciprionController.text);
         dbHelper.update(e);
+        widget.callback(true);
         setState(() {
           isUpdating = false;
         });
-        Navigator.pop(context);
+        // Navigator.pop(context);
       } else {
         EventModel e = EventModel(
           name: nameController.text, 
@@ -132,16 +132,17 @@ class _AddEventState extends State<AddEvent>{
           dbHelper.insert(e);
         }
       }
+      dialogShow();
       clearField();
     }
   }
-  Future _getImage() async {
-    var image = await ImagePicker.pickImage(source: ImageSource.gallery);
-    setState(() {
-      _image = image;
-      print('_image $_image');
-    });
-  }
+  // Future _getImage() async {
+  //   var image = await ImagePicker.pickImage(source: ImageSource.gallery);
+  //   setState(() {
+  //     _image = image;
+  //     print('_image $_image');
+  //   });
+  // }
 
   callbackResultIcon(newType, newIcon) {
     setState(() {
@@ -151,31 +152,56 @@ class _AddEventState extends State<AddEvent>{
     print('add type: $type');
     print('add icon: $icon');
   }
+
+  Future dialogShow() async {
+    String msg;
+    if (widget.update == true) {
+      msg = 'Update';
+    } else {
+      msg = 'Insert';
+    }
+    return showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) {
+        Future.delayed(Duration(seconds: 3), () {
+          Navigator.pop(context);
+        });
+        return Stack(
+        children: <Widget>[
+          SimpleDialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8)
+            ),
+            contentPadding: EdgeInsets.all(10),
+            children: <Widget>[
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Image.asset('assests/icon/tick.png', width: 80,height:80,)
+                ]
+              ),
+              Padding(
+                padding: EdgeInsets.symmetric(vertical:5),
+                child:  Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Text('$msg sucessful'),
+                  ]
+                ),
+              ),
+            ],
+          ),
+
+        ],
+      );
+      },
+
+    );
+  }
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text('Add New Activity'),
-          leading: IconButton(
-            icon: Icon(Icons.arrow_back_ios) ,
-            onPressed: () {
-              Navigator.pop(context);
-            } 
-          ),
-          actions: <Widget>[
-            IconButton(
-              icon: Icon(Icons.notifications),
-              onPressed: () async{
-                await showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return  DialogNotification();
-                  });
-              },)
-          ],
-          // elevation: 0,
-        ),
+    return Scaffold(
         backgroundColor: Colors.white,
         floatingActionButton: FloatingActionButton.extended(
           icon: Icon(Icons.save),
@@ -189,260 +215,304 @@ class _AddEventState extends State<AddEvent>{
           },
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-        body:
-          ListView(
-            padding: EdgeInsets.symmetric(vertical: 10,horizontal:0 ),
-            children: <Widget>[
-              SizedBox(height: 10,),
-              Container(
-                padding: EdgeInsets.all(15),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Column(
+        body: Stack(
+          children: <Widget>[
+            Container(
+              height: double.infinity,
+              decoration: BoxDecoration(
+                color: null,
+                image: DecorationImage(
+                  // alignment: Alignment.centerLeft,
+                  image: AssetImage('assests/images/Group1.png'),
+                  fit: BoxFit.cover
+                )
+              ),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 30),
+                    child: Row(
                       children: <Widget>[
+                        Text(
+                          'Add new event'.toUpperCase(),
+                          style: TextStyle(
+                            fontSize: 30,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.black
+                          ),
+                        ),
 
-                        Form(
-                          key: formKeyName,
-                          child: Container(
-                            margin: EdgeInsets.all(12),
-                            child: Column(
-                              mainAxisSize: MainAxisSize.max,
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                      ]
+                    ),
+                  ),
+
+                ],
+              ),
+            ),       
+              SafeArea(
+                child: Padding(
+                  padding: EdgeInsets.fromLTRB(20, 80, 20, 0),
+                  child: ListView(
+                    children: <Widget>[
+          
+                      Container(
+                        // padding: EdgeInsets.all(15),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Column(
                               children: <Widget>[
-                                Text(
-                                  'Name Event',
-                                  style: TextStyle(
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.w600
-                                  ),
-                                ),
-                                Container(
-                                  margin: EdgeInsets.fromLTRB(15, 5, 15, 5),
-                                  child: TextFormField(
-                                    controller: nameController,
-                                    keyboardType: TextInputType.text,
-                                    
-                                    decoration: InputDecoration(
-                                      hintText: 'Name',
-                                      contentPadding: EdgeInsets.all(10.0),
-                                      border: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(8),
-                                        borderSide: BorderSide(
-                                          color: Colors.red
-                                        )
-                                      ),
-                                      filled: true,
-                                      fillColor: Colors.white,
-                                    ),
-                                    validator: (val) => val.length == 0 ? 'Enter Name' : null,
-                                    onSaved: (val) => name = val,                                    
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      
-                        
-                        Form(
-                          key: formKeyType,
-                          child: Container(
-                          margin: EdgeInsets.all(12),
-                          child: Column(
-                            mainAxisSize: MainAxisSize.max,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Text(
-                                'Type',
-                                style: TextStyle(
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.w600
-                                ),
-                              ),
-                              FieldType(callbackResultIcon),
-                            ],
-                          ),
-                          ),
-                        ),
-                        Form(
-                          key: formKeyAmount,
-                          child: Container(
-                            margin: EdgeInsets.fromLTRB(15, 5, 15, 15),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: <Widget>[
-                                Text(
-                                  (type == 'goals') ? 'Target amount':'Amount',
-                                  style: TextStyle(
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.w600
-                                  ),
-                                ),
-                                Container(
-                                  margin: EdgeInsets.all(10),
-                                  child: TextField(
-                                    keyboardType: TextInputType.number,
-                                    controller: amountController,
-                                    decoration: InputDecoration(
-                                      hintText: 'Amount',
-                                      contentPadding: EdgeInsets.all(10.0),
-                                      border: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(8),
-                                        borderSide: BorderSide(
-                                          color: Colors.white
-                                        )
-                                      ),
-                                      filled: true,
-                                      fillColor: Colors.white,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                        Container(
-                          margin: EdgeInsets.fromLTRB(15, 5, 15, 15),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: <Widget>[
-                              Text(
-                                (type == 'goals') ? 'Target date':'Date & Time',
-                                style: TextStyle(
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.w600
-                                ),
-                              ),
-                              Padding(
-                                padding: EdgeInsets.symmetric(horizontal:10),
-                                child: RaisedButton(
-                                  color: Colors.grey[100],
-                                  padding: EdgeInsets.all(10.0),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(8),
-                                    side: BorderSide(color: Colors.grey)
-                                  ),
-                                  onPressed: ()
-                                  async{
-                                    await showModalBottomSheet(
-                                      context: context,
-                                      builder: (BuildContext context) {
-                                        return DatePickerWidget(callback);
-                                      }
-                                    );
-                                  },
-                                  child: new Text('TIME: ' + time),
-                                ),
-                              ),
-         
-                            ],
-                          ),
-                        ),
-                        Container(
-                          margin: EdgeInsets.fromLTRB(15, 5, 15, 15),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Text(
-                                'Descirption',
-                                style: TextStyle(
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.w600
-                                ),
-                              ),
-                              Container(
-                                margin: EdgeInsets.all(10),
-                                child: TextField(
-                                  key: formKeyDes,
-                                  controller: desciprionController,
-                                  keyboardType: TextInputType.multiline,
-                                  maxLines: 3,
-                                  decoration: InputDecoration(
-                                    hintText: '',
-                                    contentPadding: EdgeInsets.all(10.0),
-                                    filled: true,
-                                    fillColor: Colors.white,
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(8),
-                                      borderSide: BorderSide(
-                                      )
-                                    ),
-                                  ),
-                                  onChanged: null,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Container(
-                          margin: EdgeInsets.fromLTRB(15, 5, 15, 15),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: <Widget>[
-                                  Text(
-                                    'Pictures',
-                                    style: TextStyle(
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.w600
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              SizedBox(height: 12,),
-                              Padding(
-                                padding: EdgeInsets.symmetric(horizontal:15),
-                                child: GestureDetector(
-                                  onTap: _getImage,
-                                    child: Container(
-                                    height: 120,
-                                    decoration: BoxDecoration(
-                                        color: Colors.white70,
-                                        borderRadius: BorderRadius.circular(8),
-                                        boxShadow: [
-                                          BoxShadow(
-                                            color: Colors.grey[300],
-                                            spreadRadius: 1,
-                                            blurRadius: 3,
-                                            offset: Offset(0,1),
-                                          )
-                                        ]
-                                    ),
+                                Form(
+                                  key: formKeyName,
+                                  child: Container(
+                                    margin: EdgeInsets.all(12),
                                     child: Column(
+                                      mainAxisSize: MainAxisSize.max,
                                       crossAxisAlignment: CrossAxisAlignment.start,
                                       children: <Widget>[
-                                        Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: <Widget>[
-                                            Row(
-                                              mainAxisAlignment: MainAxisAlignment.center,
-                                              children: <Widget>[
-                                                _image == null ? Icon(Icons.image,color: kTextLightColor, size: 100,) : Image.file(_image,
-                                                height: 120,
-                                                fit: BoxFit.fill,),
-                                              ],
+                                        Text(
+                                          'Name Event',
+                                          style: TextStyle(
+                                              color: Colors.black,
+                                              fontWeight: FontWeight.w600
+                                          ),
+                                        ),
+                                        Container(
+                                          // margin: EdgeInsets.fromLTRB(15, 5, 15, 5),
+                                          margin: EdgeInsets.only(top:5),
+                                          color: Colors.white,
+                                          child: TextFormField(
+                                            controller: nameController,
+                                            keyboardType: TextInputType.text,
+                                            decoration: InputDecoration(
+                                              hintText: 'Name',
+                                              contentPadding: EdgeInsets.all(10.0),
+                                              border: OutlineInputBorder(
+                                                borderRadius: BorderRadius.circular(8),
+                                                borderSide: BorderSide(
+                                                  color: Colors.red
+                                                )
+                                              ),
+                                              filled: true,
+                                              fillColor: Colors.white,
                                             ),
-                                          ],
-                                        )                                       
+                                            validator: (val) => val.length == 0 ? 'Enter Name' : null,
+                                            onSaved: (val) => name = val,                                    
+                                          ),
+                                        ),
                                       ],
                                     ),
                                   ),
                                 ),
-                              ),
-                            ],
-                          ),
+                              
+                                
+                                Form(
+                                  key: formKeyType,
+                                  child: Container(
+                                  margin: EdgeInsets.all(12),
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.max,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: <Widget>[
+                                      Text(
+                                        'Type',
+                                        style: TextStyle(
+                                            color: Colors.black,
+                                            fontWeight: FontWeight.w600
+                                        ),
+                                      ),
+                                      FieldType(callbackResultIcon),
+                                    ],
+                                  ),
+                                  ),
+                                ),
+                                Form(
+                                  key: formKeyAmount,
+                                  child: Container(
+                                    margin: EdgeInsets.fromLTRB(15, 5, 15, 15),
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: <Widget>[
+                                        Text(
+                                          (type == 'goals') ? 'Target amount':'Amount',
+                                          style: TextStyle(
+                                              color: Colors.black,
+                                              fontWeight: FontWeight.w600
+                                          ),
+                                        ),
+                                        Container(
+                                          // margin: EdgeInsets.all(10),
+                                          margin: EdgeInsets.only(top:5),
+                                          child: TextField(
+                                            keyboardType: TextInputType.number,
+                                            controller: amountController,
+                                            decoration: InputDecoration(
+                                              hintText: 'Amount',
+                                              contentPadding: EdgeInsets.all(10.0),
+                                              border: OutlineInputBorder(
+                                                borderRadius: BorderRadius.circular(8),
+                                                borderSide: BorderSide(
+                                                  color: Colors.white
+                                                )
+                                              ),
+                                              filled: true,
+                                              fillColor: Colors.white,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                                Container(
+                                  margin: EdgeInsets.fromLTRB(15, 5, 15, 15),
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                                    children: <Widget>[
+                                      Text(
+                                        (type == 'goals') ? 'Target date':'Date & Time',
+                                        style: TextStyle(
+                                            color: Colors.black,
+                                            fontWeight: FontWeight.w600
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: EdgeInsets.symmetric(horizontal:0),
+                                        child: RaisedButton(
+                                          color: Colors.grey[50],
+                                          padding: EdgeInsets.all(10.0),
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(8),
+                                            side: BorderSide(color: Colors.grey)
+                                          ),
+                                          onPressed: ()
+                                          async{
+                                            await showModalBottomSheet(
+                                              context: context,
+                                              builder: (BuildContext context) {
+                                                return DatePickerWidget(callback);
+                                              }
+                                            );
+                                          },
+                                          child: new Text('TIME: ' + time),
+                                        ),
+                                      ),
+                
+                                    ],
+                                  ),
+                                ),
+                                Container(
+                                  margin: EdgeInsets.fromLTRB(15, 5, 15, 15),
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: <Widget>[
+                                      Text(
+                                        'Descirption',
+                                        style: TextStyle(
+                                            color: Colors.black,
+                                            fontWeight: FontWeight.w600
+                                        ),
+                                      ),
+                                      Container(
+                                        // margin: EdgeInsets.all(10),
+                                        
+                                        child: TextField(
+                                          key: formKeyDes,
+                                          controller: desciprionController,
+                                          keyboardType: TextInputType.multiline,
+                                          maxLines: 3,
+                                          decoration: InputDecoration(
+                                            hintText: '',
+                                            contentPadding: EdgeInsets.all(10.0),
+                                            filled: true,
+                                            fillColor: Colors.white,
+                                            border: OutlineInputBorder(
+                                              borderRadius: BorderRadius.circular(8),
+                                              borderSide: BorderSide(
+                                              )
+                                            ),
+                                          ),
+                                          onChanged: null,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                // Container(
+                                //   margin: EdgeInsets.fromLTRB(15, 5, 15, 15),
+                                //   child: Column(
+                                //     crossAxisAlignment: CrossAxisAlignment.start,
+                                //     children: <Widget>[
+                                //       Row(
+                                //         mainAxisAlignment: MainAxisAlignment.start,
+                                //         children: <Widget>[
+                                //           Text(
+                                //             'Pictures',
+                                //             style: TextStyle(
+                                //                 color: Colors.black,
+                                //                 fontWeight: FontWeight.w600
+                                //             ),
+                                //           ),
+                                //         ],
+                                //       ),
+                                //       SizedBox(height: 12,),
+                                //       Padding(
+                                //         padding: EdgeInsets.symmetric(horizontal:15),
+                                //         child: GestureDetector(
+                                //           onTap: _getImage,
+                                //             child: Container(
+                                //             height: 120,
+                                //             decoration: BoxDecoration(
+                                //                 color: Colors.white70,
+                                //                 borderRadius: BorderRadius.circular(8),
+                                //                 boxShadow: [
+                                //                   BoxShadow(
+                                //                     color: Colors.grey[300],
+                                //                     spreadRadius: 1,
+                                //                     blurRadius: 3,
+                                //                     offset: Offset(0,1),
+                                //                   )
+                                //                 ]
+                                //             ),
+                                //             child: Column(
+                                //               crossAxisAlignment: CrossAxisAlignment.start,
+                                //               children: <Widget>[
+                                //                 Column(
+                                //                   crossAxisAlignment: CrossAxisAlignment.start,
+                                //                   children: <Widget>[
+                                //                     Row(
+                                //                       mainAxisAlignment: MainAxisAlignment.center,
+                                //                       children: <Widget>[
+                                //                         _image == null ? Icon(Icons.image,color: kTextLightColor, size: 100,) : Image.file(_image,
+                                //                         height: 120,
+                                //                         fit: BoxFit.fill,),
+                                //                       ],
+                                //                     ),
+                                //                   ],
+                                //                 )                                       
+                                //               ],
+                                //             ),
+                                //           ),
+                                //         ),
+                                //       ),
+                                //     ],
+                                //   ),
+                                // ),
+                              ],
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
-                  ],
-                ),
+                      ),
+                    ],          
+                ) ,
               ),
-            ],          
-          ) ,          
-        ),
+            ),
+          ]
+        )
+
+             
     );
   }
 }

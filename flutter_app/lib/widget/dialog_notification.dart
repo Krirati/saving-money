@@ -2,8 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:savemoney/constant.dart';
-import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
 
 class DialogNotification extends StatefulWidget {
   @override
@@ -134,6 +134,7 @@ class _DialogNotificationState extends State<DialogNotification>{
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString('record_time', timeRecord);
   }
+  DateTime _dateTime = DateTime.now();
   @override
   Widget build(BuildContext context) {
     return Dialog(
@@ -248,18 +249,39 @@ class _DialogNotificationState extends State<DialogNotification>{
                                             fontWeight: FontWeight.bold,
                                           ),
                                         ),
-                                      onTap: () {
-                                        DatePicker.showTime12hPicker(context,
-                                            showTitleActions: true,
-                                            currentTime: DateTime.now(), 
-                                            onConfirm: (time) {
-                                              setState(() {
-                                                pickedtime_saving =
-                                                  "${time.hour} : ${time.minute} : ${time.second}";
-                                                showNotificationsDaily(1,time.hour, time.minute);
-                                                print(pickedtime_saving);
-                                                addTimeSavingToSF(pickedtime_saving);
-                                              }
+                                      onTap: () async{
+                                        // DatePicker.showTime12hPicker(context,
+                                        //     showTitleActions: true,
+                                        //     currentTime: DateTime.now(), 
+                                        //     onConfirm: (time) {
+                                        //       setState(() {
+                                        //         pickedtime_saving =
+                                        //           "${time.hour} : ${time.minute} : ${time.second}";
+                                        //         showNotificationsDaily(1,time.hour, time.minute);
+                                        //         print(pickedtime_saving);
+                                        //         addTimeSavingToSF(pickedtime_saving);
+                                        //       }
+                                        //     );
+                                        //   }
+                                        // );
+                                        await showModalBottomSheet(
+                                          context: context, 
+                                          builder: (BuildContext context) {
+                                            return CupertinoDatePicker(
+                                              mode: CupertinoDatePickerMode.time,
+                                              initialDateTime: _dateTime,
+                                              backgroundColor: Colors.white,
+                                              onDateTimeChanged: (dateTime) {
+                                                print(dateTime);
+                                                setState(() {
+                                                  pickedtime_saving =
+                                                    "${dateTime.hour} : ${dateTime.minute} : ${dateTime.second}";
+                                                  showNotificationsDaily(1,dateTime.hour, dateTime.minute);
+                                                  print(pickedtime_saving);
+                                                  addTimeSavingToSF(pickedtime_saving);
+                                                });
+                                              },
+
                                             );
                                           }
                                         );
@@ -318,17 +340,37 @@ class _DialogNotificationState extends State<DialogNotification>{
                                             fontWeight: FontWeight.bold,
                                           ),
                                         ),
-                                      onTap: () {
-                                        DatePicker.showTime12hPicker(context,
-                                            showTitleActions: true,
-                                            currentTime: DateTime.now(), onConfirm: (time) {
-                                          setState(() {
-                                            pickedtime_record =
-                                                "${time.hour} : ${time.minute} : ${time.second}";
-                                            showNotificationsDaily(2,time.hour, time.minute);
-                                            addTimeRecordToSF(pickedtime_record);
-                                          });
-                                        });
+                                      onTap: () async{
+                                        // DatePicker.showTime12hPicker(context,
+                                        //     showTitleActions: true,
+                                        //     currentTime: DateTime.now(), onConfirm: (time) {
+                                        //   setState(() {
+                                        //     pickedtime_record =
+                                        //         "${time.hour} : ${time.minute} : ${time.second}";
+                                        //     showNotificationsDaily(2,time.hour, time.minute);
+                                        //     addTimeRecordToSF(pickedtime_record);
+                                        //   });
+                                        // });
+                                        await showModalBottomSheet(
+                                          context: context, 
+                                          builder: (BuildContext context) {
+                                            return CupertinoDatePicker(
+                                              mode: CupertinoDatePickerMode.time,
+                                              initialDateTime: _dateTime,
+                                              backgroundColor: Colors.white,
+                                              onDateTimeChanged: (dateTime) {
+                                                print(dateTime);
+                                                setState(() {
+                                                  pickedtime_record =
+                                                      "${dateTime.hour} : ${dateTime.minute} : ${dateTime.second}";
+                                                  showNotificationsDaily(2,dateTime.hour, dateTime.minute);
+                                                  addTimeRecordToSF(pickedtime_record);
+                                                });
+                                              },
+
+                                            );
+                                          }
+                                        );
                                       },
                                     ) 
                                   ),

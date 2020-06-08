@@ -18,29 +18,30 @@ class _SettingsState extends State<Settings> {
 
   @override
   Widget build(BuildContext context) {
-    var size= MediaQuery.of(context).size;
+    // var size= MediaQuery.of(context).size;
     return Scaffold(
+      backgroundColor: Colors.white,
       body: Stack(
         children: <Widget>[
-          Container(
-            height: size.height* .45,
-            decoration: BoxDecoration(
-              color: Colors.orange[200],
-              image: DecorationImage(
-                // alignment: Alignment.centerLeft,
-                image: AssetImage('assests/images/Group1.png'),
-                fit: BoxFit.fitWidth
-              )
+           Container(
+              height: double.infinity,
+              decoration: BoxDecoration(
+                color: null,
+                image: DecorationImage(
+                  // alignment: Alignment.centerLeft,
+                  image: AssetImage('assests/images/page3.png'),
+                  fit: BoxFit.cover
+                )
+              ),
             ),
-          ),
           SafeArea(
             child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 30),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Text(
-                    'Setting',
+                    'Setting'.toUpperCase(),
                     style: TextStyle(
                       fontSize: 30,
                       fontWeight: FontWeight.w600

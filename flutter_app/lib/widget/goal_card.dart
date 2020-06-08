@@ -236,7 +236,7 @@ class _GoalCardState extends State<GoalCard> {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12)
       ),
-      elevation: 4,
+      elevation: 1,
       child: Container(
       padding: EdgeInsets.all(8),
       width: double.infinity,
@@ -287,7 +287,7 @@ class _GoalCardState extends State<GoalCard> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
-                      Text('$newCurrent Bath'),
+                      Text('${widget.current} Bath'),
                       Text('${widget.totalMoney} Bath')
                     ]
                   ),
@@ -400,6 +400,7 @@ class _DialogUpdateState extends State<DialogUpdate> {
           setState(() {
             income = snapshot.data;
           });
+          return null;
         }
       );
   }
@@ -452,14 +453,16 @@ class _DialogUpdateState extends State<DialogUpdate> {
 
     );
   }
-  void updateGoal()async {
+  void updateGoal() async {
     if (widget.current + double.parse(currentController.text)>  widget.totalMoney) {
       print('more');
       dialogError('more');
-    } else if (income - double.parse(currentController.text) < 0) {
-      dialogError('moreincome');
-    }
+    } 
+    // else if (income - double.parse(currentController.text) < 0) {
+    //   dialogError('moreincome');
+    // }
     else {
+      print('good');
       GoalModel g = GoalModel(
         id: widget.id,
         name: widget.name,

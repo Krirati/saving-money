@@ -26,13 +26,13 @@ class _AboutState extends State<About> {
       body: Stack(
         children: <Widget>[
           Container(
-            height: size.height* .45,
+            height: size.height* .99,
             decoration: BoxDecoration(
-              color: Colors.orange[300].withOpacity(0.3),
-              // image: DecorationImage(
-              //   alignment: Alignment.centerLeft
-              //   // image: 
-              // )
+              image: DecorationImage(
+                // alignment: Alignment.centerLeft,
+                image: AssetImage('assests/images/page4.png'),
+                fit: BoxFit.fitWidth
+              )
             ),
           ),
           SafeArea(
@@ -80,7 +80,7 @@ class _AboutState extends State<About> {
                           ),
                         ]
                       ),
-                      SizedBox(height:60),
+                      SizedBox(height:40),
                       Align(
                         alignment: Alignment.center,
                         child: Column(
@@ -118,6 +118,14 @@ class _AboutState extends State<About> {
                           });
                         },
                         child: Text('Flaticon.com'),
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            _launchURL('http://www.freepik.com');
+                          });
+                        },
+                        child: Text('Freepikcom'),
                       ),
                           ],
                         ),

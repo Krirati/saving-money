@@ -72,23 +72,23 @@ class _FieldTypeState extends State<FieldType> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Row(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               Row(
                 children: <Widget>[
                   Container(
-                    width: 90,
+                    // width: 90,
                     child: FlatButton(
                       padding: EdgeInsets.all(0),
                       onPressed: () {
                         showWidget();
                         setColor('income');
                       },
-                      child: Column(
+                      child: Row(
                         children: <Widget>[
                           Container(
                             padding: EdgeInsets.only(left: 10,right: 10),
-                            child: Image.asset('assests/images/income.png'),
+                            child: Image.asset('assests/images/income.png',width: 40,),
                           ),
                           Text(
                             'Income',
@@ -100,19 +100,20 @@ class _FieldTypeState extends State<FieldType> {
                       ),
                     ),
                   ),
+                  SizedBox(width:10),
                   Container(
-                    width: 90,
+                    // width: 90,
                     child: FlatButton(
                       padding: EdgeInsets.all(0),
                       onPressed: () {
                         showWidget();
                         setColor('expenditure');
                       },
-                      child: Column(
+                      child: Row(
                         children: <Widget>[
                           Container(
-                            padding: EdgeInsets.only(left: 10,right: 10),
-                            child: Image.asset('assests/images/expenditure.png'),
+                            // padding: EdgeInsets.only(left: 10,right: 10),
+                            child: Image.asset('assests/images/expenditure.png',width: 40,),
                           ),
                           Text(
                             'Expenditure',
@@ -124,36 +125,36 @@ class _FieldTypeState extends State<FieldType> {
                       ),
                     ),
                   ),
-                  Container(
-                    width: 90,
-                    child: FlatButton(
-                      padding: EdgeInsets.all(0),
-                      onPressed: () {
-                        showWidget();
-                        setColor('goals');
-                      },
-                      child: Column(
-                        children: <Widget>[
-                          Container(
-                            padding: EdgeInsets.only(left: 10,right: 10),
-                            child: Image.asset('assests/images/goalIcon.png'),
-                          ),
-                          Text(
-                            'Goals',
-                            style: TextStyle(
-                                color: kTextLightColor
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                  ),
+                  // Container(
+                  //   width: 90,
+                  //   child: FlatButton(
+                  //     padding: EdgeInsets.all(0),
+                  //     onPressed: () {
+                  //       showWidget();
+                  //       setColor('goals');
+                  //     },
+                  //     child: Row(
+                  //       children: <Widget>[
+                  //         Container(
+                  //           // padding: EdgeInsets.only(left: 10,right: 10),
+                  //           child: Image.asset('assests/images/goalIcon.png',width: 40,),
+                  //         ),
+                  //         Text(
+                  //           'Goals',
+                  //           style: TextStyle(
+                  //               color: kTextLightColor
+                  //           ),
+                  //         )
+                  //       ],
+                  //     ),
+                  //   ),
+                  // ),
                 ],
               )
             ],
           ),
           Visibility(
-              visible: viewVisible,
+              visible: true,
               child: GestureDetector(
                 onTap: ()async {
                   await showDialog(
@@ -164,7 +165,8 @@ class _FieldTypeState extends State<FieldType> {
                   );
                 },
                 child: Container(
-                height: 80,
+                // height: 80,
+                // width: double.infinity,
                 decoration: BoxDecoration(
                     color: colorType,
                     borderRadius: BorderRadius.circular(8),
@@ -177,9 +179,9 @@ class _FieldTypeState extends State<FieldType> {
                       )
                     ]
                 ),
-                margin: EdgeInsets.symmetric(horizontal: 15),
+                margin: EdgeInsets.symmetric(horizontal: 2),
                   child: Padding(
-                    padding: EdgeInsets.symmetric(vertical:8, horizontal:10),
+                    padding: EdgeInsets.symmetric(vertical:10, horizontal:12),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
@@ -198,7 +200,7 @@ class _FieldTypeState extends State<FieldType> {
                                 width:55,
                                 child: Center(
                                   child: Image.asset(
-                                    (icon == null) ? 'assests/icon/pet.png' : icon
+                                    (icon == null) ? 'assests/icon/question.png' : icon
                                   ,fit: BoxFit.cover,)
                                 )
                               ),

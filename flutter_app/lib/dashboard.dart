@@ -1,7 +1,6 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:savemoney/constant.dart';
 import 'package:savemoney/history.dart';
 import 'package:savemoney/widget/card_today.dart';
@@ -9,7 +8,7 @@ import 'package:savemoney/widget/dialog_notification.dart';
 
 import 'database/dbHelper.dart';
 import 'database/model.dart';
-import 'home.dart';
+
 
 
 Color kPrimaryBlue = Color(0xff3c528b);
@@ -25,6 +24,7 @@ class _DashboardState extends State<Dashboard>{
   var dbHelper = DBHelper();
   String timeNow = DateTime.now().toString();
   Future<List<EventModel>> events;
+
   Future<double> loadSum(name) async {
     var result = dbHelper.sumAll(name);
     return result;
@@ -57,7 +57,7 @@ class _DashboardState extends State<Dashboard>{
         print(index);
         return Container(
           padding: EdgeInsets.symmetric(horizontal:1),
-          width: MediaQuery.of(context).size.width *0.9,
+          width: (events.length == 1) ? MediaQuery.of(context).size.width *0.9 :  MediaQuery.of(context).size.width *0.7,
           child: CardToday(
             name: events[index].name,
             type: events[index].type,
@@ -79,16 +79,15 @@ class _DashboardState extends State<Dashboard>{
         builder: (context, snapshot) {
           if (snapshot.hasData && snapshot.data.length != 0) {
             return Container(
-              // width: double.infinity,
-              padding: EdgeInsets.symmetric( vertical: 24.0),
-              height: MediaQuery.of(context).size.height *0.25 ,
+              padding: EdgeInsets.symmetric( vertical: 5.0),
+              height: MediaQuery.of(context).size.height *0.19 ,
               child: dataTable(snapshot.data),
 
             );
           }
           if(null == snapshot.data || snapshot.data.length == 0){
             return Padding(
-              padding: EdgeInsets.symmetric(horizontal: 25, vertical:5),
+              padding: EdgeInsets.symmetric(horizontal: 0, vertical:10),
               child: Text("Today don't have  event")
             );
             
@@ -101,207 +100,190 @@ class _DashboardState extends State<Dashboard>{
   }
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        appBar: PreferredSize(
-          preferredSize: Size(double.infinity, 160),
-          child: ClipPath(
-            clipper: MyClipper(),
-            child: Container(
-              height: 400,
-              width: double.infinity,
-              decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topRight,
-                    end: Alignment.bottomLeft,
-                    colors: [
-                      Color(0xffffe0b2),
-                      Colors.orange[300].withOpacity(0.9)
-                    ],
-                  ),
-                 image: DecorationImage(
-                  //  alignment: Alignment.topLeft,
-                   image: AssetImage('assests/images/Group1.png'),
-                   fit: BoxFit.fitWidth
-                  )
-              ),
+    return 
+    Scaffold(
+      backgroundColor: Colors.white,
+      body: Stack(
+        children:<Widget>[
+          Container(
+            height: double.infinity,
+            decoration: BoxDecoration(
+              color: null,
+              image: DecorationImage(
+                // alignment: Alignment.centerLeft,
+                image: AssetImage('assests/images/page1.png'),
+                fit: BoxFit.fitWidth
+              )
+            ),
+          ),
+          SafeArea(
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 30),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  Padding(
-                    padding: const EdgeInsets.only(
-                      left: 12,right: 12,top: 30,bottom: 8
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: <Widget>[
-                        Align(
-                          alignment: Alignment.topRight,
-                          child: GestureDetector(
-                            onTap: () async{
-                              print("noti");
-                              await showDialog(
-                                context: context,
-                                builder: (BuildContext context) {
-                              
-                                  return  DialogNotification();
-                                });
-                            },
-                            child: Icon(Icons.notifications, color: Colors.black,size: 35,),
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                  Expanded(
-                    child: Stack(
-                      children: <Widget>[
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: <Widget>[                    
-                            Opacity(
-                              opacity: 0.1,
-                              child: CustomPaint(
-                                // painter: ShapessPainter(),
-                              ),  
-                            ),
-                          ],
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Text(
+                        'Kep tang'.toUpperCase(),
+                        style: TextStyle(
+                          fontSize: 30,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.orange
                         ),
-                        SvgPicture.asset(
-                          'assests/icon/finance.svg',
-                          width: 150,
-                          fit: BoxFit.fitHeight,
-                          alignment: Alignment.topCenter,
-                        ),
-                        Positioned(
-                          top: 2,
-                          left: 150,
-                          child: Text(
-                            'Keb Tang',
-                            style: kHeadingTextStyle.copyWith(
-                              color: Colors.black,
-                              fontSize: 40,
-                              fontWeight: FontWeight.w400
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  )
-                ],
-              ),
-            ),
-          ),
-        ),
-        backgroundColor: Colors.white10,
-        body: ListView(
-          children: <Widget>[
-            Padding(
-              padding: EdgeInsets.fromLTRB(25, 1, 25, 15),
-              child: Text('Event Lists',
-              style: kTitleTextstyle,
-              ),
-            ),
-            FutureBuilder(
-              future: loadBalance(),
-              builder: (BuildContext context, AsyncSnapshot<double> snapshot) {
-                return CardListGroup(
-                  name: 'Balance', 
-                  money: snapshot.data.toString(),
-                  img: AssetImage('assests/images/balance.png'),);
-              }
-            ),         
-            SizedBox(height: 15,),
-            FutureBuilder(
-              future: loadSum('income'),
-              builder: (BuildContext context, AsyncSnapshot<double> snapshot) {
-                return CardListGroup(
-                  name: 'Income', 
-                  money: snapshot.data.toString(),
-                  img: AssetImage('assests/images/income.png'),);
-              }
-            ),    
-            SizedBox(height: 15,),
-            FutureBuilder(
-              future: loadSum('expenditure'),
-              builder: (BuildContext context, AsyncSnapshot<double> snapshot) {
-                return CardListGroup(
-                  name: 'Expenditure', 
-                  money: snapshot.data.toString(), 
-                  img: AssetImage('assests/images/expenditure.png'),
-                );
-              }
-            ),
-            SizedBox(height: 15,),
-            FutureBuilder(
-              future: loadGoal(),
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  return CardListGroup(
-                    name: 'Saving for goals', 
-                    money: snapshot.data.toString(), 
-                    img: AssetImage('assests/images/goalIcon.png'),
-                  );
-                }
-                if(null == snapshot.data || snapshot.data.length == 0){
-                  return CardListGroup(
-                    name: 'No data', 
-                    money: '0', 
-                    img: AssetImage('assests/images/goalIcon.png'),
-                  );
-                }
-                return CircularProgressIndicator();
-               
-              }
-            ),
-            SizedBox(height: 15,),
-            Padding(
-              padding: EdgeInsets.fromLTRB(25, 1, 25, 0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  RichText(
-                    text: TextSpan(
-                      children: [
-                        TextSpan(
-                          text: 'Reminder today\n',
-                          style: kTitleTextstyle,
-                        ),
-                        TextSpan(
-                          text: 'Newest update ${timeNow.split(' ')[0]}',
-                          style: TextStyle(
-                            color: kTextLightColor
-                          ),
-                        ),
-                      ]
-                    ),
-                  ),
-                  Spacer(),
-                  FlatButton(
-                    onPressed: () {
-                      Navigator.push(context,
-                        MaterialPageRoute(
-                            builder: (_) => History()
-                        ),
-                      );
-                    }, 
-                    child: Text(
-                      "See more",
-                      style: TextStyle(
-                        color: yellowLowColor,
-                        fontWeight: FontWeight.w600,
                       ),
-                    )
-                  )
-                  
+                      IconButton(
+                        icon: Icon(Icons.notifications, color: Colors.black, size: 30,) , 
+                        onPressed: () async{
+                          print("notification");
+                          await showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                          
+                              return  DialogNotification();
+                            });
+                        }
+                      )
+                    ],
+                  ),
+                  Text(
+                    "Let's record your expenditure.",
+                    style: TextStyle(
+                      fontSize: 26,
+                      fontWeight: FontWeight.w400,
+                      color: Colors.black.withOpacity(0.8)
+                    ),
+                  ),
+                  SizedBox(height:20),
+                  Text('Overview',
+                     style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.black.withOpacity(0.8)
+                    ),
+                  ),
+                  SizedBox(height:10),
+                  Column(
+                    children: <Widget>[
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          FutureBuilder(
+                            future: loadBalance(),
+                            builder: (BuildContext context, AsyncSnapshot<double> snapshot) {
+                              return CardListGroup(
+                                name: 'Balance', 
+                                money: snapshot.data.toString(),
+                                img: AssetImage('assests/images/balance.png'),);
+                            }
+                          ),         
+                          // SizedBox(height: 15,),
+                          FutureBuilder(
+                            future: loadSum('income'),
+                            builder: (BuildContext context, AsyncSnapshot<double> snapshot) {
+                              return CardListGroup(
+                                name: 'Income', 
+                                money: snapshot.data.toString(),
+                                img: AssetImage('assests/images/income.png'),);
+                            }
+                          ),
+                        ]
+                      ),
+                      SizedBox(height: 10),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          FutureBuilder(
+                            future: loadSum('expenditure'),
+                            builder: (BuildContext context, AsyncSnapshot<double> snapshot) {
+                              return CardListGroup(
+                                name: 'Expenditure', 
+                                money: snapshot.data.toString(), 
+                                img: AssetImage('assests/images/expenditure.png'),
+                              );
+                            }
+                          ),
+                          SizedBox(height: 15,),
+                          FutureBuilder(
+                            future: loadGoal(),
+                            builder: (context, snapshot) {
+                              if (snapshot.hasData) {
+                                return CardListGroup(
+                                  name: 'Saving', 
+                                  money: snapshot.data.toString(), 
+                                  img: AssetImage('assests/images/goalIcon.png'),
+                                );
+                              }
+                              if(null == snapshot.data || snapshot.data.length == 0){
+                                return CardListGroup(
+                                  name: 'No data', 
+                                  money: '0', 
+                                  img: AssetImage('assests/images/goalIcon.png'),
+                                );
+                              }
+                              return CircularProgressIndicator();
+                            
+                            }
+                          ),
+                        ],
+                      ),
+                    ]
+                  ),
+                  SizedBox(height: 10,),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      RichText(
+                        text: TextSpan(
+                          children: [
+                            TextSpan(
+                              text: 'Reminder today\n',
+                              style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.w500,
+                                color: Colors.black.withOpacity(0.8)
+                              ),
+                            ),
+                            TextSpan(
+                              text: 'Last update ${timeNow.split(' ')[0]}',
+                              style: TextStyle(
+                                color: kTextLightColor
+                              ),
+                            ),
+                          ]
+                        ),
+                      ),
+                      // FlatButton(
+                      //   onPressed: () {
+                      //     Navigator.push(context,
+                      //       MaterialPageRoute(
+                      //           builder: (_) => History()
+                      //       ),
+                      //     );
+
+                      //   }, 
+                      //   child: Text(
+                      //     "See more",
+                      //     style: TextStyle(
+                      //       color: Colors.orangeAccent,
+                      //       fontWeight: FontWeight.w600,
+                      //       fontSize: 16
+                      //     ),
+                      //   )
+                      // )
+                    ],
+                  ),
+                  list(),
+                  // Row(
+                  //   mainAxisAlignment: MainAxisAlignment.center,
+                  //   children: _buildPageIndicator(),
+                  // ),
                 ],
               ),
-              
-            ),
-            // ReminderSlide(),
-            list()
-          ],
-        ),
+            )
+          ),
+        ]
       ),
     );
   }
@@ -329,32 +311,33 @@ class _CardGroupState extends State<CardListGroup> {
     return Column(
       children: <Widget>[
         Container(
+          width: 180,
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(13),
             boxShadow: [
               BoxShadow(
-                color: Colors.grey.withOpacity(0.5),
-                spreadRadius: 0.5,
-                blurRadius:5,
-                offset: Offset(0,2),
+                color: Colors.grey.withOpacity(0.2),
+                spreadRadius: 0.2,
+                blurRadius:1,
+                offset: Offset(0,1),
               )
             ]
           ),
-          margin: EdgeInsets.symmetric(horizontal: 45),
+          margin: EdgeInsets.symmetric(horizontal: 2),
           child: Center(
             child: Row(
               children: <Widget>[
-                SizedBox(width: 5),
+                // SizedBox(width: 5),
                 Container(
-                  height: 100,
-                  width: 100,
-                  margin: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+                  height: 70,
+                  width: 70,
+                  margin: EdgeInsets.symmetric(horizontal: 5, vertical: 1),
                   decoration: BoxDecoration(
                       image: DecorationImage(image: widget.img)
                   ),
                 ),
-                SizedBox(width: 10),
+                SizedBox(width: 4),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
@@ -362,16 +345,17 @@ class _CardGroupState extends State<CardListGroup> {
                       widget.name,
                       style: TextStyle(
                         color: Colors.black,
-                        fontSize: 22,
+                        // fontSize: 22,
                         fontWeight: FontWeight.w500,
                       ),
                     ),
-                    SizedBox(height: 10),
+                    SizedBox(height: 5),
                     Text(
                       '${widget.money} Bath',
                       style: TextStyle(
                           color: Colors.grey,
-                          fontSize: 20),
+                          // fontSize: 20
+                      ),
                     )
                   ],
                 ),

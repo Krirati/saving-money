@@ -18,7 +18,6 @@ class  _DialogHistoryGoalState  extends State<DialogHistoryGoal>{
   Future<List<EventModel>> events;
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     dbHelper = DBHelper();
     refreshList();

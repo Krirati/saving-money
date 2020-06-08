@@ -42,13 +42,13 @@ class _FeedBackState extends State<FeedBack> {
       body: Stack(
         children: <Widget>[
           Container(
-            height: size.height* .45,
+            height: size.height* .99,
             decoration: BoxDecoration(
-              color: Colors.orange[300].withOpacity(0.3),
-              // image: DecorationImage(
-              //   alignment: Alignment.centerLeft
-              //   // image: 
-              // )
+              image: DecorationImage(
+                // alignment: Alignment.centerLeft,
+                image: AssetImage('assests/images/page4.png'),
+                fit: BoxFit.fitWidth
+              )
             ),
           ),
           SafeArea(
