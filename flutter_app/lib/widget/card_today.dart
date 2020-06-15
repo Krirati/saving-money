@@ -22,6 +22,8 @@ class _CardTodayState extends State<CardToday> {
 
   @override
   Widget build(BuildContext context) {
+    var width = MediaQuery.of(context).size.width;
+    var height = MediaQuery.of(context).size.height ;
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 1),
       child: Stack(
@@ -36,10 +38,11 @@ class _CardTodayState extends State<CardToday> {
             width: double.infinity,
             padding: EdgeInsets.symmetric(horizontal:20, vertical:16),
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget> [
-                Text('${widget.name}', style: kHeadingTextStyle,),
-                Text('${widget.price} Bath', style: TextStyle(color: kBodyTextColor),),
+                Text('${widget.name}', style: TextStyle(color: kBodyTextColor,fontSize: width*0.04 ,fontWeight: FontWeight.w600,),),
+                Text('${widget.price} Bath', style: TextStyle(color: kBodyTextColor,fontSize: width*0.038,),),
                 Row(
                   children: <Widget>[
                     Icon(
@@ -51,7 +54,8 @@ class _CardTodayState extends State<CardToday> {
                     Text(
                       ' ${widget.time.split(' ')[1].split('.')[0]}',
                         style: TextStyle(
-                        color: Colors.orange[200]
+                          color: Colors.orange[200],
+                          fontSize: width*0.038,
                       ),
                     ),
                   ],
@@ -61,12 +65,13 @@ class _CardTodayState extends State<CardToday> {
           ),
         ),
         Positioned(
-          top: 20,
+          top: height*0.05,
           right: 40,
-          child: Image.asset(widget.icon, height: 80, width: 80,)
+          child: Image.asset(widget.icon, height: height*0.1,)
         ),
 
         Row(
+          crossAxisAlignment: CrossAxisAlignment.end,
           mainAxisAlignment: MainAxisAlignment.end,
           children: <Widget>[
             Padding(

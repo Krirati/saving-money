@@ -201,6 +201,8 @@ class _AddEventState extends State<AddEvent>{
   }
   @override
   Widget build(BuildContext context) {
+    var width = MediaQuery.of(context).size.width;
+    var height = MediaQuery.of(context).size.height ;
     return Scaffold(
         backgroundColor: Colors.white,
         floatingActionButton: FloatingActionButton.extended(
@@ -276,7 +278,8 @@ class _AddEventState extends State<AddEvent>{
                                           'Name Event',
                                           style: TextStyle(
                                               color: Colors.black,
-                                              fontWeight: FontWeight.w600
+                                              fontWeight: FontWeight.w600,
+                                              fontSize: width*0.045,
                                           ),
                                         ),
                                         Container(
@@ -320,7 +323,8 @@ class _AddEventState extends State<AddEvent>{
                                         'Type',
                                         style: TextStyle(
                                             color: Colors.black,
-                                            fontWeight: FontWeight.w600
+                                            fontWeight: FontWeight.w600,
+                                            fontSize: width*0.045,
                                         ),
                                       ),
                                       FieldType(callbackResultIcon),
@@ -339,7 +343,8 @@ class _AddEventState extends State<AddEvent>{
                                           (type == 'goals') ? 'Target amount':'Amount',
                                           style: TextStyle(
                                               color: Colors.black,
-                                              fontWeight: FontWeight.w600
+                                              fontWeight: FontWeight.w600,
+                                              fontSize: width*0.045,
                                           ),
                                         ),
                                         Container(
@@ -375,7 +380,8 @@ class _AddEventState extends State<AddEvent>{
                                         (type == 'goals') ? 'Target date':'Date & Time',
                                         style: TextStyle(
                                             color: Colors.black,
-                                            fontWeight: FontWeight.w600
+                                            fontWeight: FontWeight.w600,
+                                            fontSize: width*0.045,
                                         ),
                                       ),
                                       Padding(
@@ -412,7 +418,8 @@ class _AddEventState extends State<AddEvent>{
                                         'Descirption',
                                         style: TextStyle(
                                             color: Colors.black,
-                                            fontWeight: FontWeight.w600
+                                            fontWeight: FontWeight.w600,
+                                            fontSize: width*0.045,
                                         ),
                                       ),
                                       Container(

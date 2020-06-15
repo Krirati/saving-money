@@ -119,6 +119,7 @@ class _DataTargetState extends State<DataTarget>{
   }
   @override
   Widget build(BuildContext context) {
+    var width = MediaQuery.of(context).size.width;
     return Scaffold(
         backgroundColor: Colors.white,
         floatingActionButton: FloatingActionButton.extended(
@@ -335,7 +336,7 @@ class _DataTargetState extends State<DataTarget>{
                       children: <Widget>[
                         Text('Goals lists',
                           style: TextStyle(
-                            fontSize: 17
+                            fontSize: width*0.036,
                           ),
                         ),
                         Spacer(),
@@ -351,6 +352,7 @@ class _DataTargetState extends State<DataTarget>{
                             style: TextStyle(
                               color: (progress) ? yellowLowColor: kTextLightColor,
                               fontWeight: FontWeight.w400,
+                              fontSize: width*0.036,
                               decoration: (progress) ?TextDecoration.underline :TextDecoration.none
                             ),
                           ),
@@ -369,6 +371,7 @@ class _DataTargetState extends State<DataTarget>{
                             style: TextStyle(
                               color: (progress) ? kTextLightColor : yellowLowColor,
                               fontWeight: FontWeight.w400,
+                              fontSize: width*0.036,
                               decoration: (progress) ?TextDecoration.none :TextDecoration.underline
                             ),
                           ),
@@ -547,6 +550,7 @@ class _GoalAddState extends State<GoalAdd> {
   }
   @override
   Widget build(BuildContext context) {
+    var width = MediaQuery.of(context).size.width;
     return Dialog(
       backgroundColor: Colors.white,
       shape: RoundedRectangleBorder(
@@ -589,7 +593,8 @@ class _GoalAddState extends State<GoalAdd> {
                               'Name Goal',
                               style: TextStyle(
                                   color: Colors.black,
-                                  fontWeight: FontWeight.w600
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: width*0.03,
                               ),
                             ),
                             Container(
@@ -631,7 +636,8 @@ class _GoalAddState extends State<GoalAdd> {
                               'Target amount',
                               style: TextStyle(
                                   color: Colors.black,
-                                  fontWeight: FontWeight.w600
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: width*0.03,
                               ),
                             ),
                             Container(
@@ -663,7 +669,8 @@ class _GoalAddState extends State<GoalAdd> {
                                    'Target date',
                                     style: TextStyle(
                                         color: Colors.black,
-                                        fontWeight: FontWeight.w600
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: width*0.03,
                                     ),
                                   ),
                                   Padding(

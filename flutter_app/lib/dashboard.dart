@@ -100,6 +100,7 @@ class _DashboardState extends State<Dashboard>{
   }
   @override
   Widget build(BuildContext context) {
+    var width = MediaQuery.of(context).size.width;
     return 
     Scaffold(
       backgroundColor: Colors.white,
@@ -128,7 +129,7 @@ class _DashboardState extends State<Dashboard>{
                       Text(
                         'Kep tang'.toUpperCase(),
                         style: TextStyle(
-                          fontSize: 30,
+                          fontSize: width*0.08,
                           fontWeight: FontWeight.w600,
                           color: Colors.orange
                         ),
@@ -148,9 +149,9 @@ class _DashboardState extends State<Dashboard>{
                     ],
                   ),
                   Text(
-                    "Let's record your expenditure.",
+                    "Let's record your \nexpenditure.",
                     style: TextStyle(
-                      fontSize: 26,
+                      fontSize: width*0.06,
                       fontWeight: FontWeight.w400,
                       color: Colors.black.withOpacity(0.8)
                     ),
@@ -158,7 +159,7 @@ class _DashboardState extends State<Dashboard>{
                   SizedBox(height:20),
                   Text('Overview',
                      style: TextStyle(
-                      fontSize: 20,
+                      fontSize: width*0.04,
                       fontWeight: FontWeight.w500,
                       color: Colors.black.withOpacity(0.8)
                     ),
@@ -175,7 +176,7 @@ class _DashboardState extends State<Dashboard>{
                               return CardListGroup(
                                 name: 'Balance', 
                                 money: snapshot.data.toString(),
-                                img: AssetImage('assests/images/balance.png'),);
+                                img: 'assests/images/balance.png',);
                             }
                           ),         
                           // SizedBox(height: 15,),
@@ -185,7 +186,7 @@ class _DashboardState extends State<Dashboard>{
                               return CardListGroup(
                                 name: 'Income', 
                                 money: snapshot.data.toString(),
-                                img: AssetImage('assests/images/income.png'),);
+                                img: 'assests/images/income.png',);
                             }
                           ),
                         ]
@@ -200,7 +201,7 @@ class _DashboardState extends State<Dashboard>{
                               return CardListGroup(
                                 name: 'Expenditure', 
                                 money: snapshot.data.toString(), 
-                                img: AssetImage('assests/images/expenditure.png'),
+                                img: 'assests/images/expenditure.png',
                               );
                             }
                           ),
@@ -212,14 +213,14 @@ class _DashboardState extends State<Dashboard>{
                                 return CardListGroup(
                                   name: 'Saving', 
                                   money: snapshot.data.toString(), 
-                                  img: AssetImage('assests/images/goalIcon.png'),
+                                  img: 'assests/images/goalIcon.png',
                                 );
                               }
                               if(null == snapshot.data || snapshot.data.length == 0){
                                 return CardListGroup(
                                   name: 'No data', 
                                   money: '0', 
-                                  img: AssetImage('assests/images/goalIcon.png'),
+                                  img: 'assests/images/goalIcon.png',
                                 );
                               }
                               return CircularProgressIndicator();
@@ -240,7 +241,7 @@ class _DashboardState extends State<Dashboard>{
                             TextSpan(
                               text: 'Reminder today\n',
                               style: TextStyle(
-                                fontSize: 20,
+                                fontSize: width*0.04,
                                 fontWeight: FontWeight.w500,
                                 color: Colors.black.withOpacity(0.8)
                               ),
@@ -292,7 +293,7 @@ class _DashboardState extends State<Dashboard>{
 class CardListGroup extends StatefulWidget {
   final String name;
   final String money;
-  final ImageProvider img;
+  final String img;
   const CardListGroup({this.name, this.money, this.img});
   
   @override
@@ -308,10 +309,13 @@ class _CardGroupState extends State<CardListGroup> {
   }
   @override
   Widget build(BuildContext context) {
+    var width = MediaQuery.of(context).size.width;
+    var height = MediaQuery.of(context).size.height ;
     return Column(
       children: <Widget>[
         Container(
-          width: 180,
+          height: height*0.12,
+          width: width*0.43,
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(13),
@@ -328,24 +332,21 @@ class _CardGroupState extends State<CardListGroup> {
           child: Center(
             child: Row(
               children: <Widget>[
-                // SizedBox(width: 5),
                 Container(
-                  height: 70,
-                  width: 70,
                   margin: EdgeInsets.symmetric(horizontal: 5, vertical: 1),
-                  decoration: BoxDecoration(
-                      image: DecorationImage(image: widget.img)
-                  ),
+                  child: Image.asset(widget.img, height: height*0.09,),
                 ),
-                SizedBox(width: 4),
+
+                SizedBox(width: 2),
                 Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Text(
                       widget.name,
                       style: TextStyle(
                         color: Colors.black,
-                        // fontSize: 22,
+                        fontSize: width*0.04,
                         fontWeight: FontWeight.w500,
                       ),
                     ),
@@ -354,7 +355,7 @@ class _CardGroupState extends State<CardListGroup> {
                       '${widget.money} Bath',
                       style: TextStyle(
                           color: Colors.grey,
-                          // fontSize: 20
+                          fontSize: width*0.038,
                       ),
                     )
                   ],

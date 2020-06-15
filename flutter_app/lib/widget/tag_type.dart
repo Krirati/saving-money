@@ -25,6 +25,7 @@ class _TagTypeState extends State<TagType> {
   }
   @override
   Widget build(BuildContext context) {
+    var width = MediaQuery.of(context).size.width;
     return Container(
       decoration: BoxDecoration(
         color: color ,
@@ -39,7 +40,8 @@ class _TagTypeState extends State<TagType> {
          widget.type,
          style: TextStyle(
              color: Colors.white,
-             fontWeight: FontWeight.w500
+             fontWeight: FontWeight.w500,
+             fontSize: width*0.04,
          ),
        ),
     );

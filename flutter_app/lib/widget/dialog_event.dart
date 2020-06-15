@@ -30,6 +30,9 @@ class _DialogEventState extends State<DialogEvent>{
           iconData = kMapIconGoals;
         }
         break;
+        default : {
+          iconData = kMapIconIncome;
+        }
       }
     super.initState();
   }
@@ -40,6 +43,9 @@ class _DialogEventState extends State<DialogEvent>{
   }
 
   void sendState(type, selectedColor) {
+    if (type == null) {
+      type = 'income';
+    }
     widget.callbackTypeicon(type, selectedColor.toString());
   }
   @override
@@ -96,7 +102,7 @@ class _DialogEventState extends State<DialogEvent>{
                                     color: Colors.white,
                                     shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(8),),
-                                    elevation: (index == selectedColor) ? 8 : 1,
+                                    elevation: (index == selectedColor) ? 20 : 1,
                                     child: Container(
                                       padding: EdgeInsets.all(15),
                                       height:90,
@@ -111,7 +117,7 @@ class _DialogEventState extends State<DialogEvent>{
                               Positioned(
                                 child: Visibility(
                                   visible: index == selectedColor,
-                                  child: Icon(Icons.done,color: Colors.red ,size: 28),
+                                  child: Icon(Icons.done,color: Colors.green ,size: 70),
                                 )
                               )
                             ],

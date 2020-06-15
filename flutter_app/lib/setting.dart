@@ -92,7 +92,7 @@ class _SettingsState extends State<Settings> {
                           },
                         ),
                         CategoryCard(
-                          title: "Help & Feedback",
+                          title: "Feedback",
                           svgSrc: 'assests/icon/bad.svg',
                           press: () {
                             Navigator.push(

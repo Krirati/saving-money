@@ -29,7 +29,7 @@ class _DialogNotificationState extends State<DialogNotification>{
   }
 
   void initializing() async {
-    androidInitializationSettings = AndroidInitializationSettings('app_icon');
+    androidInitializationSettings = AndroidInitializationSettings('app_icon2');
     iosInitializationSettings = IOSInitializationSettings(
         onDidReceiveLocalNotification: onDidReceiveLocalNotification);
     initializationSettings = InitializationSettings(
@@ -45,14 +45,14 @@ class _DialogNotificationState extends State<DialogNotification>{
   Future<void> notificationDaily (id, hour, minute) async {
     print('$hour : $minute: 0');
     var time = Time(hour, minute, 0);
-    var androidPlatformChannelSpecifics =
+    var androidPlatformChannelSpecifics = new
         AndroidNotificationDetails(
           'repeatDailyAtTime channel id', 
           'repeatDailyAtTime channel name', 
           'repeatDailyAtTime description',
           importance: Importance.Max,
           priority: Priority.High,
-          ticker: 'Medicine Reminder'
+          ticker: 'Kep tang Reminder'
         );
     var iOSPlatformChannelSpecifics = IOSNotificationDetails();
     var platformChannelSpecifics = NotificationDetails(

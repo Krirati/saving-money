@@ -31,11 +31,11 @@ class MyApp extends StatelessWidget {
         seconds: 5,
         navigateAfterSeconds: Home(),
         imageBackground: AssetImage('assests/images/splashscreen.png'),
-        image: Image.asset('assests/icon/coin-10.png', width: 160,),
+        image: Image.asset('assests/icon/coin-10.png', width: 300,),
         title: Text(
           'Kep tang'.toUpperCase(),
           style: TextStyle(
-            fontSize: 30
+            fontSize: 50
           ),
         ),
       ),
