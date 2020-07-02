@@ -50,6 +50,7 @@ class _DialogEventState extends State<DialogEvent>{
   }
   @override
   Widget build(BuildContext context) {
+    var width = MediaQuery.of(context).size.width;
     return Dialog(
       backgroundColor: Colors.white,
       shape: RoundedRectangleBorder(
@@ -105,8 +106,8 @@ class _DialogEventState extends State<DialogEvent>{
                                     elevation: (index == selectedColor) ? 20 : 1,
                                     child: Container(
                                       padding: EdgeInsets.all(15),
-                                      height:90,
-                                      width:90,
+//                                      height:90,
+                                      width: width,
                                       child: Center(
                                         child: snapshot.data,
                                       )

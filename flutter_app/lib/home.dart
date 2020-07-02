@@ -1,3 +1,4 @@
+import 'package:firebase_admob/firebase_admob.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:savemoney/addevent.dart';
@@ -5,6 +6,7 @@ import 'package:savemoney/constant.dart';
 import 'package:savemoney/dashboard.dart';
 import 'package:savemoney/datatarget.dart';
 import 'package:savemoney/history.dart';
+import 'package:savemoney/services/admob_service.dart';
 import 'package:savemoney/setting.dart';
 
 class Home extends StatefulWidget {
@@ -14,7 +16,8 @@ class Home extends StatefulWidget {
 class HomeState extends State<Home> {
 
   //Properties
-
+  final ams = AdMobService();
+  var paddingBottom = 48.0;
   int currentTab = 0;
   List<Widget> screens = [
     Dashboard(),
@@ -22,13 +25,42 @@ class HomeState extends State<Home> {
     DataTarget(),
     Settings()
   ];// to store tab views
-
+  @override
+  void dispose() {
+    _bannerAd?.dispose();
+    super.dispose();
+  }
   @override
   void initState() {
     super.initState();
-
+    FirebaseAdMob.instance.initialize(appId: ams.getAdMobAppId());
+    _bannerAd = createBannerAd()..load()..show(anchorType: AnchorType.bottom);
   }
+  static const MobileAdTargetingInfo targetingInfo = MobileAdTargetingInfo(
+//    testDevices: testDevice != null ? <String>[testDevice] : null,
+    keywords: <String>['finance', 'money','income', 'Game'],
+    nonPersonalizedAds: true,
+    childDirected: false,
+  );
+  BannerAd _bannerAd;
 
+  BannerAd createBannerAd() {
+    return BannerAd(
+      adUnitId: ams.getBannerAdId(),
+      size: AdSize.banner,
+      targetingInfo: targetingInfo,
+      listener: (MobileAdEvent event) {
+        print("BannerAd event $event");
+      },
+    );
+  }
+  checkAdmod() {
+    if (MobileAdEvent.failedToLoad == true) {
+      setState(() {
+        paddingBottom = 0.0;
+      });
+    }
+  }
   // Active page (Tab)
   Widget currentScreen = Dashboard(); //initial screen in viewport
 
@@ -49,102 +81,106 @@ class HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: Scaffold(
-        // backgroundColor: Colors.white,
+      child: Padding(
+        padding: EdgeInsets.only(bottom: paddingBottom) ,
+        child:       Scaffold(
+          // backgroundColor: Colors.white,
 
-        body: PageStorage(
-          child: currentScreen,
-          bucket: bucket,
-        ),
-        floatingActionButton: FloatingActionButton(
-          child: Icon(Icons.add),
-          backgroundColor: Colors.orangeAccent,
-          onPressed: (){
-            setState(() {
-              currentScreen = AddEvent();
-              selectedIndex = 5;
-            },);
-          },
-        ),
-
-        //Fab position
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-        //Bottom app bar
-        
-        bottomNavigationBar: BottomAppBar(
-          child: Container(
-            margin: EdgeInsets.only(left: 15.0, right: 15.0),
-            child: Row(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                IconButton(
-                  //update the bottom app bar view each time an item is clicked
-                  onPressed: () {
-                    updateTabSelection(0, "Home");
-                    currentScreen = Dashboard();
-                  },
-                  iconSize: 27.0,
-                  icon: Icon(
-                    Icons.home,
-                    //darken the icon if it is selected or else give it a different color
-                    color: selectedIndex == 0
-                        ? yellowLowColor
-                        : Colors.grey.shade400,
-                  ),
-                ),
-                IconButton(
-                  onPressed: () {
-                    updateTabSelection(1, "Sechedule");
-                    currentScreen = History();
-                  },
-                  iconSize: 27.0,
-                  icon: Icon(
-                    Icons.date_range,
-                    color: selectedIndex == 1
-                        ? yellowLowColor
-                        : Colors.grey.shade400,
-                  ),
-                ),
-                //to leave space in between the bottom app bar items and below the FAB
-                SizedBox(
-                  width: 50.0,
-                ),
-                IconButton(
-                  onPressed: () {
-                    updateTabSelection(2, "Goal");
-                    currentScreen = DataTarget();
-                  },
-                  iconSize: 27.0,
-                  icon: Icon(
-                    Icons.assignment,
-                    color: selectedIndex == 2
-                        ? yellowLowColor
-                        : Colors.grey.shade400,
-                  ),
-                ),
-                IconButton(
-                  onPressed: () {
-                    updateTabSelection(3, "Settings");
-                    currentScreen = Settings();
-                  },
-                  iconSize: 27.0,
-                  icon: Icon(
-                    Icons.dehaze,
-                    color: selectedIndex == 3
-                        ? yellowLowColor
-                        : Colors.grey.shade400,
-                  ),
-                ),
-              ],
-            ),
+          body: PageStorage(
+            child: currentScreen,
+            bucket: bucket,
           ),
-          //to add a space between the FAB and BottomAppBar
-          shape: CircularNotchedRectangle(),
-          //color of the BottomAppBar
-          color: Colors.white,
+          floatingActionButton: FloatingActionButton(
+            child: Icon(Icons.add),
+            backgroundColor: Colors.orangeAccent,
+            onPressed: (){
+              setState(() {
+                currentScreen = AddEvent();
+                selectedIndex = 5;
+              },);
+            },
+          ),
+
+          //Fab position
+          floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+          //Bottom app bar
+
+          bottomNavigationBar: BottomAppBar(
+            child: Container(
+              margin: EdgeInsets.only(left: 15.0, right: 15.0),
+              child: Row(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  IconButton(
+                    //update the bottom app bar view each time an item is clicked
+                    onPressed: () {
+                      updateTabSelection(0, "Home");
+                      currentScreen = Dashboard();
+                    },
+                    iconSize: 27.0,
+                    icon: Icon(
+                      Icons.home,
+                      //darken the icon if it is selected or else give it a different color
+                      color: selectedIndex == 0
+                          ? yellowLowColor
+                          : Colors.grey.shade400,
+                    ),
+                  ),
+                  IconButton(
+                    onPressed: () {
+                      updateTabSelection(1, "Sechedule");
+                      currentScreen = History();
+                    },
+                    iconSize: 27.0,
+                    icon: Icon(
+                      Icons.date_range,
+                      color: selectedIndex == 1
+                          ? yellowLowColor
+                          : Colors.grey.shade400,
+                    ),
+                  ),
+                  //to leave space in between the bottom app bar items and below the FAB
+                  SizedBox(
+                    width: 50.0,
+                  ),
+                  IconButton(
+                    onPressed: () {
+                      updateTabSelection(2, "Goal");
+                      currentScreen = DataTarget();
+                    },
+                    iconSize: 27.0,
+                    icon: Icon(
+                      Icons.assignment,
+                      color: selectedIndex == 2
+                          ? yellowLowColor
+                          : Colors.grey.shade400,
+                    ),
+                  ),
+                  IconButton(
+                    onPressed: () {
+                      updateTabSelection(3, "Settings");
+                      currentScreen = Settings();
+                    },
+                    iconSize: 27.0,
+                    icon: Icon(
+                      Icons.dehaze,
+                      color: selectedIndex == 3
+                          ? yellowLowColor
+                          : Colors.grey.shade400,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            //to add a space between the FAB and BottomAppBar
+            shape: CircularNotchedRectangle(),
+            //color of the BottomAppBar
+            color: Colors.white,
+          ),
         ),
       )
+
     );
   }
 }

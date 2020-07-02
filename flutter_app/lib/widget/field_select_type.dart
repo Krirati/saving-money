@@ -129,30 +129,6 @@ class _FieldTypeState extends State<FieldType> {
                       ),
                     ),
                   ),
-                  // Container(
-                  //   width: 90,
-                  //   child: FlatButton(
-                  //     padding: EdgeInsets.all(0),
-                  //     onPressed: () {
-                  //       showWidget();
-                  //       setColor('goals');
-                  //     },
-                  //     child: Row(
-                  //       children: <Widget>[
-                  //         Container(
-                  //           // padding: EdgeInsets.only(left: 10,right: 10),
-                  //           child: Image.asset('assests/images/goalIcon.png',width: 40,),
-                  //         ),
-                  //         Text(
-                  //           'Goals',
-                  //           style: TextStyle(
-                  //               color: kTextLightColor
-                  //           ),
-                  //         )
-                  //       ],
-                  //     ),
-                  //   ),
-                  // ),
                 ],
               )
             ],

@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "588543851831",
+    "firebase_url": "https://keptang-441a8.firebaseio.com",
+    "project_id": "keptang-441a8",
+    "storage_bucket": "keptang-441a8.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:588543851831:android:35a91303ef529273296eb2",
+        "android_client_info": {
+          "package_name": "th.krirati.flutterapp.savemoney"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "588543851831-j27gcp76gk3v4cogkh9qk2u4rgkhcsee.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAm7uCPXPHMMApj7ekpUCdJ_iOETM5XmH4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "588543851831-j27gcp76gk3v4cogkh9qk2u4rgkhcsee.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

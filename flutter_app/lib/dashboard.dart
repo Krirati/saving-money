@@ -2,15 +2,16 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:savemoney/constant.dart';
-import 'package:savemoney/history.dart';
 import 'package:savemoney/widget/card_today.dart';
 import 'package:savemoney/widget/dialog_notification.dart';
-
+import 'package:admob_flutter/admob_flutter.dart';
+import 'package:savemoney/services/admob_service.dart';
+import 'package:firebase_admob/firebase_admob.dart';
 import 'database/dbHelper.dart';
 import 'database/model.dart';
 
 
-
+const String testDevice = 'YOUR_DEVICE_ID';
 Color kPrimaryBlue = Color(0xff3c528b);
 Color kBackground = Color(0xfff9fbe7);
 class Dashboard extends StatefulWidget {
@@ -24,7 +25,7 @@ class _DashboardState extends State<Dashboard>{
   var dbHelper = DBHelper();
   String timeNow = DateTime.now().toString();
   Future<List<EventModel>> events;
-
+  final ams = AdMobService();
   Future<double> loadSum(name) async {
     var result = dbHelper.sumAll(name);
     return result;
@@ -39,16 +40,39 @@ class _DashboardState extends State<Dashboard>{
   }
   void initState() {
     super.initState();
+    Admob.initialize(ams.getAdMobAppId());
+    FirebaseAdMob.instance.initialize(appId: ams.getAdMobAppId());
+    _bannerAd = createBannerAd()..load()..show(anchorType: AnchorType.bottom);
     refreshList();
-    
-  } 
-
+  }
+  @override
+  void dispose() {
+    _bannerAd?.dispose();
+    super.dispose();
+  }
   refreshList() {
     setState(() {
       events = dbHelper.getToDay();
     });
   }
+  static const MobileAdTargetingInfo targetingInfo = MobileAdTargetingInfo(
+//    testDevices: testDevice != null ? <String>[testDevice] : null,
+    keywords: <String>['finance', 'money','income'],
+    nonPersonalizedAds: true,
+    childDirected: false,
+  );
+  BannerAd _bannerAd;
 
+  BannerAd createBannerAd() {
+    return BannerAd(
+      adUnitId: ams.getBannerAdId(),
+      size: AdSize.banner,
+      targetingInfo: targetingInfo,
+      listener: (MobileAdEvent event) {
+        print("BannerAd event $event");
+      },
+    );
+  }
   ListView dataTable(List<EventModel> events) {
     var singleChildScrollView = ListView.builder(
       scrollDirection: Axis.horizontal,
@@ -191,7 +215,7 @@ class _DashboardState extends State<Dashboard>{
                           ),
                         ]
                       ),
-                      SizedBox(height: 10),
+                      SizedBox(height: 5),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
@@ -233,6 +257,16 @@ class _DashboardState extends State<Dashboard>{
                   ),
                   SizedBox(height: 10,),
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      AdmobBanner(
+                        adUnitId: ams.getBannerAdId(),
+                        adSize: AdmobBannerSize.BANNER,
+                      ),
+                    ],
+                  ),
+
+                  Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
                       RichText(
@@ -255,31 +289,10 @@ class _DashboardState extends State<Dashboard>{
                           ]
                         ),
                       ),
-                      // FlatButton(
-                      //   onPressed: () {
-                      //     Navigator.push(context,
-                      //       MaterialPageRoute(
-                      //           builder: (_) => History()
-                      //       ),
-                      //     );
-
-                      //   }, 
-                      //   child: Text(
-                      //     "See more",
-                      //     style: TextStyle(
-                      //       color: Colors.orangeAccent,
-                      //       fontWeight: FontWeight.w600,
-                      //       fontSize: 16
-                      //     ),
-                      //   )
-                      // )
                     ],
                   ),
                   list(),
-                  // Row(
-                  //   mainAxisAlignment: MainAxisAlignment.center,
-                  //   children: _buildPageIndicator(),
-                  // ),
+
                 ],
               ),
             )
