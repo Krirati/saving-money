@@ -42,12 +42,14 @@ class _DashboardState extends State<Dashboard>{
     super.initState();
     Admob.initialize(ams.getAdMobAppId());
     FirebaseAdMob.instance.initialize(appId: ams.getAdMobAppId());
-    _bannerAd = createBannerAd()..load()..show(anchorType: AnchorType.bottom);
+//    _bannerAd = createBannerAd()..load()..show(anchorType: AnchorType.bottom);
+//    createInterstitialAd()..load()..show();
     refreshList();
   }
   @override
   void dispose() {
-    _bannerAd?.dispose();
+
+    _interstitialAd?.dispose();
     super.dispose();
   }
   refreshList() {
@@ -56,21 +58,20 @@ class _DashboardState extends State<Dashboard>{
     });
   }
   static const MobileAdTargetingInfo targetingInfo = MobileAdTargetingInfo(
-//    testDevices: testDevice != null ? <String>[testDevice] : null,
+    testDevices: testDevice != null ? <String>[testDevice] : null,
     keywords: <String>['finance', 'money','income'],
     nonPersonalizedAds: true,
     childDirected: false,
   );
-  BannerAd _bannerAd;
+  InterstitialAd _interstitialAd;
 
-  BannerAd createBannerAd() {
-    return BannerAd(
-      adUnitId: ams.getBannerAdId(),
-      size: AdSize.banner,
+  InterstitialAd createInterstitialAd() {
+    return InterstitialAd(
+      adUnitId: 'ca-app-pub-9512696322864709/3433367104',
       targetingInfo: targetingInfo,
       listener: (MobileAdEvent event) {
-        print("BannerAd event $event");
-      },
+        print("InterstitialAd $event");
+      }
     );
   }
   ListView dataTable(List<EventModel> events) {
@@ -103,8 +104,8 @@ class _DashboardState extends State<Dashboard>{
         builder: (context, snapshot) {
           if (snapshot.hasData && snapshot.data.length != 0) {
             return Container(
-              padding: EdgeInsets.symmetric( vertical: 5.0),
-              height: MediaQuery.of(context).size.height *0.19 ,
+              padding: EdgeInsets.symmetric( vertical: 1.0),
+              height: MediaQuery.of(context).size.height *0.2 ,
               child: dataTable(snapshot.data),
 
             );
@@ -143,7 +144,7 @@ class _DashboardState extends State<Dashboard>{
           ),
           SafeArea(
             child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 30),
+              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
@@ -180,7 +181,7 @@ class _DashboardState extends State<Dashboard>{
                       color: Colors.black.withOpacity(0.8)
                     ),
                   ),
-                  SizedBox(height:20),
+                  SizedBox(height:10),
                   Text('Overview',
                      style: TextStyle(
                       fontSize: width*0.04,
@@ -215,7 +216,7 @@ class _DashboardState extends State<Dashboard>{
                           ),
                         ]
                       ),
-                      SizedBox(height: 5),
+                      SizedBox(height: 10),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
@@ -223,7 +224,7 @@ class _DashboardState extends State<Dashboard>{
                             future: loadSum('expenditure'),
                             builder: (BuildContext context, AsyncSnapshot<double> snapshot) {
                               return CardListGroup(
-                                name: 'Expenditure', 
+                                name: 'Expend',
                                 money: snapshot.data.toString(), 
                                 img: 'assests/images/expenditure.png',
                               );
@@ -257,16 +258,6 @@ class _DashboardState extends State<Dashboard>{
                   ),
                   SizedBox(height: 10,),
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      AdmobBanner(
-                        adUnitId: ams.getBannerAdId(),
-                        adSize: AdmobBannerSize.BANNER,
-                      ),
-                    ],
-                  ),
-
-                  Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
                       RichText(
@@ -292,7 +283,6 @@ class _DashboardState extends State<Dashboard>{
                     ],
                   ),
                   list(),
-
                 ],
               ),
             )
@@ -327,7 +317,7 @@ class _CardGroupState extends State<CardListGroup> {
     return Column(
       children: <Widget>[
         Container(
-          height: height*0.12,
+          height: height*0.11,
           width: width*0.43,
           decoration: BoxDecoration(
             color: Colors.white,
@@ -359,7 +349,7 @@ class _CardGroupState extends State<CardListGroup> {
                       widget.name,
                       style: TextStyle(
                         color: Colors.black,
-                        fontSize: width*0.04,
+                        fontSize: width*0.035,
                         fontWeight: FontWeight.w500,
                       ),
                     ),

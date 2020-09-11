@@ -27,7 +27,7 @@ class _FeedBackState extends State<FeedBack> {
     } else {
       rate = '5';
     }
-    final String _email = 'mailto:ninekani@gmail.com?subject=keptang_feedback&body="rate $rate\n ${describeController.text}"';
+    final String _email = 'mailto:kanistudio1999@gmail.com?subject=keptang_feedback&body="rate $rate\n ${describeController.text}"';
     try {
       await launch(_email);
       print('send done');

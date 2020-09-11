@@ -68,7 +68,6 @@ class _FieldTypeState extends State<FieldType> {
   @override
   Widget build(BuildContext context) {
     var width = MediaQuery.of(context).size.width;
-    var height = MediaQuery.of(context).size.height ;
     return  Container(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

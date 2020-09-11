@@ -29,13 +29,14 @@ class _TagTypeState extends State<TagType> {
     return Container(
       decoration: BoxDecoration(
         color: color ,
-        borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(15),
-            bottomLeft: Radius.circular(15))
+        borderRadius: BorderRadius.circular(15)
+//        only(
+//            topLeft: Radius.circular(15),
+//            bottomLeft: Radius.circular(15))
       ),
-      margin: EdgeInsets.symmetric(vertical: 16),
+      margin: EdgeInsets.symmetric(vertical: 5),
 //      alignment: FractionalOffset.topRight,
-      padding: EdgeInsets.fromLTRB(15, 2, 6, 2),
+      padding: EdgeInsets.fromLTRB(15, 2, 15, 2),
      child: Text(
          widget.type,
          style: TextStyle(

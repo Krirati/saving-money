@@ -26,7 +26,6 @@ dependencies:
   flutter_svg: ^0.17.4
   image_picker: 0.6.6+1
   flutter_datetime_picker: ^1.3.5
-  flutter_circular_chart: ^0.1.0
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^0.1.3
@@ -140,6 +139,13 @@ flutter:
         - asset: assests/fonts/Poppins/Poppins-Medium.ttf
           weight: 600
         - asset: assests/fonts/Poppins/Poppins-Bold.ttf
+          weight: 700
+    - family: Kanit
+      fonts:
+        - asset: assests/fonts/Kanit/Kanit-Regular.ttf
+        - asset: assests/fonts/Kanit/Kanit-Medium.ttf
+          weight: 600
+        - asset: assests/fonts/Kanit/Kanit-Bold.ttf
           weight: 700
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages

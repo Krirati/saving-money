@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_circular_chart/flutter_circular_chart.dart';
 import 'package:savemoney/database/dbHelper.dart';
 import 'package:savemoney/database/model.dart';
 import 'package:savemoney/widget/card_type_result.dart';
@@ -15,18 +14,15 @@ class BalanceScreen extends StatefulWidget {
 
 class _BalanceScreenState extends State<BalanceScreen> {
   
-  // final GlobalKey<AnimatedCircularChartState> _chartKey = new GlobalKey<AnimatedCircularChartState>();
   var dbHelper = DBHelper();
-  double income = 0.0;
+  double income;
   double expenditure;
   double saving;
 
   void initState() {
     super.initState();
     dbHelper = DBHelper();
-    income = 0.0;
-    expenditure = 0.0;
-    saving = 0.0;
+
   }
   Future<double> loadSum(name) async {
     var result = dbHelper.sumAll(name);
@@ -76,19 +72,6 @@ class _BalanceScreenState extends State<BalanceScreen> {
     );
   }
 
-  var intr= 0;
-  List<CircularStackEntry> data = <CircularStackEntry>[
-    CircularStackEntry(
-      <CircularSegmentEntry>[
-        CircularSegmentEntry(10, incomeColor, rankKey: 'Q1'),
-        CircularSegmentEntry(10, expenditureColor, rankKey: 'Q2'),
-        CircularSegmentEntry(10, Colors.blue[100], rankKey: 'Q3'),
-      ],
-      rankKey: 'Quarterly Profits',
-    ),
-  ];
-  
-
   @override
   Widget build(BuildContext context) {
    return ListView(
@@ -127,15 +110,7 @@ class _BalanceScreenState extends State<BalanceScreen> {
                       Stack(
                         // crossAxisAlignment: CrossAxisAlignment.center,
                         children: <Widget>[
-                          // Center(
-                          //   child: new AnimatedCircularChart(
-                          //     key: _chartKey,
-                          //     size: Size(160.0, 160.0),
-                          //     initialChartData: data,
-                          //     chartType: CircularChartType.Pie,
-                          //   ),
-                          // ),
-                          // Chart(),
+                          Chart(),
                           Positioned(
                               right: 0,
                               child: Center(
@@ -155,7 +130,9 @@ class _BalanceScreenState extends State<BalanceScreen> {
                                           ]
                                         ),
                                       ),
-                                      Text('Income'),
+                                      Text(
+                                        'Income',
+                                      ),
                                     ]
                                   ),
                                   Row(
@@ -171,7 +148,7 @@ class _BalanceScreenState extends State<BalanceScreen> {
                                           ]
                                         ),
                                       ),
-                                      Text('Expenditure'),
+                                      Text('Expend'),
                                     ]
                                   ),
                                   Row(
@@ -214,10 +191,10 @@ class _BalanceScreenState extends State<BalanceScreen> {
                                     FutureBuilder(
                                       future: loadSum('income'),
                                       builder: (BuildContext context, AsyncSnapshot<double> snapshot) {
-                                        return Text(snapshot.data.toString(), style: TextStyle(fontWeight: FontWeight.w500, fontSize: 25));
+                                        return Text(snapshot.data.toString(), style: TextStyle(fontWeight: FontWeight.w500, fontSize: 18));
                                       }
                                     ), 
-                                    Text('Income'.toUpperCase(), style: TextStyle(color: kTextLightColor, fontSize: 16),)
+                                    Text('Income'.toUpperCase(), style: TextStyle(color: kTextLightColor, fontSize: 14),)
                                   ]
                                 ),
                               ),
@@ -229,10 +206,10 @@ class _BalanceScreenState extends State<BalanceScreen> {
                                     FutureBuilder(
                                       future: loadSum('expenditure'),
                                       builder: (BuildContext context, AsyncSnapshot<double> snapshot) {
-                                        return Text(snapshot.data.toString(), style: TextStyle(fontWeight: FontWeight.w500, fontSize: 25));
+                                        return Text(snapshot.data.toString(), style: TextStyle(fontWeight: FontWeight.w500, fontSize: 18));
                                       }
                                     ), 
-                                    Text('Expenditure'.toUpperCase(), style: TextStyle(color: kTextLightColor, fontSize: 16),)
+                                    Text('Expenditure'.toUpperCase(), style: TextStyle(color: kTextLightColor, fontSize: 14),)
                                   ]
                                 ),
                               ),
@@ -244,10 +221,10 @@ class _BalanceScreenState extends State<BalanceScreen> {
                                     FutureBuilder(
                                       future: loadGoal(),
                                       builder: (BuildContext context, AsyncSnapshot<double> snapshot) {
-                                        return Text(snapshot.data.toString(), style: TextStyle(fontWeight: FontWeight.w500, fontSize: 25));
+                                        return Text(snapshot.data.toString(), style: TextStyle(fontWeight: FontWeight.w500, fontSize: 18));
                                       }
                                     ), 
-                                    Text('Saving'.toUpperCase(), style: TextStyle(color: kTextLightColor, fontSize: 16),)
+                                    Text('Saving'.toUpperCase(), style: TextStyle(color: kTextLightColor, fontSize: 14),)
                                   ]
                                 ),
                               ),
@@ -278,81 +255,71 @@ class Chart extends StatefulWidget {
 class _ChartState extends State<Chart> {
   List<PieChartSectionData> _sections = List<PieChartSectionData>();
   var dbHelper = DBHelper();
-  double income = 0.0;
+  double income;
   double expenditure;
   double saving;
   Future<double> loadSum(name) async {
-    var result = dbHelper.sumAll(name);
+    double result = await dbHelper.sumAll(name);
+    print("result $name ${result.runtimeType}");
+    setState(() {
+      if(name == "income") {
+        income = result;
+        print(income);
+      } else {
+        expenditure = result;
+        print(expenditure);
+      }
+    });
     return result;
   }
   Future<double> loadGoal() async {
-    var result = dbHelper.sumGoal();
+    double result = await dbHelper.sumGoal();
+    print("result goal $result");
+    setState(() {
+      saving = result;
+      print(saving);
+    });
     return result;
   }
-  
+
   @override
   void initState() {
     super.initState();
     dbHelper = DBHelper();
-    income = 0.0;
-    expenditure = 0.0;
-    saving = 0.0;
-    FutureBuilder(
-      future: loadSum('income'),
-      builder: (BuildContext context, AsyncSnapshot<double> snapshot) {
-        setState(() {
-          income = snapshot.data;
-        });
-        return Text(snapshot.data.toString(), style: TextStyle(fontWeight: FontWeight.w500, fontSize: 25));
-      }
-    );
-    FutureBuilder(
-      future: loadSum('expenditure'),
-      builder: (BuildContext context, AsyncSnapshot<double> snapshot) {
-        setState(() {
-          expenditure = snapshot.data;
-        });
-        return Text(snapshot.data.toString(), style: TextStyle(fontWeight: FontWeight.w500, fontSize: 25));
-      }
-    );
-    FutureBuilder(
-      future: loadGoal(),
-      builder: (BuildContext context, AsyncSnapshot<double> snapshot) {
-        setState(() {
-          saving = snapshot.data;
-        });
-        return Text(snapshot.data.toString(), style: TextStyle(fontWeight: FontWeight.w500, fontSize: 25));
-      }
-    ); 
-    PieChartSectionData _item1 = PieChartSectionData(
-      color: incomeColor, 
-      value: income, 
-      title: 'Income',
-      radius: 100,
-      titleStyle:  TextStyle(
-        color: Colors.white,
-        fontSize: 16
-      )
+    print("income $income");
+    print("expenditure $expenditure");
+    print("saving $saving");
+    loadSum("income");
+    loadSum("expenditure");
+    loadGoal();
+
+  }
+
+  renderChart() {
+    if(income == 0 && expenditure == 0 && saving == 0) {
+      setState(() {
+        income = 10;
+        expenditure = 10;
+        saving =10;
+      });
+    }
+    PieChartSectionData _item1 =  PieChartSectionData(
+        color: incomeColor,
+        value: income,
+        title: "",
+        radius: 100,
     );
     PieChartSectionData _item2 = PieChartSectionData(
-      color: expenditureColor, 
-      value: expenditure, 
-      title: 'Expenditure',
-      radius: 100,
-      titleStyle:  TextStyle(
-        color: Colors.white,
-        fontSize: 16
-      )
+        color: expenditureColor,
+        value: expenditure,
+        title: "",
+        radius: 100,
     );
     PieChartSectionData _item3 = PieChartSectionData(
-      color: Colors.blue[100], 
-      value: 10, 
-      title: 'Saving',
-      radius: 100,
-      titleStyle:  TextStyle(
-        color: Colors.white,
-        fontSize: 16
-      )
+        color: Colors.blue[100],
+        value: saving,
+        title: "",
+        radius: 100,
     );
     _sections = [_item1, _item2, _item3];
   }
@@ -363,16 +330,22 @@ class _ChartState extends State<Chart> {
       // child: AspectRatio(
       //   aspectRatio: 1,
       children: <Widget>[
-        PieChart(
-          PieChartData(
-            sections: _sections,
-            borderData: FlBorderData(
-              show: false,
-              border: null),
-            centerSpaceRadius: 10,
-            sectionsSpace: 0
-          )
-        )
+        FutureBuilder(
+            future: renderChart(),
+            builder: (BuildContext context, AsyncSnapshot<double> snapshot) {
+              return PieChart(
+                  PieChartData(
+                      sections: _sections,
+                      borderData: FlBorderData(
+                          show: false,
+                          border: null),
+                      centerSpaceRadius: 10,
+                      sectionsSpace: 0
+                  )
+              );
+            }
+        ),
+
       ],
       
     );

@@ -152,7 +152,7 @@ class _DataTargetState extends State<DataTarget>{
             ),
             SafeArea(
               child: Padding(
-                padding: EdgeInsets.fromLTRB(20, 30, 20, 0),
+                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
@@ -190,7 +190,7 @@ class _DataTargetState extends State<DataTarget>{
                       child: Container(
                         padding: EdgeInsets.all(10),
                         width: double.infinity,
-                        height: 180,
+                        height: 160,
                           child: Column(
                             children:<Widget>[
                               SizedBox(height: 10,),
@@ -222,7 +222,7 @@ class _DataTargetState extends State<DataTarget>{
                 
                                 ],
                               ),
-                              SizedBox(height: 25,), 
+                              SizedBox(height: 20,),
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                 children: <Widget>[
@@ -238,7 +238,7 @@ class _DataTargetState extends State<DataTarget>{
                                               return Text(
                                                 '${snapshot.data}',
                                                 style: TextStyle(
-                                                  fontSize: 25,
+                                                  fontSize: 24,
                                                   fontWeight: FontWeight.w500
                                                 )
                                               );
@@ -246,7 +246,7 @@ class _DataTargetState extends State<DataTarget>{
                                             if(null == snapshot.data || snapshot.data.length == 0) {
                                               return Text('0',
                                                 style: TextStyle(
-                                                  fontSize: 25,
+                                                  fontSize: 24,
                                                   fontWeight: FontWeight.w500
                                                 )
                                               );
@@ -271,7 +271,7 @@ class _DataTargetState extends State<DataTarget>{
                                               return Text(
                                                 '${snapshot.data}',
                                                 style: TextStyle(
-                                                  fontSize: 25,
+                                                  fontSize: 24,
                                                   fontWeight: FontWeight.w500
                                                 )
                                               );
@@ -279,7 +279,7 @@ class _DataTargetState extends State<DataTarget>{
                                             if(null == snapshot.data || snapshot.data.length == 0) {
                                               return Text('0',
                                                 style: TextStyle(
-                                                  fontSize: 25,
+                                                  fontSize: 24,
                                                   fontWeight: FontWeight.w500
                                                 )
                                               );
@@ -304,7 +304,7 @@ class _DataTargetState extends State<DataTarget>{
                                               return Text(
                                                 '${snapshot.data}',
                                                 style: TextStyle(
-                                                  fontSize: 25,
+                                                  fontSize: 24,
                                                   fontWeight: FontWeight.w500
                                                 )
                                               );
@@ -312,7 +312,7 @@ class _DataTargetState extends State<DataTarget>{
                                             if(null == snapshot.data || snapshot.data.length == 0) {
                                               return Text('0',
                                                 style: TextStyle(
-                                                  fontSize: 25,
+                                                  fontSize: 24,
                                                   fontWeight: FontWeight.w500
                                                 )
                                               );
@@ -331,6 +331,7 @@ class _DataTargetState extends State<DataTarget>{
                           ),
                         )
                     ),
+                    SizedBox(height: 10,),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[

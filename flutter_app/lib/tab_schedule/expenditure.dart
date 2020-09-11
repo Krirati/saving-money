@@ -120,11 +120,11 @@ class _ExpenditureScreenState extends State<ExpenditureScreen> {
 //                        )
 //                      ]
 //                    ),
-//
-//                    // dropdown below..
+
+                    // dropdown below..
 //                    child: Row(
 //                      children: <Widget>[
-//                        Text('Select Rang'.toUpperCase(), style: TextStyle(color: Colors.black, fontSize: 22, fontWeight: FontWeight.w300)),
+//                        Text('Select Rang'.toUpperCase(), style: TextStyle(color: Colors.black, fontSize: 16, fontWeight: FontWeight.w300)),
 //                        Spacer(),
 //                        DropdownButton<String>(
 //                          dropdownColor: Colors.white,
@@ -148,14 +148,14 @@ class _ExpenditureScreenState extends State<ExpenditureScreen> {
 //                            ].map<DropdownMenuItem<String>>((String value) {
 //                              return DropdownMenuItem<String>(
 //                                value: value,
-//                                child: Text(value , style: TextStyle(color: Colors.black, fontSize: 22, fontWeight: FontWeight.w600)),
+//                                child: Text(value , style: TextStyle(color: Colors.black, fontSize: 14, fontWeight: FontWeight.w600)),
 //                              );
 //                            }).toList()
 //                        ),
 //                      ],
 //                    )
 //                  ),
-                  // SizedBox(height:10),
+//                   SizedBox(height:10),
                   list(),
                 ],
               

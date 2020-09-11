@@ -49,7 +49,7 @@ class CategoryCard extends StatelessWidget {
                   Spacer(),
                   SvgPicture.asset(
                     svgSrc,
-                    width: 100,
+                    width: 80,
                     fit: BoxFit.contain,
                     alignment: Alignment.topCenter,
                   ),
@@ -59,7 +59,7 @@ class CategoryCard extends StatelessWidget {
                     title,
                     textAlign: TextAlign.center,
                     style: TextStyle(
-                      fontSize:20
+                      fontSize:16
                     ),
                   )
                 ],

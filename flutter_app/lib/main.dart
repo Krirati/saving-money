@@ -18,7 +18,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Kep tang',
       theme: ThemeData(
-        fontFamily: 'Poppins',
+        fontFamily: 'Kanit',
         primaryColor: Colors.orange[200],
         accentColor: Colors.orangeAccent,
         visualDensity: VisualDensity.adaptivePlatformDensity,
@@ -31,7 +31,7 @@ class MyApp extends StatelessWidget {
         seconds: 5,
         navigateAfterSeconds: Home(),
         imageBackground: AssetImage('assests/images/splashscreen.png'),
-        image: Image.asset('assests/icon/coin-10.png', width: 300,),
+//        image: Image.asset('assests/icon/coin-10.png', width: 300,),
         title: Text(
           'Kep tang'.toUpperCase(),
           style: TextStyle(

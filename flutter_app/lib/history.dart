@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:savemoney/tab_schedule/balance.dart';
 import 'package:savemoney/tab_schedule/income.dart';
-import 'package:savemoney/widget/remindercard.dart';
 
 import 'tab_schedule/expenditure.dart';
 import 'widget/dialog_notification.dart';
 
 class History extends StatefulWidget {
-  final Remin reminderItem;
+//  final Remin reminderItem;
 
-  History({this.reminderItem});
+//  History({this.reminderItem});
 
   @override
   _HistoryState createState() => _HistoryState();
@@ -38,21 +37,6 @@ class _HistoryState extends State<History>{
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
     return Scaffold(
-        // appBar: AppBar(
-          
-        //   title: Text('Schedule'),
-        //   elevation: 0,
-        //   actions: <Widget>[
-        //     IconButton(icon: Icon(Icons.notifications),
-        //     onPressed: () async{
-        //       await showDialog(
-        //         context: context,
-        //         builder: (BuildContext context) {
-        //           return  DialogNotification();
-        //         });
-        //     },)
-        //   ],
-        // ),
       backgroundColor: Colors.white,
       body: Stack(
         children: <Widget>[
@@ -69,7 +53,7 @@ class _HistoryState extends State<History>{
           ),
           SafeArea(
             child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 30),
+              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
@@ -84,19 +68,36 @@ class _HistoryState extends State<History>{
                           color: Colors.black
                         ),
                       ),
-                      IconButton(
-                        icon: Icon(Icons.notifications, color: Colors.black, size: 30,) , 
-                        onPressed: () async{
-                          print("notification");
-                          await showDialog(
-                            context: context,
-                            builder: (BuildContext context) {
-                          
-                              return  DialogNotification();
-                            });
-                        }
-                      ),
- 
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: <Widget>[
+                          IconButton(
+                              icon: Icon(Icons.notifications, color: Colors.black, size: 30,) ,
+                              onPressed: () async{
+                                print("notification");
+                                await showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+
+                                      return  DialogNotification();
+                                    });
+                              }
+                          ),
+//                          IconButton(
+//                              icon: Icon(Icons.date_range , color: Colors.black, size: 30,) ,
+//                              onPressed: () async{
+//                                print("notification");
+//                                await showDialog(
+//                                    context: context,
+//                                    builder: (BuildContext context) {
+//
+//                                      return  DialogNotification();
+//                                    });
+//                              }
+//                          ),
+                        ],
+                      )
+
                     ],
                   ),
                   
@@ -129,7 +130,10 @@ class _HistoryState extends State<History>{
                       child: Text('Balance', 
                       style: TextStyle(
                         color:  (_currentPage == 0) ? Colors.white :Colors.black,
-                        fontWeight: (_currentPage == 0) ? FontWeight.w700: FontWeight.w600),),
+                        fontWeight: (_currentPage == 0) ? FontWeight.w700: FontWeight.w600,
+                        fontSize:14,
+                      ),
+                      ),
                     ),
                   ),
                   GestureDetector(
@@ -150,7 +154,8 @@ class _HistoryState extends State<History>{
                       child: Text('Income',
                         style: TextStyle(
                           color: (_currentPage == 1) ? Colors.white :Colors.black,
-                          fontWeight: (_currentPage == 1) ? FontWeight.w700: FontWeight.w600
+                          fontWeight: (_currentPage == 1) ? FontWeight.w700: FontWeight.w600,
+                          fontSize:14,
                         ),
                       ),
                     ),
@@ -173,7 +178,10 @@ class _HistoryState extends State<History>{
                       child: Text('Expend', 
                         style: TextStyle(
                           color:  (_currentPage == 2) ? Colors.white :Colors.black,
-                          fontWeight: (_currentPage == 2) ? FontWeight.w700: FontWeight.w600),),
+                          fontWeight: (_currentPage == 2) ? FontWeight.w700: FontWeight.w600,
+                          fontSize:14,
+                        ),
+                      ),
                     ),
                   ),
                 ],

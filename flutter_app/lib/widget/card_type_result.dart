@@ -72,13 +72,13 @@ class _CardTypeResultState extends State<CardTypeResult> {
                             return Text(
                               '${snapshot.data[0]['Total']} Bath',
                               style: TextStyle(
-                                fontSize: 30,
+                                fontSize: 24,
                             ));
                           }
                           if(null == snapshot.data || snapshot.data.length == 0){
                             return Text('0 Bath',
                               style: TextStyle(
-                                fontSize: 30,
+                                fontSize: 24,
                             ));
                           }
                           return CircularProgressIndicator();
@@ -105,14 +105,14 @@ class _CardTypeResultState extends State<CardTypeResult> {
                                   return Text(
                                     '${snapshot.data[0]['Total']}',
                                     style: TextStyle(
-                                      fontSize: 20,
+                                      fontSize: 18,
                                       fontWeight: FontWeight.w200
                                   ));
                                 }
                                 if(null == snapshot.data || snapshot.data.length == 0){
                                   return Text('0',
                                     style: TextStyle(
-                                      fontSize: 20,
+                                      fontSize: 18,
                                       fontWeight: FontWeight.w200
                                   ));
                                 }
@@ -121,7 +121,7 @@ class _CardTypeResultState extends State<CardTypeResult> {
                                 
                               }
                             ),
-                            Text('today'.toUpperCase(), style: TextStyle(color: kTextLightColor, fontSize: 16),)
+                            Text('today'.toUpperCase(), style: TextStyle(color: kTextLightColor, fontSize: 14),)
                           ]
                         ),
                       ),
@@ -137,13 +137,13 @@ class _CardTypeResultState extends State<CardTypeResult> {
                                   return Text(
                                     '${snapshot.data[0]['Total']}',
                                     style: TextStyle(
-                                      fontSize: 20,
+                                      fontSize: 18,
                                   ));
                                 }
                                 if(null == snapshot.data || snapshot.data.length == 0){
                                   return Text('0',
                                     style: TextStyle(
-                                      fontSize: 20,
+                                      fontSize: 18,
                                   ));
                                 }
                                 return CircularProgressIndicator();
@@ -151,7 +151,7 @@ class _CardTypeResultState extends State<CardTypeResult> {
                                 
                               }
                             ),
-                            Text('month'.toUpperCase(), style: TextStyle(color: kTextLightColor, fontSize: 16),)
+                            Text('month'.toUpperCase(), style: TextStyle(color: kTextLightColor, fontSize: 14),)
                           ]
                         ),
                       ),
@@ -167,13 +167,13 @@ class _CardTypeResultState extends State<CardTypeResult> {
                                   return Text(
                                     '${snapshot.data[0]['Total']}',
                                     style: TextStyle(
-                                      fontSize: 20,
+                                      fontSize: 18,
                                   ));
                                 }
                                 if(null == snapshot.data || snapshot.data.length == 0){
                                   return Text('0',
                                     style: TextStyle(
-                                      fontSize: 20,
+                                      fontSize: 18,
                                   ));
                                 }
                                 return CircularProgressIndicator();
@@ -181,7 +181,7 @@ class _CardTypeResultState extends State<CardTypeResult> {
                                 
                               }
                             ),
-                            Text('year'.toUpperCase(), style: TextStyle(color: kTextLightColor, fontSize: 16),)
+                            Text('year'.toUpperCase(), style: TextStyle(color: kTextLightColor, fontSize: 14),)
                           ]
                         ),
                       ),

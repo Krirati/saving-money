@@ -107,61 +107,61 @@ class _IncomeScreenState extends State<IncomeScreen> {
       padding: EdgeInsets.symmetric(vertical:5, horizontal: 15),
       addAutomaticKeepAlives: true,
       children: <Widget>[
-//                Container(
-//                  padding:
-//                    EdgeInsets.symmetric(horizontal: 16, vertical: 5),
-//                  alignment: Alignment.centerRight,
-//                  decoration: BoxDecoration(
-//                    color: Colors.white,
-//                    borderRadius: BorderRadius.circular(10),
-//                    boxShadow:  [
-//                      BoxShadow(
-//                        color: Colors.grey.withOpacity(0.5),
-//                        spreadRadius: 1,
-//                        blurRadius:4,
-//                        offset: Offset(0,3),
-//                      )
-//                    ]
-//                  ),
-//
-//                  // dropdown below..
-//                  child: Row(
-//                    children: <Widget>[
-//                      Text('Select Rang'.toUpperCase(), style: TextStyle(color: Colors.black, fontSize: 22, fontWeight: FontWeight.w300)),
-//                      Spacer(),
-//                      DropdownButton<String>(
-//                        dropdownColor: Colors.white,
-//                        value: dropdownValue,
-//                        focusColor: Colors.red,
-//                        icon: Icon(Icons.arrow_drop_down, color: Colors.black,),
-//                        iconSize: 42,
-//                        underline: SizedBox(),
-//                        onChanged: (String newValue) {
-//                          setState(() {
-//                            dropdownValue = newValue;
-//                            print(dropdownValue);
-//                          });
-//                        },
-//                        hint: Text('select'.toUpperCase()),
-//                        items: <String>[
-//                          'Day',
-//                          'Week',
-//                          'Month',
-//                          'Year'
-//                        ].map<DropdownMenuItem<String>>((String value) {
-//                          return DropdownMenuItem<String>(
-//                            value: value,
-//                            child: Text(value , style: TextStyle(color: Colors.black, fontSize: 22, fontWeight: FontWeight.w600)),
-//                          );
-//                        }).toList()
-//                      ),
-//                    ],
-//                  )
-//                ),
-                // SizedBox(height: 5),
-                list()
-                
-              ],
+//        Container(
+//          padding:
+//            EdgeInsets.symmetric(horizontal: 16, vertical: 5),
+//          alignment: Alignment.centerRight,
+//          decoration: BoxDecoration(
+//            color: Colors.white,
+//            borderRadius: BorderRadius.circular(10),
+//            boxShadow:  [
+//              BoxShadow(
+//                color: Colors.grey.withOpacity(0.5),
+//                spreadRadius: 1,
+//                blurRadius:4,
+//                offset: Offset(0,3),
+//              )
+//            ]
+//          ),
+
+          // dropdown below..
+//          child: Row(
+//            children: <Widget>[
+//              Text('Select Rang'.toUpperCase(), style: TextStyle(color: Colors.black, fontSize: 16, fontWeight: FontWeight.w300)),
+//              Spacer(),
+//              DropdownButton<String>(
+//                dropdownColor: Colors.white,
+//                value: dropdownValue,
+//                focusColor: Colors.red,
+//                icon: Icon(Icons.arrow_drop_down, color: Colors.black,),
+//                iconSize: 42,
+//                underline: SizedBox(),
+//                onChanged: (String newValue) {
+//                  setState(() {
+//                    dropdownValue = newValue;
+//                    print(dropdownValue);
+//                  });
+//                },
+//                hint: Text('select'.toUpperCase()),
+//                items: <String>[
+//                  'Day',
+//                  'Week',
+//                  'Month',
+//                  'Year'
+//                ].map<DropdownMenuItem<String>>((String value) {
+//                  return DropdownMenuItem<String>(
+//                    value: value,
+//                    child: Text(value , style: TextStyle(color: Colors.black, fontSize: 14, fontWeight: FontWeight.w600)),
+//                  );
+//                }).toList()
+//              ),
+//            ],
+//          )
+//        ),
+//         SizedBox(height: 5),
+        list()
+
+      ],
             
     );
   } 

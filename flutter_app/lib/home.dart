@@ -1,4 +1,3 @@
-import 'package:firebase_admob/firebase_admob.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:savemoney/addevent.dart';
@@ -17,7 +16,7 @@ class HomeState extends State<Home> {
 
   //Properties
   final ams = AdMobService();
-  var paddingBottom = 48.0;
+  var paddingBottom = 0.0;
   int currentTab = 0;
   List<Widget> screens = [
     Dashboard(),
@@ -26,41 +25,10 @@ class HomeState extends State<Home> {
     Settings()
   ];// to store tab views
   @override
-  void dispose() {
-    _bannerAd?.dispose();
-    super.dispose();
-  }
-  @override
   void initState() {
     super.initState();
-    FirebaseAdMob.instance.initialize(appId: ams.getAdMobAppId());
-    _bannerAd = createBannerAd()..load()..show(anchorType: AnchorType.bottom);
   }
-  static const MobileAdTargetingInfo targetingInfo = MobileAdTargetingInfo(
-//    testDevices: testDevice != null ? <String>[testDevice] : null,
-    keywords: <String>['finance', 'money','income', 'Game'],
-    nonPersonalizedAds: true,
-    childDirected: false,
-  );
-  BannerAd _bannerAd;
 
-  BannerAd createBannerAd() {
-    return BannerAd(
-      adUnitId: ams.getBannerAdId(),
-      size: AdSize.banner,
-      targetingInfo: targetingInfo,
-      listener: (MobileAdEvent event) {
-        print("BannerAd event $event");
-      },
-    );
-  }
-  checkAdmod() {
-    if (MobileAdEvent.failedToLoad == true) {
-      setState(() {
-        paddingBottom = 0.0;
-      });
-    }
-  }
   // Active page (Tab)
   Widget currentScreen = Dashboard(); //initial screen in viewport
 

@@ -1,6 +1,7 @@
 
 // import 'dart:io';
 
+import 'package:firebase_admob/firebase_admob.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -53,16 +54,23 @@ class _AddEventState extends State<AddEvent>{
   var dbHelper;
   bool isUpdating;
   Future<List<EventModel>> events;
-
+  InterstitialAd _interstitialAd;
   callback(newTime) {
     setState(() {
       time = newTime;
       print('time:  ' + time);
     });
   }
+
+  @override
+  void dispose() {
+    _interstitialAd.dispose();
+    super.dispose();
+  }
   @override
   void initState() {
     super.initState();
+    FirebaseAdMob.instance.initialize(appId: 'ca-app-pub-9512696322864709~2262496483');
     dbHelper = DBHelper();
     newDateTime = DateTime.now();
     isUpdating = false;
@@ -77,8 +85,24 @@ class _AddEventState extends State<AddEvent>{
       curUserId = widget.id;
       type = widget.type;
     }
-  } 
+  }
+  static const MobileAdTargetingInfo targetingInfo = MobileAdTargetingInfo(
+//    testDevices: testDevice != null ? <String>[testDevice] : null,
+    keywords: <String>['Finance', 'Money','Income', 'Game'],
+    nonPersonalizedAds: true,
+    childDirected: false,
+  );
 
+
+  InterstitialAd createInterstitialAd() {
+    return InterstitialAd(
+        adUnitId: 'ca-app-pub-9512696322864709/3433367104',
+        targetingInfo: targetingInfo,
+        listener: (MobileAdEvent event) {
+          print("InterstitialAd $event");
+        }
+    );
+  }
 
   clearField() {
     setState(() {
@@ -133,17 +157,12 @@ class _AddEventState extends State<AddEvent>{
         }
       }
       dialogShow();
+      createInterstitialAd()
+        ..load()
+        ..show();
       clearField();
     }
   }
-  // Future _getImage() async {
-  //   var image = await ImagePicker.pickImage(source: ImageSource.gallery);
-  //   setState(() {
-  //     _image = image;
-  //     print('_image $_image');
-  //   });
-  // }
-
   callbackResultIcon(newType, newIcon) {
     setState(() {
       type = newType;
@@ -202,7 +221,6 @@ class _AddEventState extends State<AddEvent>{
   @override
   Widget build(BuildContext context) {
     var width = MediaQuery.of(context).size.width;
-    var height = MediaQuery.of(context).size.height ;
     return Scaffold(
         backgroundColor: Colors.white,
         floatingActionButton: FloatingActionButton.extended(
@@ -214,6 +232,7 @@ class _AddEventState extends State<AddEvent>{
             validate();
             print('save done');
             clearField();
+            createInterstitialAd()..load()..show();
           },
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
@@ -285,7 +304,6 @@ class _AddEventState extends State<AddEvent>{
                                         Container(
                                           // margin: EdgeInsets.fromLTRB(15, 5, 15, 5),
                                           margin: EdgeInsets.only(top:5),
-                                          color: Colors.white,
                                           child: TextFormField(
                                             controller: nameController,
                                             keyboardType: TextInputType.text,
@@ -309,8 +327,6 @@ class _AddEventState extends State<AddEvent>{
                                     ),
                                   ),
                                 ),
-                              
-                                
                                 Form(
                                   key: formKeyType,
                                   child: Container(
@@ -350,7 +366,7 @@ class _AddEventState extends State<AddEvent>{
                                         Container(
                                           // margin: EdgeInsets.all(10),
                                           margin: EdgeInsets.only(top:5),
-                                          child: TextField(
+                                          child: TextFormField(
                                             keyboardType: TextInputType.number,
                                             controller: amountController,
                                             decoration: InputDecoration(
@@ -359,12 +375,14 @@ class _AddEventState extends State<AddEvent>{
                                               border: OutlineInputBorder(
                                                 borderRadius: BorderRadius.circular(8),
                                                 borderSide: BorderSide(
-                                                  color: Colors.white
+                                                  color: Colors.red
                                                 )
                                               ),
                                               filled: true,
                                               fillColor: Colors.white,
                                             ),
+                                            validator: (val) => val == null  ? 'Enter amount' : null,
+                                            onSaved: (val) => amount = val,
                                           ),
                                         ),
                                       ],
@@ -387,11 +405,11 @@ class _AddEventState extends State<AddEvent>{
                                       Padding(
                                         padding: EdgeInsets.symmetric(horizontal:0),
                                         child: RaisedButton(
-                                          color: Colors.grey[50],
+                                          color: Colors.white,
                                           padding: EdgeInsets.all(10.0),
                                           shape: RoundedRectangleBorder(
                                             borderRadius: BorderRadius.circular(8),
-                                            side: BorderSide(color: Colors.grey)
+                                            side: BorderSide(color: Colors.black45)
                                           ),
                                           onPressed: ()
                                           async{
@@ -402,7 +420,7 @@ class _AddEventState extends State<AddEvent>{
                                               }
                                             );
                                           },
-                                          child: new Text('TIME: ' + time),
+                                          child: new Text('TIME: ' + time.split(".")[0]),
                                         ),
                                       ),
                 
@@ -447,66 +465,6 @@ class _AddEventState extends State<AddEvent>{
                                     ],
                                   ),
                                 ),
-                                // Container(
-                                //   margin: EdgeInsets.fromLTRB(15, 5, 15, 15),
-                                //   child: Column(
-                                //     crossAxisAlignment: CrossAxisAlignment.start,
-                                //     children: <Widget>[
-                                //       Row(
-                                //         mainAxisAlignment: MainAxisAlignment.start,
-                                //         children: <Widget>[
-                                //           Text(
-                                //             'Pictures',
-                                //             style: TextStyle(
-                                //                 color: Colors.black,
-                                //                 fontWeight: FontWeight.w600
-                                //             ),
-                                //           ),
-                                //         ],
-                                //       ),
-                                //       SizedBox(height: 12,),
-                                //       Padding(
-                                //         padding: EdgeInsets.symmetric(horizontal:15),
-                                //         child: GestureDetector(
-                                //           onTap: _getImage,
-                                //             child: Container(
-                                //             height: 120,
-                                //             decoration: BoxDecoration(
-                                //                 color: Colors.white70,
-                                //                 borderRadius: BorderRadius.circular(8),
-                                //                 boxShadow: [
-                                //                   BoxShadow(
-                                //                     color: Colors.grey[300],
-                                //                     spreadRadius: 1,
-                                //                     blurRadius: 3,
-                                //                     offset: Offset(0,1),
-                                //                   )
-                                //                 ]
-                                //             ),
-                                //             child: Column(
-                                //               crossAxisAlignment: CrossAxisAlignment.start,
-                                //               children: <Widget>[
-                                //                 Column(
-                                //                   crossAxisAlignment: CrossAxisAlignment.start,
-                                //                   children: <Widget>[
-                                //                     Row(
-                                //                       mainAxisAlignment: MainAxisAlignment.center,
-                                //                       children: <Widget>[
-                                //                         _image == null ? Icon(Icons.image,color: kTextLightColor, size: 100,) : Image.file(_image,
-                                //                         height: 120,
-                                //                         fit: BoxFit.fill,),
-                                //                       ],
-                                //                     ),
-                                //                   ],
-                                //                 )                                       
-                                //               ],
-                                //             ),
-                                //           ),
-                                //         ),
-                                //       ),
-                                //     ],
-                                //   ),
-                                // ),
                               ],
                             ),
                           ],
@@ -518,8 +476,6 @@ class _AddEventState extends State<AddEvent>{
             ),
           ]
         )
-
-             
     );
   }
 }
